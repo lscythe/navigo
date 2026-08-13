@@ -13,24 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.datastore.di
 
-android {
-    defaultConfig {
-        consumerProguardFiles("consumer-proguard-rules.pro")
-    }
-    namespace = "dev.lscythe.app.navigo.core.datastore"
-}
+import dev.zacsweers.metro.Qualifier
 
-dependencies {
-    implementation(project(":core:common"))
-    api(project(":core:datastore-proto"))
-    api(libs.androidx.dataStore)
-    implementation(libs.tink.android)
-
-    testImplementation(project(":core:datastore-test"))
-    testImplementation(libs.kotlinx.coroutines.test)
-}
+@Qualifier @Retention(AnnotationRetention.RUNTIME) annotation class EncryptedPreference

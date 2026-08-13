@@ -19,10 +19,12 @@ import android.app.Application
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
+import com.google.crypto.tink.Aead
 import dev.lscythe.app.navigo.core.common.coroutines.ApplicationScope
 import dev.lscythe.app.navigo.core.common.dispatchers.Dispatcher
 import dev.lscythe.app.navigo.core.common.dispatchers.NavigoDispatchers
 import dev.lscythe.app.navigo.core.datastore.SamplePreference
+import dev.lscythe.app.navigo.core.datastore.serializer.EncryptedSerializer
 import dev.lscythe.app.navigo.core.datastore.serializer.SamplePreferenceSerializer
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -48,5 +50,21 @@ object DataStoreBindings {
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
         ) {
             application.dataStoreFile("sample_preference.pb")
+        }
+
+    @Provides
+    @EncryptedPreference
+    @SingleIn(AppScope::class)
+    fun provideEncryptedSamplePreferenceDataStore(
+        application: Application,
+        aead: Aead,
+        @ApplicationScope scope: CoroutineScope,
+        @Dispatcher(NavigoDispatchers.IO) ioDispatcher: CoroutineDispatcher,
+    ): DataStore<SamplePreference> =
+        DataStoreFactory.create(
+            serializer = EncryptedSerializer(SamplePreferenceSerializer, aead),
+            scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
+        ) {
+            application.dataStoreFile("sample_preference_secure.pb")
         }
 }

@@ -18,11 +18,14 @@ package dev.lscythe.app.navigo.core.datastore.datasource
 import androidx.datastore.core.DataStore
 import dev.lscythe.app.navigo.core.datastore.SamplePreference
 import dev.lscythe.app.navigo.core.datastore.copy
+import dev.lscythe.app.navigo.core.datastore.di.EncryptedPreference
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 
 @Inject
-class NavigoPreferenceDataSource(private val dataStore: DataStore<SamplePreference>) {
+class NavigoPreferenceDataSource(
+    @EncryptedPreference private val dataStore: DataStore<SamplePreference>
+) {
 
     val data: Flow<SamplePreference> = dataStore.data
 
