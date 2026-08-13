@@ -19,16 +19,22 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.ApplicationProductFlavor
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ProductFlavor
+import com.android.build.api.variant.AndroidComponentsExtension
+import org.gradle.api.Project
 import org.gradle.kotlin.dsl.invoke
 
 enum class FlavorDimension {
-    Channel
+    Channel,
+    Distribution,
 }
 
 enum class NavigoFlavor(val dimension: FlavorDimension, val applicationIdSuffix: String? = null) {
+    Staging(FlavorDimension.Channel, applicationIdSuffix = ".staging"),
     Prod(FlavorDimension.Channel),
     Beta(FlavorDimension.Channel, applicationIdSuffix = ".beta"),
     Rc(FlavorDimension.Channel, applicationIdSuffix = ".rc"),
+    Google(FlavorDimension.Distribution),
+    Huawei(FlavorDimension.Distribution),
 }
 
 fun configureFlavors(
@@ -54,6 +60,45 @@ fun configureFlavors(
                     }
                 }
             }
+        }
+    }
+}
+
+private fun <T> cartesianProduct(lists: List<List<T>>): List<List<T>> =
+    lists.fold(listOf(listOf())) { acc, list -> acc.flatMap { combo -> list.map { combo + it } } }
+
+/**
+ * Registers a `<flavor><Flavor>Implementation` config per cross-dimension flavor combo (e.g.
+ * `prodGoogleImplementation`), extending into each matching variant once AGP creates it.
+ */
+fun Project.registerFlavorConfigurations(
+    androidComponentsExtension: AndroidComponentsExtension<*, *, *>
+) {
+    val flavorsByDimension =
+        FlavorDimension.entries.map { dimension ->
+            NavigoFlavor.entries.filter { it.dimension == dimension }
+        }
+
+    cartesianProduct(flavorsByDimension).forEach { combo ->
+        val configName =
+            combo
+                .mapIndexed { index, flavor ->
+                    if (index == 0) flavor.name.replaceFirstChar(Char::lowercase) else flavor.name
+                }
+                .joinToString("") + "Implementation"
+
+        val bucket =
+            configurations.maybeCreate(configName).apply {
+                isCanBeConsumed = false
+                isCanBeResolved = false
+            }
+
+        val selector =
+            combo.fold(androidComponentsExtension.selector()) { selector, flavor ->
+                selector.withFlavor(flavor.dimension.name.lowercase() to flavor.name.lowercase())
+            }
+        androidComponentsExtension.onVariants(selector) { variant ->
+            configurations.named("${variant.name}Implementation") { extendsFrom(bucket) }
         }
     }
 }

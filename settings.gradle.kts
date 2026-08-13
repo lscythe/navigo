@@ -45,6 +45,7 @@ rootProject.name = "Navigo"
 include(":app")
 
 include(
+    ":core:analytics",
     ":core:common",
     ":core:database",
     ":core:datastore",

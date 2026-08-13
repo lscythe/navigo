@@ -5,6 +5,7 @@ androidxActivity = "1.9.3"
 androidxAppCompat = "1.7.0"
 androidxBrowser = "1.8.0"
 androidxComposeUI = "1.12.0"
+androidxComposeRuntime = "1.12.0"
 androidxCore = "1.15.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.2.0"
@@ -48,6 +49,7 @@ androidx-benchmark-macro = { module = "androidx.benchmark:benchmark-macro-junit4
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidxBrowser" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidxComposeUI" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidxComposeUI" }
+androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidxComposeRuntime" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-dataStore = { module = "androidx.datastore:datastore", version.ref = "androidxDataStore" }
@@ -65,8 +67,6 @@ androidx-tracing-ktx = { module = "androidx.tracing:tracing-ktx", version.ref = 
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "androidxWork" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics", version.ref = "firebaseCrashlytics" }
-firebase-performance = { module = "com.google.firebase:firebase-perf", version.ref = "firebasePerformance" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-assertions-kotlinx-datetime = { module = "io.kotest.extensions:kotest-assertions-kotlinx-time", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
