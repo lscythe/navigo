@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.jvm.library)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.network
 
-dependencies {
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.datetime)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
+import kotlinx.coroutines.flow.Flow
+
+interface NetworkMonitor {
+    val isOnline: Flow<Boolean>
 }
