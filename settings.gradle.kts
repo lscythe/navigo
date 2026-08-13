@@ -53,6 +53,7 @@ include(
     ":core:datastore-test",
     ":core:monitoring",
     ":core:navigation",
+    ":core:network",
 )
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {

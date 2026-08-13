@@ -33,6 +33,8 @@
             <option value="$PROJECT_DIR$/core/datastore-test" />
             <option value="$PROJECT_DIR$/core/monitoring" />
             <option value="$PROJECT_DIR$/core/navigation" />
+            <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/core/network-graphql" />
           </set>
         </option>
       </GradleProjectSettings>
