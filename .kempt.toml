@@ -1,0 +1,13 @@
+[ktfmt]
+version = { file = "gradle/libs.versions.toml", key = "ktfmt" }
+style = "kotlinlang"
+
+[license-header]
+file = "config/license-header.txt"
+
+[hook]
+mode = "format"
+
+[whitespace]
+strip-trailing = true
+final-newline = true
