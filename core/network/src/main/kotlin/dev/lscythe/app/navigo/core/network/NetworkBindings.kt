@@ -45,7 +45,7 @@ object NetworkBindings {
     fun provideHttpClient(
         @BaseUrl baseUrl: String,
         tokenProvider: TokenProvider,
-        ktorLogger: KtorLogger,
+        networkLogger: NetworkLogger,
     ): HttpClient =
         HttpClient(OkHttp) {
             expectSuccess = true
@@ -70,7 +70,10 @@ object NetworkBindings {
             }
 
             install(Logging) {
-                logger = ktorLogger
+                logger =
+                    object : KtorLogger {
+                        override fun log(message: String) = networkLogger.log(message)
+                    }
                 level = LogLevel.INFO
             }
 

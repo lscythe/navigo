@@ -15,8 +15,6 @@
  */
 package dev.lscythe.app.navigo.core.network
 
-object NetworkConstant {
-    const val REQUEST_TIMEOUT_MILLIS = 30_000L
-    const val CONNECT_TIMEOUT_MILLIS = 30_000L
-    const val SOCKET_TIMEOUT_MILLIS = 30_000L
+fun interface NetworkLogger {
+    fun log(message: String)
 }

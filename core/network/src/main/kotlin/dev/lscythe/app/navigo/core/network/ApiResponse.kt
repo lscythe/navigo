@@ -38,6 +38,12 @@ sealed interface ApiResponse<out T> {
 
         data class SerializationError(val message: String? = null) : Error
 
+        data class GraphQLError(
+            val code: String? = null,
+            val retryable: Boolean? = null,
+            val message: String? = null,
+        ) : Error
+
         data class UnknownError(
             val message: String? = null,
             val cause: Throwable? = null,
@@ -50,6 +56,7 @@ internal fun ApiResponse.Error.toThrowable(): Throwable =
         is ApiResponse.Error.ClientError -> throw Exception("Client error $code: $message")
         is ApiResponse.Error.NetworkError -> throw Exception(message ?: "Network error")
         is ApiResponse.Error.SerializationError -> throw Exception(message ?: "Serialization error")
+        is ApiResponse.Error.GraphQLError -> throw Exception(message ?: "GraphQL error: $code")
         is ApiResponse.Error.ServerError -> throw Exception("Server Error: $code: $message")
         is ApiResponse.Error.UnknownError -> throw Exception(message ?: "Unknown error")
     }

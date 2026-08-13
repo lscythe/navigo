@@ -54,6 +54,7 @@ include(
     ":core:monitoring",
     ":core:navigation",
     ":core:network",
+    ":core:network-graphql",
 )
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {

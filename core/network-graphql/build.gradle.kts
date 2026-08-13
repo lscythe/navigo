@@ -26,5 +26,8 @@ apollo {
 }
 
 dependencies {
+    implementation(project(":core:network"))
     implementation(libs.apollo.runtime)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
 }

@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.network
+package dev.lscythe.app.navigo.core.network.graphql
 
-object NetworkConstant {
-    const val REQUEST_TIMEOUT_MILLIS = 30_000L
-    const val CONNECT_TIMEOUT_MILLIS = 30_000L
-    const val SOCKET_TIMEOUT_MILLIS = 30_000L
-}
+import dev.zacsweers.metro.Qualifier
+
+@Qualifier @Retention(AnnotationRetention.RUNTIME) annotation class GraphQLEndpoint
