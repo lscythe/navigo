@@ -37,19 +37,19 @@ fun configureFlavors(
 ) {
     commonExtension.apply {
         FlavorDimension.entries.forEach { flavorDimension ->
-            flavorDimensions += flavorDimension.name
+            flavorDimensions += flavorDimension.name.lowercase()
         }
 
         productFlavors {
-            NavigoFlavor.entries.forEach { niaFlavor ->
-                register(niaFlavor.name) {
-                    dimension = niaFlavor.dimension.name
-                    flavorConfigurationBlock(this, niaFlavor)
+            NavigoFlavor.entries.forEach { navigoFlavor ->
+                register(navigoFlavor.name.lowercase()) {
+                    dimension = navigoFlavor.dimension.name.lowercase()
+                    flavorConfigurationBlock(this, navigoFlavor)
                     if (
                         commonExtension is ApplicationExtension && this is ApplicationProductFlavor
                     ) {
-                        if (niaFlavor.applicationIdSuffix != null) {
-                            applicationIdSuffix = niaFlavor.applicationIdSuffix
+                        if (navigoFlavor.applicationIdSuffix != null) {
+                            applicationIdSuffix = navigoFlavor.applicationIdSuffix
                         }
                     }
                 }

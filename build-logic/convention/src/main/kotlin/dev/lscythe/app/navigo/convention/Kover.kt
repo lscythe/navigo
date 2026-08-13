@@ -34,12 +34,11 @@ internal fun Project.configureKoverAndroid(commonExtension: CommonExtension) {
         enableUnitTestCoverage = true
     }
 
-    pluginManager.apply("org.jetbrains.kotlinx.kover")
-
     configureKover()
 }
 
 internal fun Project.configureKover() {
+    pluginManager.apply("org.jetbrains.kotlinx.kover")
     extensions.configure<KoverProjectExtension> {
         reports {
             filters {

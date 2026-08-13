@@ -44,7 +44,10 @@ rootProject.name = "Navigo"
 
 include(":app")
 
-include(":core:database")
+include(
+    ":core:common",
+    ":core:database",
+)
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
     """
