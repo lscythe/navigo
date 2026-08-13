@@ -44,6 +44,8 @@ rootProject.name = "Navigo"
 
 include(":app")
 
+include(":core:database")
+
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
     """
     Navigo requires JDK 21+ but it is currently using JDK ${JavaVersion.current()}.
