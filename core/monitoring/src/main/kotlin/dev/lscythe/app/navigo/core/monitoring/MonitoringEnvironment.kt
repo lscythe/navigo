@@ -13,19 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.monitoring
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.analytics"
-}
-
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
-
-    prodGoogleImplementation(libs.firebase.analytics.get())
+enum class MonitoringEnvironment {
+    Staging,
+    Beta,
+    Rc,
+    Prod,
 }

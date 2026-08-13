@@ -13,19 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.monitoring
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.analytics"
-}
+import android.util.Log
 
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
-
-    prodGoogleImplementation(libs.firebase.analytics.get())
+interface StructuredLogger {
+    fun log(priority: Int = Log.INFO, message: String, attributes: Map<String, Any> = emptyMap())
 }

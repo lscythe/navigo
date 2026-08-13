@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.analytics
+package dev.lscythe.app.navigo.core.monitoring
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
-import timber.log.Timber
+import io.sentry.Sentry
+import io.sentry.SpanStatus
 
-private const val TAG = "StubAnalyticsHelper"
-
-@SingleIn(AppScope::class)
-internal class StubAnalyticsHelper @Inject constructor() : AnalyticsHelper {
-    override fun logEvent(event: AnalyticsEvent) {
-        Timber.tag(TAG).d("Received analytics event: $event")
+internal class SentryTracer @Inject constructor() : Tracer {
+    override fun <T> trace(name: String, operation: String, block: () -> T): T {
+        val transaction = Sentry.startTransaction(name, operation)
+        return try {
+            block().also { transaction.status = SpanStatus.OK }
+        } catch (throwable: Throwable) {
+            transaction.throwable = throwable
+            transaction.status = SpanStatus.INTERNAL_ERROR
+            throw throwable
+        } finally {
+            transaction.finish()
+        }
     }
 }

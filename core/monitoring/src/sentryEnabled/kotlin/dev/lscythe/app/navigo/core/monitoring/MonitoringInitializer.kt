@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.monitoring
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.analytics"
-}
+import android.content.Context
+import io.sentry.android.core.SentryAndroid
 
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
-
-    prodGoogleImplementation(libs.firebase.analytics.get())
+fun initializeMonitoring(context: Context, dsn: String, environment: MonitoringEnvironment) {
+    SentryAndroid.init(context) { options ->
+        options.dsn = dsn
+        options.environment = environment.name.lowercase()
+        options.isEnablePerformanceV2 = true
+        @Suppress("UnstableApiUsage")
+        options.logs.isEnabled = true
+        options.tracesSampleRate = if (environment == MonitoringEnvironment.Prod) 0.2 else 1.0
+    }
 }

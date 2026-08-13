@@ -15,17 +15,26 @@
  */
 plugins {
     alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
     alias(libs.plugins.navigo.metro)
 }
 
 android {
-    namespace = "dev.lscythe.app.navigo.core.analytics"
+    namespace = "dev.lscythe.app.navigo.core.monitoring"
+
+    sourceSets {
+        listOf("beta", "rc", "prod").forEach { flavor ->
+            getByName(flavor) {
+                kotlin.directories.add("src/sentryEnabled/kotlin")
+                manifest.srcFile("src/sentryEnabled/AndroidManifest.xml")
+            }
+        }
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
+    listOf("beta", "rc", "prod").forEach { flavor ->
+        add("${flavor}Implementation", libs.sentry.android)
+    }
 
-    prodGoogleImplementation(libs.firebase.analytics.get())
+    implementation(libs.timber)
 }

@@ -51,6 +51,7 @@ include(
     ":core:datastore",
     ":core:datastore-proto",
     ":core:datastore-test",
+    ":core:monitoring",
     ":core:navigation",
 )
 

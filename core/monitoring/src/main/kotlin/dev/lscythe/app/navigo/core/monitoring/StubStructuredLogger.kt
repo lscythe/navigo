@@ -13,19 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.monitoring
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.analytics"
-}
+import dev.zacsweers.metro.Inject
+import timber.log.Timber
 
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
+private const val TAG = "StubStructuredLogger"
 
-    prodGoogleImplementation(libs.firebase.analytics.get())
+internal class StubStructuredLogger @Inject constructor() : StructuredLogger {
+    override fun log(priority: Int, message: String, attributes: Map<String, Any>) {
+        Timber.tag(TAG).log(priority, "$message $attributes")
+    }
 }

@@ -13,26 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.analytics
+package dev.lscythe.app.navigo.core.monitoring.di
 
-import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
+import dev.lscythe.app.navigo.core.monitoring.CrashReporter
+import dev.lscythe.app.navigo.core.monitoring.StructuredLogger
+import dev.lscythe.app.navigo.core.monitoring.StubCrashReporter
+import dev.lscythe.app.navigo.core.monitoring.StubStructuredLogger
+import dev.lscythe.app.navigo.core.monitoring.StubTracer
+import dev.lscythe.app.navigo.core.monitoring.Tracer
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal object AnalyticsBindings {
+internal object MonitoringBindings {
 
     @Provides
-    fun provideAnalyticsHelper(firebaseAnalyticsHelper: FirebaseAnalyticsHelper): AnalyticsHelper =
-        firebaseAnalyticsHelper
+    fun provideCrashReporter(stubCrashReporter: StubCrashReporter): CrashReporter =
+        stubCrashReporter
 
     @Provides
-    @SingleIn(AppScope::class)
-    fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
+    fun provideStructuredLogger(stubStructuredLogger: StubStructuredLogger): StructuredLogger =
+        stubStructuredLogger
+
+    @Provides fun provideTracer(stubTracer: StubTracer): Tracer = stubTracer
 }
