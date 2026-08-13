@@ -46,6 +46,9 @@ include(":app")
 
 include(
     ":core:common",
+    ":core:datastore",
+    ":core:datastore-proto",
+    ":core:datastore-test",
     ":core:database",
 )
 
