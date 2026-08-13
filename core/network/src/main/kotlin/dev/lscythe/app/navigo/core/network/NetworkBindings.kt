@@ -31,8 +31,10 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
+import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -58,16 +60,19 @@ object NetworkBindings {
                 socketTimeoutMillis = NetworkConstant.SOCKET_TIMEOUT_MILLIS
             }
 
+            val json = Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+            }
+
             install(ContentNegotiation) {
-                val json = Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                }
                 json(json)
                 // RFC 9457 Problem Details responses use this content type, not plain
                 // application/json.
                 json(json, contentType = ContentType("application", "problem+json"))
             }
+
+            install(WebSockets) { contentConverter = KotlinxWebsocketSerializationConverter(json) }
 
             install(Logging) {
                 logger =
