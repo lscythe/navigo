@@ -46,10 +46,11 @@ include(":app")
 
 include(
     ":core:common",
+    ":core:database",
     ":core:datastore",
     ":core:datastore-proto",
     ":core:datastore-test",
-    ":core:database",
+    ":core:navigation",
 )
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {

@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/core/datastore" />
             <option value="$PROJECT_DIR$/core/datastore-proto" />
             <option value="$PROJECT_DIR$/core/datastore-test" />
+            <option value="$PROJECT_DIR$/core/navigation" />
           </set>
         </option>
       </GradleProjectSettings>
