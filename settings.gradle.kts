@@ -51,10 +51,12 @@ include(
     ":core:datastore",
     ":core:datastore-proto",
     ":core:datastore-test",
+    ":core:designsystem",
     ":core:monitoring",
     ":core:navigation",
     ":core:network",
     ":core:network-graphql",
+    ":core:testing-screenshot",
 )
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
