@@ -57,6 +57,7 @@ include(
     ":core:network",
     ":core:network-graphql",
     ":core:testing-screenshot",
+    ":core:ui",
 )
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {

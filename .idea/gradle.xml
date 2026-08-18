@@ -37,6 +37,7 @@
             <option value="$PROJECT_DIR$/core/network" />
             <option value="$PROJECT_DIR$/core/network-graphql" />
             <option value="$PROJECT_DIR$/core/testing-screenshot" />
+            <option value="$PROJECT_DIR$/core/ui" />
           </set>
         </option>
       </GradleProjectSettings>
