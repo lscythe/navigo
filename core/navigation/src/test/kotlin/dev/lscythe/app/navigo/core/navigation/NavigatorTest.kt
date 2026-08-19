@@ -22,15 +22,11 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 
-private object TestFirstTopLevelKey : NavKey
+private object TestStartKey : NavKey
 
-private object TestSecondTopLevelKey : NavKey
+private object TestFirstKey : NavKey
 
-private object TestThirdTopLevelKey : NavKey
-
-private object TestKeyFirst : NavKey
-
-private object TestKeySecond : NavKey
+private object TestSecondKey : NavKey
 
 class NavigatorTest :
     FunSpec({
@@ -38,210 +34,50 @@ class NavigatorTest :
         lateinit var navigator: Navigator
 
         beforeTest {
-            val startKey = TestFirstTopLevelKey
-            val topLevelStack = NavBackStack<NavKey>(startKey)
-            val topLevelKeys =
-                listOf(
-                    startKey,
-                    TestSecondTopLevelKey,
-                    TestThirdTopLevelKey,
-                )
-            val subStacks = topLevelKeys.associateWith { key -> NavBackStack(key) }
-
-            navigationState =
-                NavigationState(
-                    startKey = startKey,
-                    topLevelStack = topLevelStack,
-                    subStacks = subStacks,
-                )
+            navigationState = NavigationState(NavBackStack(TestStartKey))
             navigator = Navigator(navigationState)
         }
 
-        test("startKey") {
-            navigationState.startKey shouldBe TestFirstTopLevelKey
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
+        test("starts at the initial key") {
+            navigationState.currentKey shouldBe TestStartKey
+            navigationState.backStack shouldContainExactly listOf(TestStartKey)
         }
 
-        test("navigate") {
-            navigator.navigate(TestKeyFirst)
+        test("navigates forward") {
+            navigator.navigate(TestFirstKey)
+            navigator.navigate(TestSecondKey)
 
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-            navigationState.subStacks[TestFirstTopLevelKey]?.last() shouldBe TestKeyFirst
+            navigationState.backStack shouldContainExactly
+                listOf(TestStartKey, TestFirstKey, TestSecondKey)
+            navigationState.currentKey shouldBe TestSecondKey
         }
 
-        test("navigate top level") {
-            navigator.navigate(TestSecondTopLevelKey)
-            navigationState.currentTopLevelKey shouldBe TestSecondTopLevelKey
+        test("does not duplicate the current key") {
+            navigator.navigate(TestFirstKey)
+            navigator.navigate(TestFirstKey)
+
+            navigationState.backStack shouldContainExactly listOf(TestStartKey, TestFirstKey)
         }
 
-        test("navigate single top") {
-            navigator.navigate(TestKeyFirst)
+        test("preserves history when revisiting an older key") {
+            navigator.navigate(TestFirstKey)
+            navigator.navigate(TestSecondKey)
+            navigator.navigate(TestFirstKey)
 
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestFirstTopLevelKey,
-                    TestKeyFirst,
-                )
-
-            navigator.navigate(TestKeyFirst)
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestFirstTopLevelKey,
-                    TestKeyFirst,
-                )
+            navigationState.backStack shouldContainExactly
+                listOf(TestStartKey, TestFirstKey, TestSecondKey, TestFirstKey)
         }
 
-        test("navigate top level single top") {
-            navigator.navigate(TestSecondTopLevelKey)
-            navigator.navigate(TestKeyFirst)
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestSecondTopLevelKey,
-                    TestKeyFirst,
-                )
-
-            navigator.navigate(TestSecondTopLevelKey)
-
-            navigationState.currentSubStack shouldContainExactly listOf(TestSecondTopLevelKey)
-        }
-
-        test("sub stack") {
-            navigator.navigate(TestKeyFirst)
-
-            navigationState.currentKey shouldBe TestKeyFirst
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-
-            navigator.navigate(TestKeySecond)
-
-            navigationState.currentKey shouldBe TestKeySecond
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-        }
-
-        test("multi stack") {
-            // add to start stack
-            navigator.navigate(TestKeyFirst)
-
-            navigationState.currentKey shouldBe TestKeyFirst
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-
-            // navigate to new top level
-            navigator.navigate(TestSecondTopLevelKey)
-
-            navigationState.currentKey shouldBe TestSecondTopLevelKey
-            navigationState.currentTopLevelKey shouldBe TestSecondTopLevelKey
-
-            // add to new stack
-            navigator.navigate(TestKeySecond)
-
-            navigationState.currentKey shouldBe TestKeySecond
-            navigationState.currentTopLevelKey shouldBe TestSecondTopLevelKey
-
-            // go back to start stack
-            navigator.navigate(TestFirstTopLevelKey)
-
-            navigationState.currentKey shouldBe TestKeyFirst
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-        }
-
-        test("pop one non top level") {
-            navigator.navigate(TestKeyFirst)
-            navigator.navigate(TestKeySecond)
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestFirstTopLevelKey,
-                    TestKeyFirst,
-                    TestKeySecond,
-                )
+        test("pops the current key") {
+            navigator.navigate(TestFirstKey)
 
             navigator.goBack()
 
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestFirstTopLevelKey,
-                    TestKeyFirst,
-                )
-
-            navigationState.currentKey shouldBe TestKeyFirst
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
+            navigationState.backStack shouldContainExactly listOf(TestStartKey)
+            navigationState.currentKey shouldBe TestStartKey
         }
 
-        test("pop one top level") {
-            navigator.navigate(TestKeyFirst)
-            navigator.navigate(TestSecondTopLevelKey)
-
-            navigationState.currentSubStack shouldContainExactly listOf(TestSecondTopLevelKey)
-
-            navigationState.currentKey shouldBe TestSecondTopLevelKey
-            navigationState.currentTopLevelKey shouldBe TestSecondTopLevelKey
-
-            // remove TopLevel
-            navigator.goBack()
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestFirstTopLevelKey,
-                    TestKeyFirst,
-                )
-
-            navigationState.currentKey shouldBe TestKeyFirst
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-        }
-
-        test("pop multiple non top level") {
-            navigator.navigate(TestKeyFirst)
-            navigator.navigate(TestKeySecond)
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestFirstTopLevelKey,
-                    TestKeyFirst,
-                    TestKeySecond,
-                )
-
-            navigator.goBack()
-            navigator.goBack()
-
-            navigationState.currentSubStack shouldContainExactly listOf(TestFirstTopLevelKey)
-
-            navigationState.currentKey shouldBe TestFirstTopLevelKey
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-        }
-
-        test("pop multiple top level") {
-            // second sub-stack
-            navigator.navigate(TestSecondTopLevelKey)
-            navigator.navigate(TestKeyFirst)
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestSecondTopLevelKey,
-                    TestKeyFirst,
-                )
-
-            // third sub-stack
-            navigator.navigate(TestThirdTopLevelKey)
-            navigator.navigate(TestKeySecond)
-
-            navigationState.currentSubStack shouldContainExactly
-                listOf(
-                    TestThirdTopLevelKey,
-                    TestKeySecond,
-                )
-
-            repeat(4) {
-                navigator.goBack()
-            }
-
-            navigationState.currentSubStack shouldContainExactly listOf(TestFirstTopLevelKey)
-
-            navigationState.currentKey shouldBe TestFirstTopLevelKey
-            navigationState.currentTopLevelKey shouldBe TestFirstTopLevelKey
-        }
-
-        test("throw on empty back stack") {
+        test("throws when going back from the start key") {
             shouldThrow<IllegalStateException> {
                 navigator.goBack()
             }

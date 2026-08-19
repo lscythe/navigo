@@ -30,53 +30,12 @@ class Navigator(val state: NavigationState) {
      * @param key - the navigation key to navigate to.
      */
     fun navigate(key: NavKey) {
-        when (key) {
-            state.currentTopLevelKey -> clearSubStack()
-            in state.topLevelKeys -> goToTopLevel(key)
-            else -> goToKey(key)
-        }
+        if (key != state.currentKey) state.backStack.add(key)
     }
 
     /** Go back to the previous navigation key. */
     fun goBack() {
-        when (state.currentKey) {
-            state.startKey -> error("You cannot go back from the start route")
-            state.currentTopLevelKey -> {
-                // We're at the base of the current sub stack, go back to the previous top level
-                // stack.
-                state.topLevelStack.removeLastOrNull()
-            }
-            else -> state.currentSubStack.removeLastOrNull()
-        }
-    }
-
-    /** Go to a non top level key. */
-    private fun goToKey(key: NavKey) {
-        state.currentSubStack.apply {
-            // Remove it if it's already in the stack so it's added at the end.
-            remove(key)
-            add(key)
-        }
-    }
-
-    /** Go to a top level stack. */
-    private fun goToTopLevel(key: NavKey) {
-        state.topLevelStack.apply {
-            if (key == state.startKey) {
-                // This is the start key. Clear the stack so it's added as the only key.
-                clear()
-            } else {
-                // Remove it if it's already in the stack so it's added at the end.
-                remove(key)
-            }
-            add(key)
-        }
-    }
-
-    /** Clearing all but the root key in the current substack. */
-    private fun clearSubStack() {
-        state.currentSubStack.run {
-            if (size > 1) subList(1, size).clear()
-        }
+        check(state.backStack.size > 1) { "You cannot go back from the start route" }
+        state.backStack.removeLastOrNull()
     }
 }

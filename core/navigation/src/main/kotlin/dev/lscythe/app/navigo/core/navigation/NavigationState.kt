@@ -15,7 +15,6 @@
  */
 package dev.lscythe.app.navigo.core.navigation
 
-import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -29,69 +28,34 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import kotlin.collections.associateWith
+import kotlin.collections.last
 
-/** Create a navigation state that persists config changes and process death. */
+/** Create a single navigation back stack that persists configuration changes and process death. */
 @Composable
-fun rememberNavigationState(
-    startKey: NavKey,
-    topLevelKeys: Set<NavKey>,
-): NavigationState {
-    val topLevelStack = rememberNavBackStack(startKey)
-    val subStacks = topLevelKeys.associateWith { key -> rememberNavBackStack(key) }
-
-    return remember(startKey, topLevelKeys) {
-        NavigationState(
-            startKey = startKey,
-            topLevelStack = topLevelStack,
-            subStacks = subStacks,
-        )
-    }
+fun rememberNavigationState(startKey: NavKey): NavigationState {
+    val backStack = rememberNavBackStack(startKey)
+    return remember(backStack) { NavigationState(backStack) }
 }
 
-/**
- * State holder for navigation state.
- *
- * @param startKey - the starting navigation key. The user will exit the app through this key.
- * @param topLevelStack - the top level back stack. It holds only top level keys.
- * @param subStacks - the back stacks for each top level key
- */
-class NavigationState(
-    val startKey: NavKey,
-    val topLevelStack: NavBackStack<NavKey>,
-    val subStacks: Map<NavKey, NavBackStack<NavKey>>,
-) {
-    val currentTopLevelKey: NavKey by derivedStateOf { topLevelStack.last() }
-
-    val topLevelKeys
-        get() = subStacks.keys
-
-    @get:VisibleForTesting
-    val currentSubStack: NavBackStack<NavKey>
-        get() =
-            subStacks[currentTopLevelKey]
-                ?: error("Sub stack for $currentTopLevelKey does not exist")
-
-    @get:VisibleForTesting val currentKey: NavKey by derivedStateOf { currentSubStack.last() }
+/** State holder for the application's navigation back stack. */
+class NavigationState(val backStack: NavBackStack<NavKey>) {
+    val currentKey: NavKey by derivedStateOf { backStack.last() }
 }
 
-/** Convert NavigationState into NavEntries. */
+/** Convert this navigation state into decorated navigation entries. */
 @Composable
 fun NavigationState.toEntries(
     entryProvider: (NavKey) -> NavEntry<NavKey>
 ): SnapshotStateList<NavEntry<NavKey>> {
-    val decoratedEntries = subStacks.mapValues { (_, stack) ->
-        val decorators =
-            listOf(
-                rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
-                rememberViewModelStoreNavEntryDecorator<NavKey>(),
-            )
-        rememberDecoratedNavEntries(
-            backStack = stack,
+    val decorators =
+        listOf(
+            rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
+            rememberViewModelStoreNavEntryDecorator<NavKey>(),
+        )
+    return rememberDecoratedNavEntries(
+            backStack = backStack,
             entryDecorators = decorators,
             entryProvider = entryProvider,
         )
-    }
-
-    return topLevelStack.flatMap { decoratedEntries[it] ?: emptyList() }.toMutableStateList()
+        .toMutableStateList()
 }
