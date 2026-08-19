@@ -20,7 +20,8 @@ import timber.log.Timber
 
 private const val TAG = "StubStructuredLogger"
 
-internal class StubStructuredLogger @Inject constructor() : StructuredLogger {
+@Inject
+class StubStructuredLogger : StructuredLogger {
     override fun log(priority: Int, message: String, attributes: Map<String, Any>) {
         Timber.tag(TAG).log(priority, "$message $attributes")
     }

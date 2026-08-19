@@ -18,7 +18,8 @@ package dev.lscythe.app.navigo.core.monitoring
 import dev.zacsweers.metro.Inject
 import io.sentry.Sentry
 
-internal class SentryCrashReporter @Inject constructor() : CrashReporter {
+@Inject
+class SentryCrashReporter : CrashReporter {
     override fun logError(throwable: Throwable) {
         Sentry.captureException(throwable)
     }

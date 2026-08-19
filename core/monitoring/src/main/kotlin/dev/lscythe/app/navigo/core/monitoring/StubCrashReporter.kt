@@ -20,8 +20,9 @@ import timber.log.Timber
 
 private const val TAG = "StubCrashReporter"
 
-internal class StubCrashReporter @Inject constructor() : CrashReporter {
+@Inject
+class StubCrashReporter : CrashReporter {
     override fun logError(throwable: Throwable) {
-        Timber.tag(TAG).e("Received crash report", throwable)
+        Timber.tag(TAG).e(throwable, "Received crash report")
     }
 }

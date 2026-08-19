@@ -22,7 +22,8 @@ import io.sentry.SentryAttributes
 import io.sentry.SentryLogLevel
 import io.sentry.logger.SentryLogParameters
 
-internal class SentryStructuredLogger @Inject constructor() : StructuredLogger {
+@Inject
+class SentryStructuredLogger : StructuredLogger {
     override fun log(priority: Int, message: String, attributes: Map<String, Any>) {
         Sentry.logger()
             .log(

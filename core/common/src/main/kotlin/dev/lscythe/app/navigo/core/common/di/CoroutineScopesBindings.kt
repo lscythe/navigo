@@ -29,7 +29,7 @@ import kotlinx.coroutines.SupervisorJob
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal object CoroutineScopesBindings {
+object CoroutineScopesBindings {
 
     @Provides
     @SingleIn(AppScope::class)

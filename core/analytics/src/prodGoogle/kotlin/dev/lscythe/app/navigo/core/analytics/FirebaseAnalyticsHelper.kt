@@ -19,9 +19,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.logEvent
 import dev.zacsweers.metro.Inject
 
-internal class FirebaseAnalyticsHelper
 @Inject
-constructor(private val firebaseAnalytics: FirebaseAnalytics) : AnalyticsHelper {
+internal class FirebaseAnalyticsHelper(private val firebaseAnalytics: FirebaseAnalytics) :
+    AnalyticsHelper {
     override fun logEvent(event: AnalyticsEvent) {
         firebaseAnalytics.logEvent(event.type) {
             for (extra in event.extras) {

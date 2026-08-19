@@ -26,7 +26,7 @@ import kotlinx.coroutines.Dispatchers
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal object DispatchersBindings {
+object DispatchersBindings {
 
     @Provides
     @Dispatcher(NavigoDispatchers.IO)

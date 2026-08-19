@@ -22,7 +22,7 @@ import dev.zacsweers.metro.Provides
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal object MonitoringBindings {
+object MonitoringBindings {
 
     @Provides
     fun provideCrashReporter(sentryCrashReporter: SentryCrashReporter): CrashReporter =

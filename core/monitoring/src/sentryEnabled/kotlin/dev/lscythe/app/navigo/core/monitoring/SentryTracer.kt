@@ -19,7 +19,8 @@ import dev.zacsweers.metro.Inject
 import io.sentry.Sentry
 import io.sentry.SpanStatus
 
-internal class SentryTracer @Inject constructor() : Tracer {
+@Inject
+class SentryTracer : Tracer {
     override fun <T> trace(name: String, operation: String, block: () -> T): T {
         val transaction = Sentry.startTransaction(name, operation)
         return try {

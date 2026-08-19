@@ -23,7 +23,8 @@ import timber.log.Timber
 private const val TAG = "StubAnalyticsHelper"
 
 @SingleIn(AppScope::class)
-internal class StubAnalyticsHelper @Inject constructor() : AnalyticsHelper {
+@Inject
+internal class StubAnalyticsHelper : AnalyticsHelper {
     override fun logEvent(event: AnalyticsEvent) {
         Timber.tag(TAG).d("Received analytics event: $event")
     }

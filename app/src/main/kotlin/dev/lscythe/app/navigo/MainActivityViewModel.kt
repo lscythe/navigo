@@ -13,11 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.monitoring
+package dev.lscythe.app.navigo
 
+import androidx.lifecycle.ViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 
 @Inject
-class StubTracer : Tracer {
-    override fun <T> trace(name: String, operation: String, block: () -> T): T = block()
-}
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
+class MainActivityViewModel : ViewModel() {}
