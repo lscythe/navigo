@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.di
+package dev.lscythe.app.navigo.feature.onboarding.impl
 
-import dev.lscythe.app.navigo.util.ProfileVerifierLogger
+import androidx.lifecycle.ViewModel
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metrox.android.MetroAppComponentProviders
-import dev.zacsweers.metrox.viewmodel.ViewModelGraph
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 
-@DependencyGraph(AppScope::class)
-interface NavigoGraph : MetroAppComponentProviders, ViewModelGraph {
-    val profileVerifierLogger: ProfileVerifierLogger
-}
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class)
+class OnboardingViewModel : ViewModel() {}

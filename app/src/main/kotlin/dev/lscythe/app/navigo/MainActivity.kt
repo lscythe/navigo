@@ -17,52 +17,76 @@ package dev.lscythe.app.navigo
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
-import androidx.metrics.performance.JankStats
+import androidx.navigation3.runtime.entryProvider
+import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.monitoring.StructuredLogger
-import dev.lscythe.app.navigo.di.NavigoViewModelFactory
+import dev.lscythe.app.navigo.core.navigation.Navigator
+import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
+import dev.lscythe.app.navigo.feature.onboarding.impl.navigation.onboardingEntry
+import dev.lscythe.app.navigo.ui.NavigoApp
+import dev.lscythe.app.navigo.ui.rememberNavigoAppState
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 
 @Inject
 @ActivityKey
 @ContributesIntoMap(AppScope::class, binding<Activity>())
 class MainActivity(
-    private val viewModelFactory: NavigoViewModelFactory,
+    private val viewModelFactory: MetroViewModelFactory,
     private val logger: StructuredLogger,
 ) : ComponentActivity() {
 
     override val defaultViewModelProviderFactory: ViewModelProvider.Factory
         get() = viewModelFactory
 
-    private lateinit var jankStats: JankStats
+    //    private lateinit var jankStats: JankStats
 
     private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        jankStats =
-            JankStats.createAndTrack(window) { frameData ->
-                if (frameData.isJank) {
-                    logger.log(
-                        priority = Log.WARN,
-                        message = "Janky frame",
-                        attributes = mapOf("frameData" to frameData.toString()),
-                    )
-                }
+        //        jankStats =
+        //            JankStats.createAndTrack(window) { frameData ->
+        //                if (frameData.isJank) {
+        //                    logger.log(
+        //                        priority = Log.WARN,
+        //                        message = "Janky frame",
+        //                        attributes = mapOf("frameData" to frameData.toString()),
+        //                    )
+        //                }
+        //            }
+
+        setContent {
+            val appState = rememberNavigoAppState(OnboardingNavKey)
+
+            val navigator = remember { Navigator(appState.navigationState) }
+
+            val entryProvider = entryProvider {
+                onboardingEntry(navigator)
             }
+
+            NavigoTheme {
+                NavigoApp(
+                    appState = appState,
+                    entryProvider = entryProvider,
+                )
+            }
+        }
     }
 
     override fun onDestroy() {
-        if (::jankStats.isInitialized) jankStats.isTrackingEnabled = false
+        //        if (::jankStats.isInitialized) jankStats.isTrackingEnabled = false
         super.onDestroy()
     }
 }

@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.di
+package dev.lscythe.app.navigo.feature.onboarding.impl.navigation
 
-import dev.lscythe.app.navigo.util.ProfileVerifierLogger
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metrox.android.MetroAppComponentProviders
-import dev.zacsweers.metrox.viewmodel.ViewModelGraph
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import dev.lscythe.app.navigo.core.navigation.Navigator
+import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingRoute
 
-@DependencyGraph(AppScope::class)
-interface NavigoGraph : MetroAppComponentProviders, ViewModelGraph {
-    val profileVerifierLogger: ProfileVerifierLogger
+fun EntryProviderScope<NavKey>.onboardingEntry(navigator: Navigator) {
+    entry<OnboardingNavKey> {
+        OnboardingRoute(navigateHome = navigator::goBack)
+    }
 }

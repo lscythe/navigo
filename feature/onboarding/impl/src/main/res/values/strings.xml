@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_onboarding_impl_pager_indicator_format">%1$02d / %2$02d</string>
+</resources>

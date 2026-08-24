@@ -116,6 +116,9 @@ baselineProfile {
 }
 
 dependencies {
+    implementation(project(":feature:onboarding:api"))
+    implementation(project(":feature:onboarding:impl"))
+
     implementation(project(":core:analytics"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
@@ -144,11 +147,13 @@ dependencies {
 
     implementation(libs.metro.android)
     implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
     implementation(libs.timber)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
 }
 
 dependencyGuard {
-    configuration("prodReleaseRuntimeClasspath")
+    configuration("prodGoogleReleaseRuntimeClasspath")
+    configuration("prodHuaweiReleaseRuntimeClasspath")
 }

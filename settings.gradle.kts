@@ -60,6 +60,11 @@ include(
     ":core:ui",
 )
 
+include(
+    ":feature:onboarding:api",
+    ":feature:onboarding:impl",
+)
+
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
     """
     Navigo requires JDK 21+ but it is currently using JDK ${JavaVersion.current()}.

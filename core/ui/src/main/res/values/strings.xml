@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- General / Common -->
+    <string name="core_ui_app_name">Navigo</string>
+    <!-- endregion -->
+    <!-- Feature: Onboarding -->
+    <string name="core_ui_onboarding_feed_page_title">Two feeds. One map of what\'s really running.</string>
+    <string name="core_ui_onboarding_feed_page_description">Navigo combines the operator\'s live feed with crowdsourced rider reports to cover the rest of the network, including microtrans, minibuses, and buses with turned-off trackers.</string>
+    <string name="core_ui_onboarding_gps_feed_title">A GPS dot can\'t tell you if you\'ll fit.</string>
+    <string name="core_ui_onboarding_gps_feed_description">The operator feed knows where the bus is. Riders on board report how full it is, today\'s fare, and route diversions, and Navigo always shows how old those reports are.</string>
+    <string name="core_ui_onboarding_alarm_page_title">Doze off. It wakes you at your stop.</string>
+    <string name="core_ui_onboarding_alarm_page_description">Set a get-off alarm and Navigo rings one stop early, even with your screen locked and your phone in your pocket. It reads both feeds, so it still rings on the lines the operator never tracked.</string>
+    <string name="core_ui_onboarding_feed_page_first_item">Operator where it exists</string>
+    <string name="core_ui_onboarding_feed_page_second_item">Rider reports where it doesn\'t</string>
+    <string name="core_ui_onboarding_feed_page_third_item">Every dot says which one it came from</string>
+    <string name="core_ui_onboarding_alarm_page_first_item">Rings through a minute of dead signal</string>
+    <string name="core_ui_onboarding_alarm_page_second_item">Works offline on maps you\'ve downloaded</string>
+    <string name="core_ui_onboarding_gps_disclosure_note">When a line goes quiet, Navigo says so instead of inventing a number, while your ride fills the gap for whoever\'s next.</string>
+    <string name="core_ui_onboarding_alarm_notification_sample_category">Stop Alarm</string>
+    <string name="core_ui_onboarding_alarm_notification_sample_time">Now</string>
+    <string name="core_ui_onboarding_alarm_notification_sample_title">Get Off at Jalan Melati - next stop</string>
+    <string name="core_ui_onboarding_alarm_notification_sample_description">Riding the 14 · doors on your left</string>
+    <string name="core_ui_onboarding_next_button_label">Next</string>
+    <string name="core_ui_onboarding_skip_button_label">Skip</string>
+    <string name="core_ui_onboarding_swipe_helper_label">Swipe</string>
+    <string name="core_ui_onboarding_setup_button_label">Set up Navigo</string>
+    <!-- Language selection -->
+    <string name="core_ui_language_sheet_title">Language</string>
+    <string name="core_ui_language_sheet_description">Changes the app only — stop names stay as the operator writes them.</string>
+    <string name="core_ui_language_system_default">System default</string>
+    <string name="core_ui_language_system_default_description">Use the device language</string>
+    <string name="core_ui_language_english">English</string>
+    <string name="core_ui_language_indonesian">Bahasa Indonesia</string>
+    <string name="core_ui_language_apply">Apply</string>
+    <!-- endregion -->
+    <!-- endregion -->
+</resources>
