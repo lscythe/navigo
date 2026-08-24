@@ -9,8 +9,4 @@
         <item name="android:forceDarkAllowed" tools:targetApi="29">false</item>
     </style>
 
-    <style name="Theme.Navigo.Splash" parent="NightAdjusted.Theme.Splash">
-        <item name="postSplashScreenTheme">@style/Theme.Navigo</item>
-    </style>
-
 </resources>
