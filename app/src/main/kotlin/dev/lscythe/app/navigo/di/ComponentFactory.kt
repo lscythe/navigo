@@ -1,0 +1,66 @@
+/*
+ * Copyright 2026 Lscythe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package dev.lscythe.app.navigo.di
+
+import android.app.Activity
+import android.app.Application
+import android.content.Intent
+import androidx.core.app.AppComponentFactory
+import dev.lscythe.app.navigo.BuildConfig
+import dev.lscythe.app.navigo.NavigoApplication
+import kotlin.reflect.KClass
+import kotlinx.coroutines.DEBUG_PROPERTY_NAME
+
+class NavigoAppComponentFactory : AppComponentFactory() {
+
+    private inline fun <reified T : Any> getInstance(
+        cl: ClassLoader,
+        className: String,
+        providers: Map<KClass<out T>, () -> T>,
+    ): T? {
+        val clazz = Class.forName(className, false, cl).asSubclass(T::class.java)
+        val modelProvider = providers[clazz.kotlin] ?: return null
+        return modelProvider()
+    }
+
+    override fun instantiateActivityCompat(
+        cl: ClassLoader,
+        className: String,
+        intent: Intent?,
+    ): Activity {
+        return getInstance(cl, className, applicationRef.appComponentProviders.activityProviders)
+            ?: super.instantiateActivityCompat(cl, className, intent)
+    }
+
+    override fun instantiateApplicationCompat(cl: ClassLoader, className: String): Application {
+        val app = super.instantiateApplicationCompat(cl, className)
+        applicationRef = (app as NavigoApplication)
+        return app
+    }
+
+    // AppComponentFactory can be created multiple times
+    companion object {
+        private lateinit var applicationRef: NavigoApplication
+
+        // Enable coroutines debug mode in debug builds
+        init {
+            if (BuildConfig.DEBUG) {
+                System.setProperty(DEBUG_PROPERTY_NAME, "on")
+                System.setProperty("kotlinx.coroutines.stacktrace.recovery", "true")
+            }
+        }
+    }
+}
