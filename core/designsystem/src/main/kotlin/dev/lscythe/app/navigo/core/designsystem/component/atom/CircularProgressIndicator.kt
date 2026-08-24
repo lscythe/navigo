@@ -185,7 +185,7 @@ private fun DeterminateCircularIndicator(
 @Composable
 private fun NavigoCircularProgressIndicatorPreview() {
     NavigoPreview {
-        Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
             NavigoCircularProgressIndicator(progress = 0.25f)
             NavigoCircularProgressIndicator(progress = 0.65f)
             NavigoCircularProgressIndicator(progress = 1f)

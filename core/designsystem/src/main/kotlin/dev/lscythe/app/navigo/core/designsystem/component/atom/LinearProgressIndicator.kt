@@ -151,7 +151,7 @@ fun NavigoSegmentedLinearProgressIndicator(
 @Composable
 private fun NavigoLinearProgressIndicatorPreview() {
     NavigoPreview {
-        Column(verticalArrangement = spacedBy(NavigoSpacing.cardPadding)) {
+        Column(verticalArrangement = spacedBy(NavigoSpacing.container)) {
             NavigoSegmentedLinearProgressIndicator(
                 segments =
                     persistentListOf(
@@ -189,7 +189,7 @@ private fun NavigoLinearProgressIndicatorPreview() {
 @Composable
 private fun NavigoLinearProgressIndicatorMaterialKolorPreview() {
     NavigoMaterialKolorPreview {
-        Column(verticalArrangement = spacedBy(NavigoSpacing.cardPadding)) {
+        Column(verticalArrangement = spacedBy(NavigoSpacing.container)) {
             NavigoSegmentedLinearProgressIndicator(
                 segments =
                     persistentListOf(

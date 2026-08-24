@@ -108,7 +108,7 @@ private fun ListContainerPreviewContent() {
         itemCount = labels.size,
         modifier = Modifier.fillMaxWidth(),
     ) { index ->
-        Row(modifier = Modifier.fillMaxWidth().padding(NavigoSpacing.cardPadding)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(NavigoSpacing.container)) {
             Text(labels[index])
         }
     }

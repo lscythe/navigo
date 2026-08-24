@@ -20,9 +20,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import dev.lscythe.app.navigo.core.designsystem.token.MaterialKolorConfig
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
@@ -47,15 +49,19 @@ annotation class NavigoMaterialKolorThemePreview
 @Composable
 fun NavigoPreview(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(NavigoSpacing.cardPadding),
+    contentPadding: PaddingValues = PaddingValues(NavigoSpacing.container),
     materialKolor: MaterialKolorConfig? = null,
+    backgroundColor: Color? = null,
     content: @Composable () -> Unit,
 ) {
     NavigoTheme(
         isDarkTheme = isSystemInDarkTheme(),
         materialKolor = materialKolor,
     ) {
-        Surface(modifier = modifier) {
+        Surface(
+            modifier = modifier,
+            color = backgroundColor ?: MaterialTheme.colorScheme.background,
+        ) {
             Box(modifier = Modifier.padding(contentPadding)) {
                 content()
             }
@@ -66,14 +72,16 @@ fun NavigoPreview(
 @Composable
 fun NavigoMaterialKolorPreview(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(NavigoSpacing.cardPadding),
+    contentPadding: PaddingValues = PaddingValues(NavigoSpacing.container),
     materialKolor: MaterialKolorConfig = MaterialKolorConfig(),
+    backgroundColor: Color? = null,
     content: @Composable () -> Unit,
 ) {
     NavigoPreview(
         modifier = modifier,
         contentPadding = contentPadding,
         materialKolor = materialKolor,
+        backgroundColor = backgroundColor,
         content = content,
     )
 }

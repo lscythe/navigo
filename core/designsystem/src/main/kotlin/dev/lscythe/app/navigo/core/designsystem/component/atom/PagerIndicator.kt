@@ -17,8 +17,8 @@ package dev.lscythe.app.navigo.core.designsystem.component.atom
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -65,20 +65,16 @@ fun NavigoPagerIndicator(
     currentPage: Int,
     pageProgress: Float,
     modifier: Modifier = Modifier,
-    activeWidth: Dp = 64.dp,
-    indicatorSize: Dp = 24.dp,
+    activeWidth: Dp = 32.dp,
+    indicatorSize: Dp = 10.dp,
+    inactiveWidth: Dp = indicatorSize,
     activeColor: Color = MaterialTheme.colorScheme.primary,
     inactiveColor: Color = MaterialTheme.colorScheme.surfaceVariant,
 ) {
     require(pageCount > 0) { "pageCount must be greater than zero" }
     require(currentPage in 0 until pageCount) { "currentPage must be within pageCount" }
 
-    val progress by
-        animateFloatAsState(
-            targetValue = pageProgress.coerceIn(0f, 1f),
-            animationSpec = tween(durationMillis = 150, easing = LinearEasing),
-            label = "pager indicator progress",
-        )
+    val progress = pageProgress.coerceIn(0f, 1f)
 
     Row(
         modifier =
@@ -90,16 +86,24 @@ fun NavigoPagerIndicator(
                         steps = pageCount - 1,
                     )
             },
-        horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+        horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
     ) {
         repeat(pageCount) { page ->
             val isActive = page == currentPage
+            val width by
+                animateDpAsState(
+                    targetValue = if (isActive) activeWidth else inactiveWidth,
+                    animationSpec =
+                        if (isActive) {
+                            tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)
+                        } else {
+                            tween(durationMillis = 150, easing = LinearEasing)
+                        },
+                    label = "pager indicator width",
+                )
             Canvas(
                 modifier =
-                    Modifier.size(
-                            width = if (isActive) activeWidth else indicatorSize,
-                            height = indicatorSize,
-                        )
+                    Modifier.size(width = width, height = indicatorSize)
                         .clip(MaterialTheme.shapes.extraLarge)
             ) {
                 val radius = size.height / 2f

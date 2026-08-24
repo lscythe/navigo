@@ -102,7 +102,7 @@ private fun NavigoRadioButtonPreview() {
     NavigoPreview {
         var selected by remember { mutableStateOf(false) }
 
-        Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap)) {
+        Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
             NavigoRadioButton(
                 selected = selected,
                 onClick = { selected = !selected },

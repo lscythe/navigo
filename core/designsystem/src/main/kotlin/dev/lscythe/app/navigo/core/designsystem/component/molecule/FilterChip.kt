@@ -83,8 +83,8 @@ fun NavigoFilterChip(
     unselectedContainerColor: Color = Color.Transparent,
     unselectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
     unselectedBorderColor: Color = MaterialTheme.colorScheme.outline,
-    horizontalPadding: Dp = NavigoSpacing.cardPadding,
-    verticalPadding: Dp = NavigoSpacing.chipGap,
+    horizontalPadding: Dp = NavigoSpacing.container,
+    verticalPadding: Dp = NavigoSpacing.element,
     labelStyle: TextStyle = MaterialTheme.typography.titleMedium,
     countStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) {
@@ -109,7 +109,7 @@ fun NavigoFilterChip(
         Row(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = verticalPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
         ) {
             NavigoDot(
                 color =
@@ -149,8 +149,8 @@ private fun NavigoFilterChipMaterialKolorPreview() {
 private fun FilterChipPreviewContent() {
     var selected by remember { mutableStateOf(true) }
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
-        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+        horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
+        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
     ) {
         NavigoFilterChip(
             selected = selected,

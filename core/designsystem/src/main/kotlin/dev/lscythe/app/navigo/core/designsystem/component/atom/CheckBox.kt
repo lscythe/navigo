@@ -119,7 +119,7 @@ private fun NavigoCheckboxPreview() {
     NavigoPreview {
         var checked by remember { mutableStateOf(false) }
 
-        Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap)) {
+        Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
             NavigoCheckbox(
                 checked = checked,
                 onCheckedChange = { checked = it },

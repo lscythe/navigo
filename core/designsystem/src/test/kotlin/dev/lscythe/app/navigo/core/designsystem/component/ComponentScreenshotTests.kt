@@ -19,15 +19,20 @@ import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.unit.dp
+import dev.lscythe.app.navigo.core.designsystem.brand.NavigoBrand
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoAlertCard
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoDisclosureNote
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoFilterChip
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoListContainer
+import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBottomSheet
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoSearchBar
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoStatusChip
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoTextField
@@ -71,6 +76,16 @@ class ComponentScreenshotTests {
 
     @Test fun listContainer_multipleThemes() = capture("ListContainer") { ListContainerContent() }
 
+    @Test
+    fun modalBottomSheet_multipleThemes() =
+        capture("ModalBottomSheet") { ModalBottomSheetContent() }
+
+    @Test fun navigoBrand_multipleThemes() = capture("NavigoBrand") { NavigoBrand() }
+
+    @Test
+    fun navigoBrand_constrainedWidth_multipleThemes() =
+        capture("NavigoBrandConstrainedWidth") { NavigoBrand(Modifier.width(120.dp)) }
+
     private fun capture(name: String, content: @Composable () -> Unit) {
         composeTestRule.captureMultiTheme(name) { content() }
     }
@@ -78,7 +93,7 @@ class ComponentScreenshotTests {
 
 @Composable
 private fun FilterChipContent() {
-    Row(modifier = Modifier.padding(NavigoSpacing.cardPadding)) {
+    Row(modifier = Modifier.padding(NavigoSpacing.container)) {
         NavigoFilterChip(selected = true, onClick = {}, label = "Buses", count = "12")
         NavigoFilterChip(selected = false, onClick = {}, label = "Stops")
     }
@@ -131,7 +146,7 @@ private fun AlertCardContent() {
     NavigoAlertCard(
         source = "NAVIGO",
         category = "STOP ALARM",
-        message = "Get off at Jalan Melati — next stop",
+        title = "Get off at Jalan Melati — next stop",
         timestamp = "now",
         icon = NavigoIcons.Notification,
         modifier = Modifier.fillMaxWidth(),
@@ -142,8 +157,25 @@ private fun AlertCardContent() {
 @Composable
 private fun ListContainerContent() {
     NavigoListContainer(itemCount = 3, modifier = Modifier.fillMaxWidth()) { index ->
-        Row(modifier = Modifier.fillMaxWidth().padding(NavigoSpacing.cardPadding)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(NavigoSpacing.container)) {
             Text(listOf("First option", "Second option", "Third option")[index])
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ModalBottomSheetContent() {
+    NavigoModalBottomSheet(
+        title = "Text size",
+        description = "Affects every screen. Arrival numbers scale with it.",
+        onDismissRequest = {},
+    ) {
+        Text(
+            text = "Sample content",
+            modifier =
+                Modifier.padding(horizontal = NavigoSpacing.screen, vertical = NavigoSpacing.item),
+            style = MaterialTheme.typography.bodyLarge,
+        )
     }
 }

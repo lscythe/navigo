@@ -138,7 +138,7 @@ private fun NavigoDotMaterialKolorPreview() {
 
 @Composable
 private fun DotPreviewContent() {
-    Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoDot(color = MaterialTheme.colorScheme.primary)
         NavigoDot(color = MaterialTheme.colorScheme.secondary)
         NavigoDot(color = MaterialTheme.colorScheme.tertiary)
@@ -168,8 +168,8 @@ private fun NavigoBadgeMaterialKolorPreview() {
 
 @Composable
 private fun BadgePreviewContent() {
-    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap)) {
-        Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
             NavigoBadge(text = "3")
             NavigoBadge(
                 text = "12",

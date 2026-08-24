@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults.iconSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,8 +70,10 @@ fun NavigoDisclosureNote(
     shape: Shape = MaterialTheme.shapes.large,
     containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
     contentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
-    contentPadding: Dp = NavigoSpacing.cardPadding,
+    contentPadding: Dp = NavigoSpacing.container,
+    alignment: Alignment.Vertical = Alignment.CenterVertically,
     iconSize: Dp = 24.dp,
+    iconTint: Color = Color.White,
     iconContainerShape: Shape? = null,
     iconContainerColor: Color = Color.Transparent,
     iconContainerSize: Dp = 40.dp,
@@ -84,8 +87,8 @@ fun NavigoDisclosureNote(
     ) {
         Row(
             modifier = Modifier.padding(contentPadding),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.rowInternal),
+            verticalAlignment = alignment,
+            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
         ) {
             if (iconContainerShape != null) {
                 Box(
@@ -94,10 +97,10 @@ fun NavigoDisclosureNote(
                             .background(iconContainerColor, iconContainerShape),
                     contentAlignment = Alignment.Center,
                 ) {
-                    DisclosureIcon(icon = icon, size = iconSize)
+                    DisclosureIcon(icon = icon, size = iconSize, tint = iconTint)
                 }
             } else {
-                DisclosureIcon(icon = icon, size = iconSize)
+                DisclosureIcon(icon = icon, size = iconSize, tint = iconTint)
             }
             Text(
                 text = text,
@@ -112,10 +115,12 @@ fun NavigoDisclosureNote(
 private fun DisclosureIcon(
     icon: ImageVector,
     size: Dp,
+    tint: Color,
 ) {
     Icon(
         imageVector = icon,
         contentDescription = null,
+        tint = tint,
         modifier = Modifier.size(size),
     )
 }
@@ -138,7 +143,7 @@ private fun NavigoDisclosureNoteMaterialKolorPreview() {
 
 @Composable
 private fun DisclosureNotePreviewContent() {
-    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoDisclosureNote(
             text = "Reports are anonymous. Location is shared only while you're on a bus.",
             icon = NavigoIcons.ExclamationCircle,

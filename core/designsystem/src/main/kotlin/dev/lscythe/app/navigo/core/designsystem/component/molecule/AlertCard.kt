@@ -45,11 +45,12 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
- * Displays alert metadata and a prominent message in a card.
+ * Displays alert metadata, a title, and optional description in a card.
  *
  * @param source the source of this alert
  * @param category the category of this alert
- * @param message the alert message
+ * @param title the alert title
+ * @param description the optional alert description
  * @param timestamp the time associated with this alert
  * @param icon the icon displayed before the alert metadata
  * @param modifier the [Modifier] to apply to this card
@@ -62,13 +63,15 @@ import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
  * @param iconSize the width and height of the icon
  * @param metadataStyle the style of the source and category
  * @param timestampStyle the style of the timestamp
- * @param messageStyle the style of the message
+ * @param titleStyle the style of the title
+ * @param descriptionStyle the style of the description
  */
 @Composable
 fun NavigoAlertCard(
     source: String,
     category: String,
-    message: String,
+    title: String,
+    description: String = "",
     timestamp: String,
     icon: ImageVector,
     modifier: Modifier = Modifier,
@@ -77,24 +80,27 @@ fun NavigoAlertCard(
     containerColor: Color = MaterialTheme.colorScheme.primaryFixed,
     contentColor: Color = MaterialTheme.colorScheme.onPrimaryFixed,
     border: BorderStroke? = null,
-    contentPadding: Dp = NavigoSpacing.cardPadding,
+    contentPadding: Dp = NavigoSpacing.container,
     iconSize: Dp = 24.dp,
     metadataStyle: TextStyle = MaterialTheme.typography.labelLarge,
     timestampStyle: TextStyle = MaterialTheme.typography.labelSmall,
-    messageStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    descriptionStyle: TextStyle = MaterialTheme.typography.bodyMedium,
 ) {
     val content: @Composable () -> Unit = {
         AlertCardContent(
-            source = source,
-            category = category,
-            message = message,
-            timestamp = timestamp,
-            icon = icon,
-            contentPadding = contentPadding,
-            iconSize = iconSize,
-            metadataStyle = metadataStyle,
-            timestampStyle = timestampStyle,
-            messageStyle = messageStyle,
+            source,
+            category,
+            title,
+            description,
+            timestamp,
+            icon,
+            contentPadding,
+            iconSize,
+            metadataStyle,
+            timestampStyle,
+            titleStyle,
+            descriptionStyle,
         )
     }
     if (onClick != null) {
@@ -123,34 +129,32 @@ fun NavigoAlertCard(
 private fun AlertCardContent(
     source: String,
     category: String,
-    message: String,
+    title: String,
+    description: String,
     timestamp: String,
     icon: ImageVector,
     contentPadding: Dp,
     iconSize: Dp,
     metadataStyle: TextStyle,
     timestampStyle: TextStyle,
-    messageStyle: TextStyle,
+    titleStyle: TextStyle,
+    descriptionStyle: TextStyle,
 ) {
     Column(
-        modifier = Modifier.padding(contentPadding),
-        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+        Modifier.padding(contentPadding),
+        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
         ) {
             Icon(imageVector = icon, contentDescription = null, modifier = Modifier.size(iconSize))
-            Text(
-                text = "$source · $category",
-                modifier = Modifier.weight(1f),
-                style = metadataStyle,
-                maxLines = 1,
-            )
-            Text(text = timestamp, style = timestampStyle, maxLines = 1)
+            Text("$source · $category", Modifier.weight(1f), style = metadataStyle, maxLines = 1)
+            Text(timestamp, style = timestampStyle, maxLines = 1)
         }
-        Text(text = message, style = messageStyle)
+        Text(title, style = titleStyle)
+        if (description.isNotEmpty()) Text(description, style = descriptionStyle)
     }
 }
 
@@ -172,11 +176,11 @@ private fun NavigoAlertCardMaterialKolorPreview() {
 
 @Composable
 private fun AlertCardPreviewContent() {
-    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoAlertCard(
             source = "NAVIGO",
             category = "STOP ALARM",
-            message = "Get off at Jalan Melati — next stop",
+            title = "Get off at Jalan Melati — next stop",
             timestamp = "now",
             icon = NavigoIcons.Notification,
             modifier = Modifier.fillMaxWidth(),
@@ -184,7 +188,7 @@ private fun AlertCardPreviewContent() {
         NavigoAlertCard(
             source = "OPERATOR",
             category = "DIVERSION",
-            message = "Line 14 skipping Pasar Baru until 18:00",
+            title = "Line 14 skipping Pasar Baru until 18:00",
             timestamp = "14:02",
             icon = NavigoIcons.ExclamationCircle,
             modifier = Modifier.fillMaxWidth(),

@@ -18,6 +18,8 @@ package dev.lscythe.app.navigo.core.testing.screenshot
 import android.graphics.Bitmap.CompressFormat.PNG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -173,16 +175,17 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
                 isDarkTheme = darkMode,
                 materialKolor = materialKolor,
             ) {
-                // Keying is necessary in some cases (e.g. animations).
                 key(darkMode, materialKolor) {
-                    content(
-                        generateDescription(
-                            shouldCompareDarkMode = shouldCompareDarkMode,
-                            darkMode = darkMode,
-                            shouldCompareMaterialKolor = shouldCompareMaterialKolor,
-                            materialKolor = materialKolor,
+                    Surface(color = MaterialTheme.colorScheme.background) {
+                        content(
+                            generateDescription(
+                                shouldCompareDarkMode = shouldCompareDarkMode,
+                                darkMode = darkMode,
+                                shouldCompareMaterialKolor = shouldCompareMaterialKolor,
+                                materialKolor = materialKolor,
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

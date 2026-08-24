@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
+    api(project(":core:common"))
     api(project(":core:analytics"))
     api(project(":core:designsystem"))
 

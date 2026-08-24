@@ -18,10 +18,10 @@ package dev.lscythe.app.navigo.core.designsystem.token
 import androidx.compose.ui.unit.dp
 
 object NavigoSpacing {
-    val iconGap = 4.dp
-    val chipGap = 8.dp
-    val rowInternal = 12.dp
-    val cardPadding = 16.dp
-    val screenGutter = 24.dp
-    val blockBreak = 32.dp
+    val micro = 4.dp
+    val element = 8.dp
+    val item = 12.dp
+    val container = 16.dp
+    val screen = 24.dp
+    val section = 32.dp
 }

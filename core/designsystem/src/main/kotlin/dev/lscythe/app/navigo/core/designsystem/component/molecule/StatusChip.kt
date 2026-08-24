@@ -61,8 +61,8 @@ fun NavigoStatusChip(
     containerColor: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     dotSize: Dp = 12.dp,
-    horizontalPadding: Dp = NavigoSpacing.cardPadding,
-    verticalPadding: Dp = NavigoSpacing.chipGap,
+    horizontalPadding: Dp = NavigoSpacing.container,
+    verticalPadding: Dp = NavigoSpacing.element,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) {
     Surface(
@@ -74,7 +74,7 @@ fun NavigoStatusChip(
         Row(
             modifier = Modifier.padding(horizontal = horizontalPadding, vertical = verticalPadding),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
         ) {
             NavigoDot(color = dotColor, size = dotSize)
             Text(text = label, style = textStyle, maxLines = 1)
@@ -101,8 +101,8 @@ private fun NavigoStatusChipMaterialKolorPreview() {
 @Composable
 private fun StatusChipPreviewContent() {
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
-        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.chipGap),
+        horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
+        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
     ) {
         NavigoStatusChip(
             label = "Live · 20s",

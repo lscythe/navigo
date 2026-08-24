@@ -104,7 +104,7 @@ private fun NavigoIconMaterialKolorPreview() {
 
 @Composable
 private fun IconPreviewContent() {
-    Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+    Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoIcon(imageVector = NavigoIcons.Circle, contentDescription = "Circle")
         NavigoIcon(
             imageVector = NavigoIcons.Circle,

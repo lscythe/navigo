@@ -52,6 +52,8 @@ import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
  * @param value the text displayed in this field
  * @param onValueChange called when the text changes
  * @param modifier the [Modifier] to apply to this field
+ * @param label caption displayed above this field
+ * @param labelTrailing text displayed above this field, aligned to the end (e.g. "Optional")
  * @param helperText supporting text displayed below this field
  * @param maxLength the character limit shown by the counter, or `null` for no counter
  * @param minHeight the minimum height of this field
@@ -75,6 +77,8 @@ fun NavigoTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    label: String? = null,
+    labelTrailing: String? = null,
     helperText: String? = null,
     maxLength: Int? = null,
     minHeight: Dp = OutlinedTextFieldDefaults.MinHeight,
@@ -91,15 +95,40 @@ fun NavigoTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     shape: Shape = OutlinedTextFieldDefaults.shape,
-    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    colors: TextFieldColors =
+        OutlinedTextFieldDefaults.colors(
+            focusedPlaceholderColor = MaterialTheme.colorScheme.primary
+        ),
 ) {
     require(maxLength == null || maxLength >= 0) { "maxLength must be non-negative" }
     require(minLines > 0) { "minLines must be greater than zero" }
     require(maxLines >= minLines) { "maxLines must be at least minLines" }
 
     val hasSupportingContent = helperText != null || maxLength != null
+    val hasLabelContent = label != null || labelTrailing != null
     val fieldIsError = isError || (maxLength != null && value.length > maxLength)
     Column(modifier = modifier) {
+        if (hasLabelContent) {
+            Row(modifier = Modifier.fillMaxWidth().padding(bottom = 6.dp)) {
+                if (label != null) {
+                    Text(
+                        text = label.uppercase(),
+                        modifier = Modifier.weight(1f),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                if (labelTrailing != null) {
+                    Text(
+                        text = labelTrailing,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
+        }
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
@@ -168,11 +197,13 @@ private fun NavigoTextFieldMaterialKolorPreview() {
 private fun TextFieldPreviewContent() {
     var address by remember { mutableStateOf("Jalan Melati") }
     var notes by remember { mutableStateOf("") }
-    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.cardPadding)) {
+    Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoTextField(
             value = address,
             onValueChange = { address = it },
             modifier = Modifier.fillMaxWidth(),
+            label = "Reply to",
+            labelTrailing = "Optional",
             maxLines = 1,
         )
         NavigoTextField(
