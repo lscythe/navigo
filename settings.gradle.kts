@@ -55,7 +55,6 @@ include(
     ":core:monitoring",
     ":core:navigation",
     ":core:network",
-    ":core:network-graphql",
     ":core:testing-screenshot",
     ":core:ui",
 )
