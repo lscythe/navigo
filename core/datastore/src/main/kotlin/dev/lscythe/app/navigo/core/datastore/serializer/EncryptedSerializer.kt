@@ -49,6 +49,7 @@ class EncryptedSerializer<T>(private val delegate: Serializer<T>, private val ae
         return delegate.readFrom(ByteArrayInputStream(plaintext))
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun writeTo(t: T, output: OutputStream) {
         val plaintext = ByteArrayOutputStream().also { delegate.writeTo(t, it) }.toByteArray()
         output.write(aead.encrypt(plaintext, NO_ASSOCIATED_DATA))

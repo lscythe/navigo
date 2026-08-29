@@ -17,6 +17,7 @@ package dev.lscythe.app.navigo.core.datastore.di
 
 import android.app.Application
 import com.google.crypto.tink.Aead
+import com.google.crypto.tink.RegistryConfiguration
 import com.google.crypto.tink.aead.AeadConfig
 import com.google.crypto.tink.aead.AeadKeyTemplates
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
@@ -44,6 +45,6 @@ object AeadBindings {
             .withMasterKeyUri(MASTER_KEY_URI)
             .build()
             .keysetHandle
-            .getPrimitive(Aead::class.java)
+            .getPrimitive(RegistryConfiguration.get(), Aead::class.java)
     }
 }
