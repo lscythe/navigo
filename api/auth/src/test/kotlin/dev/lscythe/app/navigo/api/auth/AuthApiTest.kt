@@ -63,7 +63,7 @@ class AuthApiTest :
                     defaultRequest { contentType(ContentType.Application.Json) }
                     install(ContentNegotiation) { json() }
                 }
-            val api: AuthApi = AuthApiImpl(client)
+            val api: PublicAuthApi = PublicAuthApiImpl(client)
 
             val result =
                 api.createIntegrityChallenge(
@@ -101,7 +101,7 @@ class AuthApiTest :
                     defaultRequest { contentType(ContentType.Application.Json) }
                     install(ContentNegotiation) { json() }
                 }
-            val api: AuthApi = AuthApiImpl(client)
+            val api: PublicAuthApi = PublicAuthApiImpl(client)
 
             val result =
                 api.createSession(
@@ -147,7 +147,7 @@ class AuthApiTest :
                     defaultRequest { contentType(ContentType.Application.Json) }
                     install(ContentNegotiation) { json() }
                 }
-            val api: AuthApi = AuthApiImpl(client)
+            val api: PublicAuthApi = PublicAuthApiImpl(client)
 
             val result =
                 api.refreshSession(
@@ -180,7 +180,7 @@ class AuthApiTest :
                 request.url.encodedPath shouldBe "/sessions/current"
                 respond(content = "", status = HttpStatusCode.NoContent)
             }
-            val api: AuthApi = AuthApiImpl(HttpClient(engine))
+            val api: SessionApi = SessionApiImpl(HttpClient(engine))
 
             api.deleteCurrentSession() shouldBe ApiResponse.Success(Unit)
         }

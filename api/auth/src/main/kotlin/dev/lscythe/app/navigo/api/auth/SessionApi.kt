@@ -15,22 +15,8 @@
  */
 package dev.lscythe.app.navigo.api.auth
 
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeRequest
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeResponse
-import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
-import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshResponse
-import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
-import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
 
-interface AuthApi {
-    suspend fun createIntegrityChallenge(
-        request: IntegrityChallengeRequest
-    ): ApiResponse<IntegrityChallengeResponse>
-
-    suspend fun createSession(request: SessionRequest): ApiResponse<SessionResponse>
-
-    suspend fun refreshSession(request: SessionRefreshRequest): ApiResponse<SessionRefreshResponse>
-
+interface SessionApi {
     suspend fun deleteCurrentSession(): ApiResponse<Unit>
 }

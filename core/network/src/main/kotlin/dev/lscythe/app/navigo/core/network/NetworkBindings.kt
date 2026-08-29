@@ -45,9 +45,9 @@ object NetworkBindings {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideHttpClient(
+    @PublicClient
+    fun providePublicHttpClient(
         @BaseUrl baseUrl: String,
-        tokenProvider: TokenProvider,
         networkLogger: NetworkLogger,
     ): HttpClient =
         HttpClient(OkHttp) {
@@ -85,15 +85,28 @@ object NetworkBindings {
                     }
                 level = LogLevel.INFO
             }
+        }
 
-            install(Auth) {
-                bearer {
-                    loadTokens {
-                        // ponytail: no refresh-token flow wired yet, refresh once the backend
-                        // supports it via refreshTokens { }
-                        tokenProvider.getToken()?.let { BearerTokens(it, "") }
+    @Provides
+    @AuthenticatedClient
+    @SingleIn(AppScope::class)
+    fun provideAuthenticatedHttpClient(
+        @PublicClient publicClient: HttpClient,
+        sessionManager: SessionManager,
+    ): HttpClient = publicClient.config {
+        install(Auth) {
+            bearer {
+                loadTokens {
+                    sessionManager.loadTokens()?.let {
+                        BearerTokens(it.accessToken, it.refreshToken)
+                    }
+                }
+                refreshTokens {
+                    sessionManager.refreshTokens()?.let {
+                        BearerTokens(it.accessToken, it.refreshToken)
                     }
                 }
             }
         }
+    }
 }

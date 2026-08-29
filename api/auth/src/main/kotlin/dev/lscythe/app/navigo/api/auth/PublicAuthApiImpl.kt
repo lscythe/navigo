@@ -23,21 +23,20 @@ import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
-import dev.lscythe.app.navigo.core.network.safeNoContentRequest
+import dev.lscythe.app.navigo.core.network.PublicClient
 import dev.lscythe.app.navigo.core.network.safeRequest
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
-import io.ktor.client.request.delete
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-internal class AuthApiImpl(private val httpClient: HttpClient) : AuthApi {
+internal class PublicAuthApiImpl(@PublicClient private val httpClient: HttpClient) : PublicAuthApi {
     override suspend fun createIntegrityChallenge(
         request: IntegrityChallengeRequest
     ): ApiResponse<IntegrityChallengeResponse> = safeRequest {
@@ -53,9 +52,5 @@ internal class AuthApiImpl(private val httpClient: HttpClient) : AuthApi {
         request: SessionRefreshRequest
     ): ApiResponse<SessionRefreshResponse> = safeRequest {
         httpClient.post(AuthEndpoint.SESSION_REFRESHES) { setBody(request) }
-    }
-
-    override suspend fun deleteCurrentSession(): ApiResponse<Unit> = safeNoContentRequest {
-        httpClient.delete(AuthEndpoint.CURRENT_SESSION)
     }
 }

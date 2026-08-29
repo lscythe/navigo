@@ -126,6 +126,11 @@ android {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
+        jniLibs.keepDebugSymbols +=
+            setOf(
+                "**/libandroidx.graphics.path.so",
+                "**/libdatastore_shared_counter.so",
+            )
     }
     testOptions.unitTests.isIncludeAndroidResources = true
 }
@@ -136,12 +141,14 @@ baselineProfile {
 }
 
 dependencies {
+    implementation(project(":api:auth"))
     implementation(project(":feature:onboarding:api"))
     implementation(project(":feature:onboarding:impl"))
 
     implementation(project(":core:analytics"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:monitoring"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))

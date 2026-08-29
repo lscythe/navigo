@@ -15,6 +15,10 @@
  */
 package dev.lscythe.app.navigo.core.network
 
-interface TokenProvider {
-    suspend fun getToken(): String?
+data class SessionTokens(val accessToken: String, val refreshToken: String)
+
+interface SessionManager {
+    suspend fun loadTokens(): SessionTokens?
+
+    suspend fun refreshTokens(): SessionTokens?
 }
