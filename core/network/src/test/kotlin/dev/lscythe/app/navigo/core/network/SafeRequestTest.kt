@@ -15,6 +15,7 @@
  */
 package dev.lscythe.app.navigo.core.network
 
+import dev.lscythe.app.navigo.core.testing.readResource
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -29,6 +30,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
@@ -49,7 +51,7 @@ class SafeRequestTest :
         test("2xx response maps to Success") {
             val engine = MockEngine {
                 respond(
-                    content = """{"id":1}""",
+                    content = readResource("network/success-response.json"),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
@@ -76,17 +78,7 @@ class SafeRequestTest :
         test("4xx with RFC 9457 problem+json body parses into ClientError.problem") {
             val engine = MockEngine {
                 respond(
-                    content =
-                        """
-                        {
-                          "type": "https://example.com/probs/out-of-credit",
-                          "title": "You do not have enough credit.",
-                          "status": 403,
-                          "detail": "Your current balance is 30, but that costs 50.",
-                          "instance": "/account/12345/msgs/abc"
-                        }
-                        """
-                            .trimIndent(),
+                    content = readResource("network/problem-response.json"),
                     status = HttpStatusCode.Forbidden,
                     headers = headersOf(HttpHeaders.ContentType, "application/problem+json"),
                 )
@@ -122,7 +114,7 @@ class SafeRequestTest :
         test("malformed body maps to SerializationError") {
             val engine = MockEngine {
                 respond(
-                    content = "not json",
+                    content = readResource("network/malformed-response.json"),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )
@@ -136,9 +128,9 @@ class SafeRequestTest :
 
         test("timeout maps to NetworkError") {
             val engine = MockEngine {
-                delay(500)
+                delay(500.milliseconds)
                 respond(
-                    content = """{"id":1}""",
+                    content = readResource("network/success-response.json"),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, "application/json"),
                 )

@@ -1,0 +1,7 @@
+{
+  "id": "challenge-id",
+  "nonce": "base64url-nonce",
+  "action": "create-session",
+  "protocolVersion": "v1",
+  "expiresAt": "2026-08-28T05:02:00Z"
+}

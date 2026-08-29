@@ -1,0 +1,8 @@
+{
+  "id": "session-id",
+  "accessToken": "access-token",
+  "refreshToken": "refresh-token",
+  "accessExpiresAt": "2026-08-28T05:15:00Z",
+  "refreshExpiresAt": "2026-08-29T05:00:00Z",
+  "installationId": "installation-id"
+}
