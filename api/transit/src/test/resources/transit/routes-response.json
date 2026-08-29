@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "agencyId": "TJ",
+      "shortName": "1",
+      "longName": "Blok-M",
+      "description": "",
+      "type": 3,
+      "url": "https://navigo.app/routes/1",
+      "color": "123456",
+      "textColor": "ffffff",
+      "sortOrder": 1,
+      "continuousPickup": "",
+      "continuousDropOff": "",
+      "networkId": "TJ",
+      "priceIdr": 3500,
+      "startTime": "05:00",
+      "endTime": "22:00",
+      "headwaySeconds": 600,
+      "operationalDays": ["monday"],
+      "tripIds": ["trip-1"],
+      "facilities": []
+    }
+  ],
+  "freshness": {
+    "observedAt": "2026-08-28T05:00:00Z",
+    "receivedAt": "2026-08-28T05:00:01Z",
+    "stale": false
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "id": "stop-id",
+      "parentStation": "station-id",
+      "name": "Central Stop",
+      "location": {
+        "latitude": -6.1754,
+        "longitude": 106.8272
+      },
+      "routeIds": ["1", "6A"],
+      "distanceMeters": 125.5,
+      "platformCode": "A",
+      "description": "Main platform",
+      "zoneId": "zone-1",
+      "url": "https://example.com/stops/stop-id",
+      "locationType": 0,
+      "timezone": "Asia/Jakarta",
+      "wheelchairBoarding": 1,
+      "facilityNames": ["wheelchair"],
+      "stopType": "bus_stop",
+      "facilities": [
+        {
+          "name": "wheelchair",
+          "title": "Wheelchair accessible",
+          "iconUrl": "https://example.com/icons/wheelchair.svg",
+          "darkIconUrl": "https://example.com/icons/wheelchair-dark.svg"
+        }
+      ]
+    }
+  ],
+  "freshness": {
+    "observedAt": "2019-08-24T14:15:22Z",
+    "receivedAt": "2019-08-24T14:15:22Z",
+    "stale": true
+  }
+}

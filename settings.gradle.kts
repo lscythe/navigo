@@ -44,7 +44,10 @@ rootProject.name = "Navigo"
 
 include(":app")
 
-include(":api:auth")
+include(
+    ":api:auth",
+    ":api:transit",
+)
 
 include(
     ":core:analytics",

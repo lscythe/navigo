@@ -1,0 +1,36 @@
+{
+  "route": {
+    "id": "route-id",
+    "agencyId": "agency-id",
+    "shortName": "1A",
+    "longName": "Route One",
+    "description": "Route description",
+    "type": 3,
+    "url": "https://example.com/routes/route-id",
+    "color": "0B3D33",
+    "textColor": "FFFFFF",
+    "sortOrder": 1,
+    "continuousPickup": "",
+    "continuousDropOff": "",
+    "networkId": "network-id",
+    "priceIdr": 3500,
+    "startTime": "05:00:00",
+    "endTime": "24:30:00",
+    "headwaySeconds": 600,
+    "operationalDays": ["monday", "tuesday"],
+    "tripIds": ["trip-1", "trip-2"],
+    "facilities": [
+      {
+        "name": "wheelchair",
+        "title": "Wheelchair accessible",
+        "iconUrl": "https://example.com/icons/wheelchair.svg",
+        "darkIconUrl": "https://example.com/icons/wheelchair-dark.svg"
+      }
+    ]
+  },
+  "freshness": {
+    "observedAt": "2019-08-24T14:15:22Z",
+    "receivedAt": "2019-08-24T14:15:23Z",
+    "stale": true
+  }
+}
