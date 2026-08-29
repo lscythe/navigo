@@ -18,20 +18,19 @@ package dev.lscythe.app.navigo.core.datastore.serializer
 import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.Serializer
 import com.google.protobuf.InvalidProtocolBufferException
-import dev.lscythe.app.navigo.core.datastore.SamplePreference
+import dev.lscythe.app.navigo.core.datastore.SessionPreference
 import java.io.InputStream
 import java.io.OutputStream
 
-object SamplePreferenceSerializer : Serializer<SamplePreference> {
+object SessionPreferenceSerializer : Serializer<SessionPreference> {
+    override val defaultValue: SessionPreference = SessionPreference.getDefaultInstance()
 
-    override val defaultValue: SamplePreference = SamplePreference.getDefaultInstance()
-
-    override suspend fun readFrom(input: InputStream): SamplePreference =
+    override suspend fun readFrom(input: InputStream): SessionPreference =
         try {
-            SamplePreference.parseFrom(input)
+            SessionPreference.parseFrom(input)
         } catch (exception: InvalidProtocolBufferException) {
-            throw CorruptionException("Cannot read SamplePreference.", exception)
+            throw CorruptionException("Cannot read SessionPreference.", exception)
         }
 
-    override suspend fun writeTo(t: SamplePreference, output: OutputStream) = t.writeTo(output)
+    override suspend fun writeTo(t: SessionPreference, output: OutputStream) = t.writeTo(output)
 }

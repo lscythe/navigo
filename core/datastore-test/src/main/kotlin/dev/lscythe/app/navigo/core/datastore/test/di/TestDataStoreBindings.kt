@@ -16,9 +16,12 @@
 package dev.lscythe.app.navigo.core.datastore.test.di
 
 import androidx.datastore.core.DataStore
-import dev.lscythe.app.navigo.core.datastore.SamplePreference
+import dev.lscythe.app.navigo.core.datastore.SessionPreference
+import dev.lscythe.app.navigo.core.datastore.UserPreference
 import dev.lscythe.app.navigo.core.datastore.di.DataStoreBindings
-import dev.lscythe.app.navigo.core.datastore.serializer.SamplePreferenceSerializer
+import dev.lscythe.app.navigo.core.datastore.di.EncryptedPreference
+import dev.lscythe.app.navigo.core.datastore.serializer.SessionPreferenceSerializer
+import dev.lscythe.app.navigo.core.datastore.serializer.UserPreferenceSerializer
 import dev.lscythe.app.navigo.core.datastore.test.InMemoryDataStore
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -32,6 +35,12 @@ object TestDataStoreBindings {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideSamplePreferenceDataStore(): DataStore<SamplePreference> =
-        InMemoryDataStore(SamplePreferenceSerializer.defaultValue)
+    fun provideUserPreferenceDataStore(): DataStore<UserPreference> =
+        InMemoryDataStore(UserPreferenceSerializer.defaultValue)
+
+    @Provides
+    @EncryptedPreference
+    @SingleIn(AppScope::class)
+    fun provideSessionPreferenceDataStore(): DataStore<SessionPreference> =
+        InMemoryDataStore(SessionPreferenceSerializer.defaultValue)
 }

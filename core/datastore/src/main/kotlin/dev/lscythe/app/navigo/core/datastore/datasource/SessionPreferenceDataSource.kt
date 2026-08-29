@@ -16,26 +16,22 @@
 package dev.lscythe.app.navigo.core.datastore.datasource
 
 import androidx.datastore.core.DataStore
-import dev.lscythe.app.navigo.core.datastore.Language
-import dev.lscythe.app.navigo.core.datastore.ThemePreference
-import dev.lscythe.app.navigo.core.datastore.UserPreference
-import dev.lscythe.app.navigo.core.datastore.copy
+import dev.lscythe.app.navigo.core.datastore.SessionPreference
+import dev.lscythe.app.navigo.core.datastore.di.EncryptedPreference
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 
 @Inject
-class NavigoPreferenceDataSource(private val dataStore: DataStore<UserPreference>) {
-    val data: Flow<UserPreference> = dataStore.data
+class SessionPreferenceDataSource(
+    @EncryptedPreference private val dataStore: DataStore<SessionPreference>
+) {
+    val data: Flow<SessionPreference> = dataStore.data
 
-    suspend fun setLanguage(language: Language) {
-        dataStore.updateData { it.copy { this.language = language } }
+    suspend fun setSession(session: SessionPreference) {
+        dataStore.updateData { session }
     }
 
-    suspend fun setTheme(theme: ThemePreference) {
-        dataStore.updateData { it.copy { this.theme = theme } }
-    }
-
-    suspend fun completeOnboarding() {
-        dataStore.updateData { it.copy { hasCompletedOnboarding = true } }
+    suspend fun clear() {
+        dataStore.updateData { SessionPreference.getDefaultInstance() }
     }
 }

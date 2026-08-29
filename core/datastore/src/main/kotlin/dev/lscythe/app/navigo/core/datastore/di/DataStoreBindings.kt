@@ -23,9 +23,11 @@ import com.google.crypto.tink.Aead
 import dev.lscythe.app.navigo.core.common.coroutines.ApplicationScope
 import dev.lscythe.app.navigo.core.common.dispatchers.Dispatcher
 import dev.lscythe.app.navigo.core.common.dispatchers.NavigoDispatchers
-import dev.lscythe.app.navigo.core.datastore.SamplePreference
+import dev.lscythe.app.navigo.core.datastore.SessionPreference
+import dev.lscythe.app.navigo.core.datastore.UserPreference
 import dev.lscythe.app.navigo.core.datastore.serializer.EncryptedSerializer
-import dev.lscythe.app.navigo.core.datastore.serializer.SamplePreferenceSerializer
+import dev.lscythe.app.navigo.core.datastore.serializer.SessionPreferenceSerializer
+import dev.lscythe.app.navigo.core.datastore.serializer.UserPreferenceSerializer
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
@@ -40,31 +42,31 @@ object DataStoreBindings {
 
     @Provides
     @SingleIn(AppScope::class)
-    fun provideSamplePreferenceDataStore(
+    fun provideUserPreferenceDataStore(
         application: Application,
         @ApplicationScope scope: CoroutineScope,
         @Dispatcher(NavigoDispatchers.IO) ioDispatcher: CoroutineDispatcher,
-    ): DataStore<SamplePreference> =
+    ): DataStore<UserPreference> =
         DataStoreFactory.create(
-            serializer = SamplePreferenceSerializer,
+            serializer = UserPreferenceSerializer,
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
         ) {
-            application.dataStoreFile("sample_preference.pb")
+            application.dataStoreFile("user_preference.pb")
         }
 
     @Provides
     @EncryptedPreference
     @SingleIn(AppScope::class)
-    fun provideEncryptedSamplePreferenceDataStore(
+    fun provideSessionPreferenceDataStore(
         application: Application,
         aead: Aead,
         @ApplicationScope scope: CoroutineScope,
         @Dispatcher(NavigoDispatchers.IO) ioDispatcher: CoroutineDispatcher,
-    ): DataStore<SamplePreference> =
+    ): DataStore<SessionPreference> =
         DataStoreFactory.create(
-            serializer = EncryptedSerializer(SamplePreferenceSerializer, aead),
+            serializer = EncryptedSerializer(SessionPreferenceSerializer, aead),
             scope = CoroutineScope(scope.coroutineContext + ioDispatcher),
         ) {
-            application.dataStoreFile("sample_preference_secure.pb")
+            application.dataStoreFile("session_preference_secure.pb")
         }
 }

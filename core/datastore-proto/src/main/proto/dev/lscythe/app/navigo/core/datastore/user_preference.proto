@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+option java_package = "dev.lscythe.app.navigo.core.datastore";
+option java_multiple_files = true;
+
+enum Language {
+  LANGUAGE_SYSTEM = 0;
+  LANGUAGE_ENGLISH = 1;
+  LANGUAGE_INDONESIAN = 2;
+}
+
+enum ThemeMode {
+  THEME_MODE_SYSTEM = 0;
+  THEME_MODE_LIGHT = 1;
+  THEME_MODE_DARK = 2;
+}
+
+enum PaletteStyle {
+  PALETTE_STYLE_UNSPECIFIED = 0;
+  PALETTE_STYLE_TONAL_SPOT = 1;
+  PALETTE_STYLE_NEUTRAL = 2;
+  PALETTE_STYLE_VIBRANT = 3;
+  PALETTE_STYLE_EXPRESSIVE = 4;
+  PALETTE_STYLE_RAINBOW = 5;
+  PALETTE_STYLE_FRUIT_SALAD = 6;
+  PALETTE_STYLE_MONOCHROME = 7;
+  PALETTE_STYLE_FIDELITY = 8;
+  PALETTE_STYLE_CONTENT = 9;
+}
+
+enum ColorSpecVersion {
+  COLOR_SPEC_VERSION_UNSPECIFIED = 0;
+  COLOR_SPEC_VERSION_2021 = 1;
+  COLOR_SPEC_VERSION_2025 = 2;
+}
+
+message MaterialKolorPreference {
+  fixed32 seed_color_argb = 1;
+  bool is_amoled = 2;
+  PaletteStyle palette_style = 3;
+  ColorSpecVersion spec_version = 4;
+  double contrast_level = 5;
+  optional fixed32 primary_argb = 6;
+  optional fixed32 secondary_argb = 7;
+  optional fixed32 tertiary_argb = 8;
+  optional fixed32 neutral_argb = 9;
+  optional fixed32 neutral_variant_argb = 10;
+  optional fixed32 error_argb = 11;
+}
+
+message ThemePreference {
+  ThemeMode mode = 1;
+  optional MaterialKolorPreference material_kolor = 2;
+}
+
+message UserPreference {
+  Language language = 1;
+  ThemePreference theme = 2;
+  bool has_completed_onboarding = 3;
+}
