@@ -39,6 +39,12 @@ data class MaterialKolorConfig(
     val paletteStyle: PaletteStyle = PaletteStyle.Expressive,
     val specVersion: ColorSpec.SpecVersion = ColorSpec.SpecVersion.SPEC_2025,
     val contrastLevel: Double = Contrast.Default.value,
+    val primary: Color? = null,
+    val secondary: Color? = null,
+    val tertiary: Color? = null,
+    val neutral: Color? = null,
+    val neutralVariant: Color? = null,
+    val error: Color? = null,
 ) {
     init {
         require(paletteStyle in supportedPaletteStyles(specVersion)) {
@@ -86,6 +92,12 @@ fun NavigoTheme(
                 style = config.paletteStyle,
                 specVersion = config.specVersion,
                 contrastLevel = config.contrastLevel,
+                primary = config.primary,
+                secondary = config.secondary,
+                tertiary = config.tertiary,
+                neutral = config.neutral,
+                neutralVariant = config.neutralVariant,
+                error = config.error,
             )
         } ?: defaultColorScheme
 
