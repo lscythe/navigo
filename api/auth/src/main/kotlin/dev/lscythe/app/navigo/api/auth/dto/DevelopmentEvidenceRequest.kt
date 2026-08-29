@@ -15,15 +15,11 @@
  */
 package dev.lscythe.app.navigo.api.auth.dto
 
-import kotlin.time.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SessionRefreshResponse(
-    val id: String,
-    val accessToken: String,
-    val refreshToken: String,
-    val accessExpiresAt: Instant,
-    val refreshExpiresAt: Instant,
-    val installationId: String,
+data class DevelopmentEvidenceRequest(
+    val payload: String,
+    val signature: String,
+    val keyId: String,
 )

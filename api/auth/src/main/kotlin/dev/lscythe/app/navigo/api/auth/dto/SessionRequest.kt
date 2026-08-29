@@ -15,10 +15,18 @@
  */
 package dev.lscythe.app.navigo.api.auth.dto
 
+import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class SessionRequest(
     val challengeId: String,
-    val playIntegrity: PlayIntegrityRequest,
-)
+    @EncodeDefault(EncodeDefault.Mode.NEVER) val playIntegrity: PlayIntegrityRequest? = null,
+    @EncodeDefault(EncodeDefault.Mode.NEVER) val development: DevelopmentEvidenceRequest? = null,
+) {
+    init {
+        require((playIntegrity == null) xor (development == null)) {
+            "Exactly one session evidence type is required"
+        }
+    }
+}

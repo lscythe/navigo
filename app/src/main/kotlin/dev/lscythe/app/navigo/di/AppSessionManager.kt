@@ -17,7 +17,7 @@ package dev.lscythe.app.navigo.di
 
 import dev.lscythe.app.navigo.api.auth.PublicAuthApi
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
-import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshResponse
+import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.datastore.SessionPreference
 import dev.lscythe.app.navigo.core.datastore.datasource.SessionPreferenceDataSource
 import dev.lscythe.app.navigo.core.datastore.sessionPreference
@@ -28,7 +28,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlin.time.Instant
 import kotlinx.coroutines.flow.first
 
 @Inject
@@ -48,16 +47,7 @@ class AppSessionManager(
         return when (
             val response =
                 publicAuthApi.refreshSession(
-                    SessionRefreshRequest(
-                        id = current.id,
-                        accessToken = current.accessToken,
-                        refreshToken = current.refreshToken,
-                        accessExpiresAt =
-                            Instant.fromEpochSeconds(current.accessExpiresAtEpochSeconds),
-                        refreshExpiresAt =
-                            Instant.fromEpochSeconds(current.refreshExpiresAtEpochSeconds),
-                        installationId = current.installationId,
-                    )
+                    SessionRefreshRequest(refreshToken = current.refreshToken)
                 )
         ) {
             is ApiResponse.Success -> {
@@ -74,7 +64,7 @@ class AppSessionManager(
     }
 }
 
-private fun SessionRefreshResponse.toPreference(): SessionPreference = sessionPreference {
+private fun SessionResponse.toPreference(): SessionPreference = sessionPreference {
     id = this@toPreference.id
     accessToken = this@toPreference.accessToken
     refreshToken = this@toPreference.refreshToken

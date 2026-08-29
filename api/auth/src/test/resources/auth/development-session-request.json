@@ -1,0 +1,8 @@
+{
+  "challengeId": "challenge-id",
+  "development": {
+    "payload": "base64url-payload",
+    "signature": "base64url-signature",
+    "keyId": "development-key"
+  }
+}

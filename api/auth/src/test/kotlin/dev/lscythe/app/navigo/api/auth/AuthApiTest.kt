@@ -16,15 +16,16 @@
 package dev.lscythe.app.navigo.api.auth
 
 import dev.lscythe.app.navigo.api.auth.constant.AuthAction
+import dev.lscythe.app.navigo.api.auth.dto.DevelopmentEvidenceRequest
 import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeRequest
 import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeResponse
 import dev.lscythe.app.navigo.api.auth.dto.PlayIntegrityRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
-import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
 import dev.lscythe.app.navigo.core.testing.readResource
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
@@ -47,7 +48,7 @@ class AuthApiTest :
         test("creates an integrity challenge") {
             val engine = MockEngine { request ->
                 request.method shouldBe HttpMethod.Post
-                request.url.encodedPath shouldBe "/integrity-challenges"
+                request.url.encodedPath shouldBe "/v1/integrity-challenges"
                 val body = request.body as TextContent
                 body.contentType shouldBe ContentType.Application.Json
                 Json.parseToJsonElement(body.text) shouldBe
@@ -85,7 +86,7 @@ class AuthApiTest :
         test("creates a session") {
             val engine = MockEngine { request ->
                 request.method shouldBe HttpMethod.Post
-                request.url.encodedPath shouldBe "/sessions"
+                request.url.encodedPath shouldBe "/v1/sessions"
                 val body = request.body as TextContent
                 body.contentType shouldBe ContentType.Application.Json
                 Json.parseToJsonElement(body.text) shouldBe
@@ -128,10 +129,54 @@ class AuthApiTest :
                 )
         }
 
+        test("creates a session with development evidence only") {
+            val engine = MockEngine { request ->
+                val body = request.body as TextContent
+                Json.parseToJsonElement(body.text) shouldBe
+                    Json.parseToJsonElement(readResource("auth/development-session-request.json"))
+                respond(
+                    content = readResource("auth/session-response.json"),
+                    status = HttpStatusCode.Created,
+                    headers = io.ktor.http.headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val client =
+                HttpClient(engine) {
+                    defaultRequest { contentType(ContentType.Application.Json) }
+                    install(ContentNegotiation) { json() }
+                }
+
+            PublicAuthApiImpl(client)
+                .createSession(
+                    SessionRequest(
+                        challengeId = "challenge-id",
+                        development =
+                            DevelopmentEvidenceRequest(
+                                payload = "base64url-payload",
+                                signature = "base64url-signature",
+                                keyId = "development-key",
+                            ),
+                    )
+                )
+        }
+
+        test("requires exactly one session evidence type") {
+            shouldThrow<IllegalArgumentException> {
+                SessionRequest(challengeId = "challenge-id")
+            }
+            shouldThrow<IllegalArgumentException> {
+                SessionRequest(
+                    challengeId = "challenge-id",
+                    playIntegrity = PlayIntegrityRequest("token", "hash"),
+                    development = DevelopmentEvidenceRequest("payload", "signature", "key"),
+                )
+            }
+        }
+
         test("refreshes a session") {
             val engine = MockEngine { request ->
                 request.method shouldBe HttpMethod.Post
-                request.url.encodedPath shouldBe "/session-refreshes"
+                request.url.encodedPath shouldBe "/v1/session-refreshes"
                 val body = request.body as TextContent
                 body.contentType shouldBe ContentType.Application.Json
                 Json.parseToJsonElement(body.text) shouldBe
@@ -149,21 +194,11 @@ class AuthApiTest :
                 }
             val api: PublicAuthApi = PublicAuthApiImpl(client)
 
-            val result =
-                api.refreshSession(
-                    SessionRefreshRequest(
-                        id = "session-id",
-                        accessToken = "access-token",
-                        refreshToken = "refresh-token",
-                        accessExpiresAt = Instant.parse("2019-08-24T14:15:22Z"),
-                        refreshExpiresAt = Instant.parse("2019-08-24T14:15:22Z"),
-                        installationId = "installation-id",
-                    )
-                )
+            val result = api.refreshSession(SessionRefreshRequest(refreshToken = "refresh-token"))
 
             result shouldBe
                 ApiResponse.Success(
-                    SessionRefreshResponse(
+                    SessionResponse(
                         id = "session-id",
                         accessToken = "new-access-token",
                         refreshToken = "new-refresh-token",
@@ -177,7 +212,7 @@ class AuthApiTest :
         test("deletes the current session") {
             val engine = MockEngine { request ->
                 request.method shouldBe HttpMethod.Delete
-                request.url.encodedPath shouldBe "/sessions/current"
+                request.url.encodedPath shouldBe "/v1/sessions/current"
                 respond(content = "", status = HttpStatusCode.NoContent)
             }
             val api: SessionApi = SessionApiImpl(HttpClient(engine))

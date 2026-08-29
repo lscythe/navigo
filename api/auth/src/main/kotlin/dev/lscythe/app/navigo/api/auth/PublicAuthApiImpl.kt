@@ -19,7 +19,6 @@ import dev.lscythe.app.navigo.api.auth.constant.AuthEndpoint
 import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeRequest
 import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
-import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
@@ -50,7 +49,7 @@ internal class PublicAuthApiImpl(@PublicClient private val httpClient: HttpClien
 
     override suspend fun refreshSession(
         request: SessionRefreshRequest
-    ): ApiResponse<SessionRefreshResponse> = safeRequest {
+    ): ApiResponse<SessionResponse> = safeRequest {
         httpClient.post(AuthEndpoint.SESSION_REFRESHES) { setBody(request) }
     }
 }
