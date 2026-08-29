@@ -34,6 +34,7 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.KotlinxWebsocketSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
@@ -52,7 +53,10 @@ object NetworkBindings {
         HttpClient(OkHttp) {
             expectSuccess = true
 
-            defaultRequest { url(baseUrl) }
+            defaultRequest {
+                url(baseUrl)
+                contentType(ContentType.Application.Json)
+            }
 
             install(HttpTimeout) {
                 requestTimeoutMillis = NetworkConstant.REQUEST_TIMEOUT_MILLIS

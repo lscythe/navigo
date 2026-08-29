@@ -49,3 +49,27 @@ suspend inline fun <reified T> safeRequest(
     } catch (e: Exception) {
         ApiResponse.Error.UnknownError(message = e.message, cause = e)
     }
+
+suspend fun safeNoContentRequest(block: suspend () -> HttpResponse): ApiResponse<Unit> =
+    try {
+        block()
+        ApiResponse.Success(Unit)
+    } catch (e: ClientRequestException) {
+        val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
+        ApiResponse.Error.ClientError(
+            code = e.response.status.value,
+            problem = problem,
+            message = e.message,
+        )
+    } catch (e: ServerResponseException) {
+        val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
+        ApiResponse.Error.ServerError(
+            code = e.response.status.value,
+            problem = problem,
+            message = e.message,
+        )
+    } catch (e: HttpRequestTimeoutException) {
+        ApiResponse.Error.NetworkError(message = "Request Timeout", cause = e)
+    } catch (e: Exception) {
+        ApiResponse.Error.UnknownError(message = e.message, cause = e)
+    }
