@@ -15,11 +15,22 @@
  */
 package dev.lscythe.app.navigo.di
 
+import dev.lscythe.app.navigo.BuildConfig
+import dev.lscythe.app.navigo.core.network.BaseUrl
 import dev.lscythe.app.navigo.util.ProfileVerifierLogger
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
+
+@ContributesTo(AppScope::class)
+@BindingContainer
+object NavigoNetworkBindings {
+    @Provides @BaseUrl fun provideBaseUrl(): String = BuildConfig.API_BASE_URL
+}
 
 @DependencyGraph(AppScope::class)
 interface NavigoGraph : MetroAppComponentProviders, ViewModelGraph {

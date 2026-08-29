@@ -58,15 +58,35 @@ android {
     productFlavors {
         getByName("staging") {
             buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Staging\"")
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"${providers.gradleProperty("navigoStagingApiBaseUrl").get()}\"",
+            )
         }
         getByName("beta") {
             buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Beta\"")
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"${providers.gradleProperty("navigoApiBaseUrl").get()}\"",
+            )
         }
         getByName("rc") {
             buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Rc\"")
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"${providers.gradleProperty("navigoApiBaseUrl").get()}\"",
+            )
         }
         getByName("prod") {
             buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Prod\"")
+            buildConfigField(
+                "String",
+                "API_BASE_URL",
+                "\"${providers.gradleProperty("navigoApiBaseUrl").get()}\"",
+            )
         }
     }
     signingConfigs {
