@@ -13,18 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
-    alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
-}
+package dev.lscythe.app.navigo.core.common.text
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
-}
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 
-dependencies {
-    implementation(libs.kotlinx.serialization.json)
-    implementation(project(":feature:onboarding:api"))
-}
+class InitialsTest :
+    FunSpec({
+        test("uses the first two non-empty words") {
+            "  Ayu   Kusuma Putri  ".toInitials() shouldBe "AK"
+        }
+
+        test("uses one initial for one word") {
+            "Ayu".toInitials() shouldBe "A"
+        }
+
+        test("uses the supplied fallback for blank text") {
+            "  ".toInitials(fallback = "?") shouldBe "?"
+        }
+    })

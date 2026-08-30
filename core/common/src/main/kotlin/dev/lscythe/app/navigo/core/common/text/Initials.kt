@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
-    alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
-}
+package dev.lscythe.app.navigo.core.common.text
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
-}
-
-dependencies {
-    implementation(libs.kotlinx.serialization.json)
-    implementation(project(":feature:onboarding:api"))
-}
+fun String.toInitials(fallback: String = "N"): String =
+    trim()
+        .split(Regex("\\s+"))
+        .filter(String::isNotEmpty)
+        .take(2)
+        .joinToString("") { it.first().uppercase() }
+        .ifEmpty { fallback }

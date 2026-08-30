@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.onboarding.impl
+package dev.lscythe.app.navigo.feature.onboarding.impl.content
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -95,12 +94,12 @@ internal fun OnboardingPageIntro(
         Text(
             title,
             style = MaterialTheme.typography.headlineMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Text(
             description,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f),
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
         )
     }
 }
@@ -236,13 +235,13 @@ private fun OnboardingPageCheckList(
         NavigoIcon(
             NavigoIcons.Check,
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.tertiary,
+            tint = MaterialTheme.colorScheme.primary,
             size = 18.dp,
         )
         Text(
             item,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onBackground,
         )
     }
 }
@@ -272,17 +271,18 @@ private fun OnboardingGpsPageRouteItem(
     enabled: Boolean = false,
 ) {
     val color =
-        if (enabled) MaterialTheme.colorScheme.onPrimary
-        else MaterialTheme.colorScheme.outline.copy(alpha = 0.74f)
+        if (enabled) MaterialTheme.colorScheme.primary
+        else MaterialTheme.colorScheme.surfaceContainerHigh
 
     val avatarTextColor =
-        if (enabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.background
+        if (enabled) MaterialTheme.colorScheme.onPrimary
+        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
 
     val textColor =
-        if (enabled) MaterialTheme.colorScheme.primary
-        else MaterialTheme.colorScheme.outline.copy(alpha = 0.74f)
+        if (enabled) MaterialTheme.colorScheme.onBackground
+        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
 
-    val cardContainerColor = if (enabled) color.copy(alpha = 0.2f) else Color.Transparent
+    val cardContainerColor = color.copy(alpha = 0.34f)
 
     NavigoCard(
         modifier = modifier,
@@ -316,7 +316,7 @@ private fun OnboardingGpsPageRouteItem(
                     "${route.source} · ${route.updatedAt}",
                     style = MaterialTheme.typography.labelSmall,
                     color = textColor,
-                    fontSize = 8.sp,
+                    fontSize = 10.sp,
                 )
             }
             NavigoIcon(

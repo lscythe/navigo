@@ -13,18 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
-    alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
-}
+package dev.lscythe.app.navigo.feature.onboarding.impl.legal
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
-}
+private val SectionPattern = Regex("<section>(.*?)</section>", RegexOption.DOT_MATCHES_ALL)
 
-dependencies {
-    implementation(libs.kotlinx.serialization.json)
-    implementation(project(":feature:onboarding:api"))
-}
+internal fun legalHtmlSections(html: String): List<String> =
+    SectionPattern.findAll(html).map { it.groupValues[1] }.toList().ifEmpty { listOf(html) }

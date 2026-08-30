@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
-    alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
-}
+package dev.lscythe.app.navigo.feature.onboarding.impl.legal
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
-}
-
-dependencies {
-    implementation(libs.kotlinx.serialization.json)
-    implementation(project(":feature:onboarding:api"))
-}
+internal data class LegalDocumentUiModel(
+    val type: LegalDocumentType,
+    val languageTag: String,
+    val version: String,
+    val title: String,
+    val readingTimeMinutes: Int,
+    val summaryHtml: String,
+    val bodyHtml: String,
+)
