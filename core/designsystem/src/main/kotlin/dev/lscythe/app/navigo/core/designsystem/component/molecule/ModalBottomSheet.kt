@@ -60,6 +60,7 @@ import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
  * @param modifier the [Modifier] to apply to this sheet
  * @param description optional supporting text displayed below the title
  * @param sheetState the state controlling this sheet
+ * @param sheetGesturesEnabled whether drag gestures can move or dismiss this sheet
  * @param dragHandle the handle displayed at the top of the sheet, or null for none
  * @param shape the shape of this sheet
  * @param containerColor the background color of this sheet
@@ -75,6 +76,7 @@ fun NavigoModalBottomSheet(
     modifier: Modifier = Modifier,
     description: String? = null,
     sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
+    sheetGesturesEnabled: Boolean = true,
     dragHandle: (@Composable () -> Unit)? = { SheetDragHandle() },
     shape: Shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
     containerColor: Color = MaterialTheme.colorScheme.surface,
@@ -95,6 +97,7 @@ fun NavigoModalBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         sheetState = sheetState,
+        sheetGesturesEnabled = sheetGesturesEnabled,
         dragHandle = dragHandle,
         shape = shape,
         containerColor = containerColor,
@@ -103,13 +106,13 @@ fun NavigoModalBottomSheet(
         Column(modifier = Modifier.padding(headerPadding)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.headlineMedium,
             )
             if (description != null) {
                 Text(
                     text = description,
                     modifier = Modifier.padding(top = NavigoSpacing.item),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -123,7 +126,7 @@ private fun SheetDragHandle() {
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         Box(
             modifier =
-                Modifier.padding(top = NavigoSpacing.element)
+                Modifier.padding(top = NavigoSpacing.container)
                     .width(40.dp)
                     .height(4.dp)
                     .background(

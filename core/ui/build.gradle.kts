@@ -27,6 +27,7 @@ dependencies {
     api(project(":core:analytics"))
     api(project(":core:designsystem"))
 
+    implementation(libs.androidx.core.ktx)
     api(libs.androidx.metrics)
     api(libs.kotlinx.datetime)
 }

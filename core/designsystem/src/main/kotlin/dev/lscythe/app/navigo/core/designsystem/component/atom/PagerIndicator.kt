@@ -93,12 +93,7 @@ fun NavigoPagerIndicator(
             val width by
                 animateDpAsState(
                     targetValue = if (isActive) activeWidth else inactiveWidth,
-                    animationSpec =
-                        if (isActive) {
-                            tween(durationMillis = 150, delayMillis = 150, easing = LinearEasing)
-                        } else {
-                            tween(durationMillis = 150, easing = LinearEasing)
-                        },
+                    animationSpec = tween(durationMillis = 150, easing = LinearEasing),
                     label = "pager indicator width",
                 )
             Canvas(

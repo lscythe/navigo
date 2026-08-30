@@ -27,7 +27,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,12 +58,14 @@ fun LanguageSelectionBottomSheet(
     onApply: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
 ) {
     NavigoModalBottomSheet(
         title = stringResource(R.string.core_ui_language_sheet_title),
         description = stringResource(R.string.core_ui_language_sheet_description),
         onDismissRequest = onDismissRequest,
         modifier = modifier,
+        sheetState = sheetState,
     ) {
         LanguageRow(
             title = stringResource(R.string.core_ui_language_system_default),
@@ -87,17 +92,14 @@ fun LanguageSelectionBottomSheet(
                         end = NavigoSpacing.screen,
                         bottom = NavigoSpacing.section,
                     )
-                    .heightIn(min = 64.dp),
+                    .heightIn(min = 54.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                 ),
         ) {
-            Text(
-                text = stringResource(R.string.core_ui_language_apply),
-                style = MaterialTheme.typography.titleLarge,
-            )
+            Text(text = stringResource(R.string.core_ui_language_apply))
         }
     }
 }
@@ -113,18 +115,18 @@ private fun LanguageRow(
         modifier =
             Modifier.fillMaxWidth()
                 .clickable(role = Role.RadioButton, onClick = onClick)
-                .padding(horizontal = NavigoSpacing.screen, vertical = NavigoSpacing.screen),
+                .padding(horizontal = NavigoSpacing.screen, vertical = NavigoSpacing.container),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container),
     ) {
         NavigoRadioButton(selected = selected, onClick = null)
         Column(modifier = Modifier.weight(1f)) {
-            Text(title, style = MaterialTheme.typography.titleLarge)
+            Text(title, style = MaterialTheme.typography.titleMedium)
             if (description != null) {
                 Text(
                     description,
                     modifier = Modifier.padding(top = NavigoSpacing.micro),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -139,6 +141,7 @@ private fun SupportedLanguage.displayName(): String =
         SupportedLanguage.Indonesian -> stringResource(R.string.core_ui_language_indonesian)
     }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @NavigoThemePreview
 @Composable
 private fun LanguageSelectionBottomSheetPreview() {

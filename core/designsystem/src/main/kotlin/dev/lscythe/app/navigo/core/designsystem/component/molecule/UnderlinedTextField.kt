@@ -53,6 +53,7 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
  * @param onValueChange called when the text changes
  * @param label the label displayed above this field
  * @param modifier the [Modifier] to apply to this field
+ * @param hint text displayed when the field is empty
  * @param helperText supporting text displayed below this field
  * @param maxLength the character limit shown by the counter, or `null` for no counter
  * @param minHeight the minimum height of the input area
@@ -75,6 +76,7 @@ fun NavigoUnderlinedTextField(
     onValueChange: (String) -> Unit,
     label: String,
     modifier: Modifier = Modifier,
+    hint: String? = null,
     helperText: String? = null,
     maxLength: Int? = null,
     minHeight: Dp = 56.dp,
@@ -130,6 +132,18 @@ fun NavigoUnderlinedTextField(
                     modifier = Modifier.fillMaxWidth().heightIn(min = minHeight),
                     contentAlignment = Alignment.CenterStart,
                 ) {
+                    if (value.isEmpty() && hint != null) {
+                        Text(
+                            text = hint,
+                            color =
+                                if (enabled) {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                } else {
+                                    disabledColor
+                                },
+                            style = textStyle,
+                        )
+                    }
                     innerTextField()
                 }
             },
@@ -179,11 +193,22 @@ private fun NavigoUnderlinedTextFieldMaterialKolorPreview() {
 
 @Composable
 private fun UnderlinedTextFieldPreviewContent() {
-    NavigoUnderlinedTextField(
-        value = "Ayu K.",
-        onValueChange = {},
-        label = "DISPLAY NAME",
-        modifier = Modifier.fillMaxWidth(),
-        maxLength = 40,
-    )
+    Column {
+        NavigoUnderlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = "DISPLAY NAME",
+            hint = "Your name",
+            modifier = Modifier.fillMaxWidth(),
+            maxLength = 40,
+        )
+        NavigoUnderlinedTextField(
+            value = "Ayu K.",
+            onValueChange = {},
+            label = "DISPLAY NAME",
+            hint = "Your name",
+            modifier = Modifier.fillMaxWidth(),
+            maxLength = 40,
+        )
+    }
 }

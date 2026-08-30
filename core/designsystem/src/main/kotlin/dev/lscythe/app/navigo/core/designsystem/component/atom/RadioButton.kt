@@ -70,7 +70,7 @@ fun NavigoRadioButton(
     Box(
         modifier =
             modifier
-                .size(48.dp)
+                .size(20.dp)
                 .then(
                     if (onClick == null) {
                         Modifier.semantics {
