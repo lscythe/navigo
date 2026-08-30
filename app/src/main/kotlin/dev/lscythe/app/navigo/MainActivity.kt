@@ -17,12 +17,14 @@ package dev.lscythe.app.navigo
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
+import androidx.metrics.performance.JankStats
 import androidx.navigation3.runtime.entryProvider
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.monitoring.StructuredLogger
@@ -49,23 +51,13 @@ class MainActivity(
     override val defaultViewModelProviderFactory: ViewModelProvider.Factory
         get() = viewModelFactory
 
-    //    private lateinit var jankStats: JankStats
+    private lateinit var jankStats: JankStats
 
     private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        //        jankStats =
-        //            JankStats.createAndTrack(window) { frameData ->
-        //                if (frameData.isJank) {
-        //                    logger.log(
-        //                        priority = Log.WARN,
-        //                        message = "Janky frame",
-        //                        attributes = mapOf("frameData" to frameData.toString()),
-        //                    )
-        //                }
-        //            }
 
         setContent {
             val appState = rememberNavigoAppState(OnboardingNavKey)
@@ -83,10 +75,20 @@ class MainActivity(
                 )
             }
         }
+        jankStats =
+            JankStats.createAndTrack(window) { frameData ->
+                if (frameData.isJank) {
+                    logger.log(
+                        priority = Log.WARN,
+                        message = "Janky frame",
+                        attributes = mapOf("frameData" to frameData.toString()),
+                    )
+                }
+            }
     }
 
     override fun onDestroy() {
-        //        if (::jankStats.isInitialized) jankStats.isTrackingEnabled = false
+        if (::jankStats.isInitialized) jankStats.isTrackingEnabled = false
         super.onDestroy()
     }
 }

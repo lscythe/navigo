@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import dev.lscythe.app.navigo.convention.NavigoBuildType
-import org.apache.commons.logging.LogFactory.release
 
 /*
  * Copyright 2026 Lscythe

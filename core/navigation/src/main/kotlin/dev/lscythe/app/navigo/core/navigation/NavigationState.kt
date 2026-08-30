@@ -28,7 +28,6 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
-import kotlin.collections.last
 
 /** Create a single navigation back stack that persists configuration changes and process death. */
 @Composable
