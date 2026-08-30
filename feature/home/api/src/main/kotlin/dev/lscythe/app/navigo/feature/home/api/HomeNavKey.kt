@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.onboarding.impl.navigation
+package dev.lscythe.app.navigo.feature.home.api
 
-import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import dev.lscythe.app.navigo.core.navigation.Navigator
-import dev.lscythe.app.navigo.feature.home.api.navigateToHome
-import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
-import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingRoute
+import kotlinx.serialization.Serializable
 
-fun EntryProviderScope<NavKey>.onboardingEntry(navigator: Navigator) {
-    entry<OnboardingNavKey> {
-        OnboardingRoute(navigateHome = navigator::navigateToHome)
-    }
+@Serializable object HomeNavKey : NavKey
+
+fun Navigator.navigateToHome() {
+    navigate(HomeNavKey)
 }

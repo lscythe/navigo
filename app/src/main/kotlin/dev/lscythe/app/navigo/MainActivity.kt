@@ -29,6 +29,7 @@ import androidx.navigation3.runtime.entryProvider
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.monitoring.StructuredLogger
 import dev.lscythe.app.navigo.core.navigation.Navigator
+import dev.lscythe.app.navigo.feature.home.impl.navigation.homeEntry
 import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
 import dev.lscythe.app.navigo.feature.onboarding.impl.navigation.onboardingEntry
 import dev.lscythe.app.navigo.ui.NavigoApp
@@ -66,6 +67,7 @@ class MainActivity(
 
             val entryProvider = entryProvider {
                 onboardingEntry(navigator)
+                homeEntry(navigator)
             }
 
             NavigoTheme {

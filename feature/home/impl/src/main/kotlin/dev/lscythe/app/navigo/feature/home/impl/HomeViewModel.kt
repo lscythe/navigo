@@ -13,20 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
-    alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
-}
-
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
-}
-
-dependencies {
-    implementation(project(":feature:onboarding:api"))
-    implementation(project(":feature:home:api"))
-
-    implementation(libs.kotlinx.serialization.json)
-}
+package dev.lscythe.app.navigo.feature.home.impl

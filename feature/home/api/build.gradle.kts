@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
-    alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.navigo.android.feature.api)
 }
 
 android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
-}
-
-dependencies {
-    implementation(project(":feature:onboarding:api"))
-    implementation(project(":feature:home:api"))
-
-    implementation(libs.kotlinx.serialization.json)
+    namespace = "dev.lscythe.app.navigo.feature.home.api"
 }

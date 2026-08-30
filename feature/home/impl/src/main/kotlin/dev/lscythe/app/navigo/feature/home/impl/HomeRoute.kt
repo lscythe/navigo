@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.onboarding.impl.navigation
+package dev.lscythe.app.navigo.feature.home.impl
 
-import androidx.navigation3.runtime.EntryProviderScope
-import androidx.navigation3.runtime.NavKey
-import dev.lscythe.app.navigo.core.navigation.Navigator
-import dev.lscythe.app.navigo.feature.home.api.navigateToHome
-import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
-import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingRoute
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 
-fun EntryProviderScope<NavKey>.onboardingEntry(navigator: Navigator) {
-    entry<OnboardingNavKey> {
-        OnboardingRoute(navigateHome = navigator::navigateToHome)
-    }
+@Composable
+internal fun HomeRoute(modifier: Modifier = Modifier) {
+    HomeScreen(modifier = modifier)
 }

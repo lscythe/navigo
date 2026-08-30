@@ -42,6 +42,7 @@ kover = "0.9.9"
 ksp = "2.3.11"
 ktfmt = "0.64"
 ktor = "3.5.2"
+maplibre = "0.15.0"
 material = "1.14.0"
 materialKolor = "5.0.0"
 metro = "1.4.1"
@@ -124,6 +125,8 @@ lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "androidT
 kotlinx-coroutines-guava = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
 lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "androidTools" }
 lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "androidTools" }
+maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre" }
+maplibre-compose-opengl-runtime = { module = "org.maplibre.compose:maplibre-compose-runtime-opengl-android", version.ref = "maplibre" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 metro-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }

@@ -143,6 +143,8 @@ dependencies {
     implementation(project(":api:auth"))
     implementation(project(":feature:onboarding:api"))
     implementation(project(":feature:onboarding:impl"))
+    implementation(project(":feature:home:api"))
+    implementation(project(":feature:home:impl"))
 
     implementation(project(":core:analytics"))
     implementation(project(":core:common"))

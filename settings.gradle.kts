@@ -67,6 +67,8 @@ include(
 )
 
 include(
+    ":feature:home:api",
+    ":feature:home:impl",
     ":feature:onboarding:api",
     ":feature:onboarding:impl",
 )
