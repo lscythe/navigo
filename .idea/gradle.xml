@@ -21,6 +21,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/api" />
+            <option value="$PROJECT_DIR$/api/auth" />
+            <option value="$PROJECT_DIR$/api/legal" />
+            <option value="$PROJECT_DIR$/api/transit" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/convention" />
@@ -35,9 +39,13 @@
             <option value="$PROJECT_DIR$/core/monitoring" />
             <option value="$PROJECT_DIR$/core/navigation" />
             <option value="$PROJECT_DIR$/core/network" />
-            <option value="$PROJECT_DIR$/core/network-graphql" />
+            <option value="$PROJECT_DIR$/core/testing" />
             <option value="$PROJECT_DIR$/core/testing-screenshot" />
             <option value="$PROJECT_DIR$/core/ui" />
+            <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/onboarding" />
+            <option value="$PROJECT_DIR$/feature/onboarding/api" />
+            <option value="$PROJECT_DIR$/feature/onboarding/impl" />
           </set>
         </option>
       </GradleProjectSettings>
