@@ -16,9 +16,11 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl.content
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +32,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -54,6 +59,12 @@ internal fun OnboardingIntroduction(
     modifier: Modifier = Modifier,
 ) {
     val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
+    val routePagerProgress by
+        remember(pagerState) {
+            derivedStateOf {
+                (pagerState.currentPage + pagerState.currentPageOffsetFraction).coerceIn(0f, 2f)
+            }
+        }
 
     Column(
         modifier = modifier,
@@ -69,16 +80,23 @@ internal fun OnboardingIntroduction(
             color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.padding(horizontal = NavigoSpacing.screen),
         )
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize().weight(1f),
-            verticalAlignment = Alignment.Top,
-            userScrollEnabled = pagerEnabled,
-        ) { page ->
-            when (page) {
-                0 -> OnboardingFeedPage()
-                1 -> OnboardingGpsPage()
-                2 -> OnboardingAlarmPage()
+        Box(modifier = Modifier.fillMaxSize().weight(1f)) {
+            OnboardingRouteBackground(
+                pagerProgress = routePagerProgress,
+                modifier =
+                    Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.5f),
+            )
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                verticalAlignment = Alignment.Top,
+                userScrollEnabled = pagerEnabled,
+            ) { page ->
+                when (page) {
+                    0 -> OnboardingFeedPage()
+                    1 -> OnboardingGpsPage()
+                    2 -> OnboardingAlarmPage()
+                }
             }
         }
         Spacer(Modifier.height(NavigoSpacing.micro))

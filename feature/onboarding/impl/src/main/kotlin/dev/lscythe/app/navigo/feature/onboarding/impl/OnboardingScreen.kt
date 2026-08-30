@@ -17,6 +17,7 @@ package dev.lscythe.app.navigo.feature.onboarding.impl
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -82,6 +83,7 @@ import kotlinx.coroutines.launch
 
 private const val PageCount = OnboardingPageCount
 private const val PageDurationMillis = 5_000
+private const val PageTransitionDurationMillis = 650
 
 private enum class OnboardingStage {
     Introduction,
@@ -127,7 +129,14 @@ internal fun OnboardingScreen(
         }
         if (pagerState.settledPage < PageCount - 1) {
             pageProgress = 0f
-            pagerState.animateScrollToPage(pagerState.settledPage + 1)
+            pagerState.animateScrollToPage(
+                page = pagerState.settledPage + 1,
+                animationSpec =
+                    tween(
+                        durationMillis = PageTransitionDurationMillis,
+                        easing = FastOutSlowInEasing,
+                    ),
+            )
         }
     }
 
@@ -178,7 +187,14 @@ internal fun OnboardingScreen(
                         pagerEnabled = !showLanguageSelector,
                         onNextPage = {
                             scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                pagerState.animateScrollToPage(
+                                    page = pagerState.currentPage + 1,
+                                    animationSpec =
+                                        tween(
+                                            durationMillis = PageTransitionDurationMillis,
+                                            easing = FastOutSlowInEasing,
+                                        ),
+                                )
                             }
                         },
                         onContinue = { stage = OnboardingStage.Permissions },
