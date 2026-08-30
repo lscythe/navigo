@@ -80,7 +80,11 @@ class SafeRequestTest :
                 respond(
                     content = readResource("network/problem-response.json"),
                     status = HttpStatusCode.Forbidden,
-                    headers = headersOf(HttpHeaders.ContentType, "application/problem+json"),
+                    headers =
+                        headersOf(
+                            HttpHeaders.ContentType to listOf("application/problem+json"),
+                            HttpHeaders.ContentLanguage to listOf("id"),
+                        ),
                 )
             }
             val client = clientOf(engine)
@@ -97,6 +101,7 @@ class SafeRequestTest :
                     detail = "Your current balance is 30, but that costs 50.",
                     instance = "/account/12345/msgs/abc",
                 )
+            error.contentLanguage shouldBe "id"
         }
 
         test("5xx response maps to ServerError") {

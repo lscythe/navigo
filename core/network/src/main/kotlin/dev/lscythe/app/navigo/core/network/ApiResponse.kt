@@ -22,12 +22,14 @@ sealed interface ApiResponse<out T> {
         data class ClientError(
             val code: Int,
             val problem: ProblemDetail? = null,
+            val contentLanguage: String? = null,
             val message: String? = null,
         ) : Error
 
         data class ServerError(
             val code: Int,
             val problem: ProblemDetail? = null,
+            val contentLanguage: String? = null,
             val message: String? = null,
         ) : Error
 

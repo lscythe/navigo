@@ -33,6 +33,7 @@ suspend inline fun <reified T> safeRequest(
         ApiResponse.Error.ClientError(
             code = e.response.status.value,
             problem = problem,
+            contentLanguage = e.response.headers[io.ktor.http.HttpHeaders.ContentLanguage],
             message = e.message,
         )
     } catch (e: ServerResponseException) {
@@ -40,6 +41,37 @@ suspend inline fun <reified T> safeRequest(
         ApiResponse.Error.ServerError(
             code = e.response.status.value,
             problem = problem,
+            contentLanguage = e.response.headers[io.ktor.http.HttpHeaders.ContentLanguage],
+            message = e.message,
+        )
+    } catch (e: ContentConvertException) {
+        ApiResponse.Error.SerializationError(message = e.message)
+    } catch (e: HttpRequestTimeoutException) {
+        ApiResponse.Error.NetworkError(message = "Request Timeout", cause = e)
+    } catch (e: Exception) {
+        ApiResponse.Error.UnknownError(message = e.message, cause = e)
+    }
+
+suspend fun <T> safeResponseRequest(
+    block: suspend () -> HttpResponse,
+    transform: suspend (HttpResponse) -> T,
+): ApiResponse<T> =
+    try {
+        ApiResponse.Success(transform(block()))
+    } catch (e: ClientRequestException) {
+        val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
+        ApiResponse.Error.ClientError(
+            code = e.response.status.value,
+            problem = problem,
+            contentLanguage = e.response.headers[io.ktor.http.HttpHeaders.ContentLanguage],
+            message = e.message,
+        )
+    } catch (e: ServerResponseException) {
+        val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
+        ApiResponse.Error.ServerError(
+            code = e.response.status.value,
+            problem = problem,
+            contentLanguage = e.response.headers[io.ktor.http.HttpHeaders.ContentLanguage],
             message = e.message,
         )
     } catch (e: ContentConvertException) {
@@ -58,6 +90,7 @@ suspend fun safeNoContentRequest(block: suspend () -> HttpResponse): ApiResponse
         val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
         ApiResponse.Error.ClientError(
             code = e.response.status.value,
+            contentLanguage = e.response.headers[io.ktor.http.HttpHeaders.ContentLanguage],
             problem = problem,
             message = e.message,
         )
@@ -65,6 +98,7 @@ suspend fun safeNoContentRequest(block: suspend () -> HttpResponse): ApiResponse
         val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
         ApiResponse.Error.ServerError(
             code = e.response.status.value,
+            contentLanguage = e.response.headers[io.ktor.http.HttpHeaders.ContentLanguage],
             problem = problem,
             message = e.message,
         )

@@ -20,16 +20,12 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core:common"))
-    api(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.auth)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.websockets)
-    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(project(":core:network"))
+    implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
 
     testImplementation(project(":core:testing"))
+    testImplementation(libs.ktor.client.content.negotiation)
     testImplementation(libs.ktor.client.mock)
+    testImplementation(libs.ktor.serialization.kotlinx.json)
 }

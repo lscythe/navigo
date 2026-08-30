@@ -46,6 +46,7 @@ include(":app")
 
 include(
     ":api:auth",
+    ":api:legal",
     ":api:transit",
 )
 
