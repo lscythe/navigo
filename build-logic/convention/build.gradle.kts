@@ -45,7 +45,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.kover.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(libs.room3.gradlePlugin)
+    implementation(libs.sqldelight.gradlePlugin)
     implementation(libs.kotest.assertions.core)
     lintChecks(libs.androidx.lint.gradle)
 }
@@ -91,10 +91,6 @@ gradlePlugin {
             id = "navigo.android.lint"
             implementationClass = "AndroidLintConventionPlugin"
         }
-        register("androidRoom") {
-            id = "navigo.android.room"
-            implementationClass = "AndroidRoomConventionPlugin"
-        }
         register("androidTest") {
             id = "navigo.android.test"
             implementationClass = "AndroidTestConventionPlugin"
@@ -106,6 +102,10 @@ gradlePlugin {
         register("multiplatformLibrary") {
             id = "navigo.multiplatform.library"
             implementationClass = "KotlinMultiplatformLibraryConventionPlugin"
+        }
+        register("multiplatformSqlDelight") {
+            id = "navigo.multiplatform.sqldelight"
+            implementationClass = "KotlinMultiplatformSqlDelightConventionPlugin"
         }
         register("metro") {
             id = "navigo.metro"

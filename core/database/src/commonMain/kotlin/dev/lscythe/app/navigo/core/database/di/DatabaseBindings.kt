@@ -13,13 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.multiplatform.sqldelight)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.database.di
 
-kotlin {
-    android {
-        namespace = "dev.lscythe.app.navigo.core.database"
-    }
+import app.cash.sqldelight.db.SqlDriver
+import dev.lscythe.app.navigo.core.database.NavigoDatabase
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+
+@ContributesTo(AppScope::class)
+@BindingContainer
+object DatabaseBindings {
+    @Provides
+    @SingleIn(AppScope::class)
+    fun provideNavigoDatabase(driver: SqlDriver): NavigoDatabase = NavigoDatabase(driver)
 }

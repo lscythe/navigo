@@ -49,7 +49,7 @@ mockk = "1.14.11"
 okhttp = "5.4.0"
 robolectric = "4.16.1"
 roborazzi = "1.71.0"
-room3 = "3.0.1"
+sqldelight = "2.3.2"
 sentry = "6.18.0"
 sentryAndroid = "8.53.0"
 timber = "5.0.1"
@@ -137,8 +137,11 @@ okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-intercepto
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazzi-accessibility-check = { module = "io.github.takahirom.roborazzi:roborazzi-accessibility-check", version.ref = "roborazzi" }
-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3" }
+sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentryAndroid" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -150,7 +153,7 @@ compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-room3-gradlePlugin = { module = "androidx.room3:room3-gradle-plugin", version.ref = "room3" }
+sqldelight-gradlePlugin = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -172,7 +175,7 @@ kotest = { id = "io.kotest", version.ref = "kotest" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
-room3 = { id = "androidx.room3", version.ref = "room3" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 
 navigo-android-application = { id = "navigo.android.application" }
@@ -183,10 +186,10 @@ navigo-android-feature-impl = { id = "navigo.android.feature.impl" }
 navigo-android-library = { id = "navigo.android.library" }
 navigo-android-library-compose = { id = "navigo.android.library.compose" }
 navigo-android-lint = { id = "navigo.android.lint" }
-navigo-android-room = { id = "navigo.android.room" }
 navigo-android-test = { id = "navigo.android.test" }
 navigo-jvm-library = { id = "navigo.jvm.library" }
 navigo-multiplatform-library = { id = "navigo.multiplatform.library" }
+navigo-multiplatform-sqldelight = { id = "navigo.multiplatform.sqldelight" }
 navigo-metro = { id = "navigo.metro" }
 navigo-root = { id = "navigo.root" }
 
