@@ -15,8 +15,4 @@
  */
 package dev.lscythe.app.navigo.core.testing
 
-fun readResource(path: String): String =
-    checkNotNull(Thread.currentThread().contextClassLoader.getResource(path)) {
-            "Missing test resource: $path"
-        }
-        .readText()
+expect fun readResource(path: String): String

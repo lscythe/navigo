@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.multiplatform.library)
-}
+package dev.lscythe.app.navigo.core.testing
 
-kotlin {
-    android {
-        namespace = "dev.lscythe.app.navigo.core.testing"
-    }
-}
+actual fun readResource(path: String): String =
+    checkNotNull(Thread.currentThread().contextClassLoader.getResource(path)) {
+            "Missing test resource: $path"
+        }
+        .readText()
