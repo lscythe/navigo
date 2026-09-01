@@ -13,24 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.multiplatform.library)
-    alias(libs.plugins.navigo.metro)
-}
+package dev.lscythe.app.navigo.core.common.dispatchers
 
-kotlin {
-    android {
-        namespace = "dev.lscythe.app.navigo.core.common"
-    }
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.datetime)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlinx.coroutines.test)
-            implementation(libs.turbine)
-        }
-    }
-}
+internal actual val platformIoDispatcher: CoroutineDispatcher = Dispatchers.Default

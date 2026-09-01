@@ -17,6 +17,7 @@ package dev.lscythe.app.navigo.core.common.di
 
 import dev.lscythe.app.navigo.core.common.dispatchers.Dispatcher
 import dev.lscythe.app.navigo.core.common.dispatchers.NavigoDispatchers
+import dev.lscythe.app.navigo.core.common.dispatchers.platformIoDispatcher
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
@@ -30,7 +31,7 @@ object DispatchersBindings {
 
     @Provides
     @Dispatcher(NavigoDispatchers.IO)
-    fun provideIODispatcher(): CoroutineDispatcher = Dispatchers.IO
+    fun provideIODispatcher(): CoroutineDispatcher = platformIoDispatcher
 
     @Provides
     @Dispatcher(NavigoDispatchers.Default)
