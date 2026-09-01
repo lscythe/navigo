@@ -20,7 +20,6 @@ import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.datastore.SessionPreference
 import dev.lscythe.app.navigo.core.datastore.datasource.SessionPreferenceDataSource
-import dev.lscythe.app.navigo.core.datastore.sessionPreference
 import dev.lscythe.app.navigo.core.network.ApiResponse
 import dev.lscythe.app.navigo.core.network.SessionManager
 import dev.lscythe.app.navigo.core.network.SessionTokens
@@ -64,14 +63,15 @@ class AppSessionManager(
     }
 }
 
-private fun SessionResponse.toPreference(): SessionPreference = sessionPreference {
-    id = this@toPreference.id
-    accessToken = this@toPreference.accessToken
-    refreshToken = this@toPreference.refreshToken
-    accessExpiresAtEpochSeconds = this@toPreference.accessExpiresAt.epochSeconds
-    refreshExpiresAtEpochSeconds = this@toPreference.refreshExpiresAt.epochSeconds
-    installationId = this@toPreference.installationId
-}
+private fun SessionResponse.toPreference(): SessionPreference =
+    SessionPreference(
+        id = id,
+        accessToken = accessToken,
+        refreshToken = refreshToken,
+        accessExpiresAtEpochSeconds = accessExpiresAt.epochSeconds,
+        refreshExpiresAtEpochSeconds = refreshExpiresAt.epochSeconds,
+        installationId = installationId,
+    )
 
 private fun SessionPreference.toBearerTokensOrNull(): SessionTokens? =
     accessToken.takeIf(String::isNotEmpty)?.let { SessionTokens(it, refreshToken) }

@@ -14,23 +14,26 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
+    alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    defaultConfig {
-        consumerProguardFiles("consumer-proguard-rules.pro")
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.datastore"
     }
-    namespace = "dev.lscythe.app.navigo.core.datastore"
-}
 
-dependencies {
-    implementation(project(":core:common"))
-    api(project(":core:datastore-proto"))
-    api(libs.androidx.dataStore)
-    implementation(libs.tink.android)
-
-    testImplementation(project(":core:datastore-test"))
-    testImplementation(libs.kotlinx.coroutines.test)
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:common"))
+            implementation(libs.ksafe)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+        }
+    }
 }
