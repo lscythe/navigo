@@ -24,7 +24,6 @@ import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -104,7 +103,7 @@ object NetworkBindings {
         languageProvider: LanguageProvider,
         networkLogger: NetworkLogger,
     ): HttpClient =
-        HttpClient(OkHttp) {
+        HttpClient(createPlatformHttpClientEngine()) {
             configurePublicClient(baseUrl, languageProvider, networkLogger)
         }
 
