@@ -3,9 +3,6 @@ name: Pull Request Validation
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
-    paths-ignore:
-      - '**/*.md'
-      - 'docs/**'
   merge_group:
 
 permissions:
@@ -15,6 +12,7 @@ permissions:
 jobs:
   validate:
     name: Validate PR template
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Validate required sections
@@ -22,22 +20,31 @@ jobs:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
           set -eu
+          python3 - <<'PY'
+          import os
+          import re
 
-          for heading in \
-            '## Summary' \
-            '## Related issue' \
-            '## Specification' \
-            '## Acceptance criteria' \
-            '## Verification' \
-            '## Review checklist'
-          do
-            printf '%s\n' "$PR_BODY" | grep -Fq "$heading" || {
-              echo "Missing required section: $heading"
-              exit 1
-            }
-          done
+          body = os.environ.get("PR_BODY", "")
+          headings = [
+              "Summary",
+              "Related issue",
+              "Specification",
+              "Acceptance criteria",
+              "Verification",
+              "Review checklist",
+          ]
 
-          printf '%s\n' "$PR_BODY" | grep -Eq '^-[[:space:]]+\[[ xX]\]' || {
-            echo 'Acceptance criteria must contain at least one checkbox.'
-            exit 1
-          }
+          for heading in headings:
+              if not re.search(rf"(?m)^##\s+{re.escape(heading)}\s*$", body):
+                  raise SystemExit(f"Missing required section: ## {heading}")
+
+          match = re.search(
+              r"(?ms)^##\s+Acceptance criteria\s*$"
+              r"(.*?)(?=^##\s+|\Z)",
+              body,
+          )
+          if not match or not re.search(r"(?m)^-\s+\[[ xX]\]\s+\S", match.group(1)):
+              raise SystemExit(
+                  "Acceptance criteria must contain a checkbox with criterion text."
+              )
+          PY
