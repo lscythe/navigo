@@ -39,7 +39,7 @@ jobs:
           cache: gradle
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
 
       - name: Assemble
         run: ./gradlew assemble --stacktrace -Dorg.gradle.configuration-cache.parallel=false
@@ -67,7 +67,7 @@ jobs:
           cache: gradle
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
 
       - name: Test
         run: ./gradlew test --stacktrace -Dorg.gradle.configuration-cache.parallel=false
@@ -85,7 +85,7 @@ jobs:
           java-version: '21'
           cache: gradle
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c # v5
       - name: Generate coverage
         run: ./gradlew koverXmlReport --stacktrace -Dorg.gradle.configuration-cache.parallel=false
       - name: Upload coverage to Codecov
