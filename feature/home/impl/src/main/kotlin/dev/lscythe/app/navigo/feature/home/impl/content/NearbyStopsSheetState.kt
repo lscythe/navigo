@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.home.impl
+package dev.lscythe.app.navigo.feature.home.impl.content
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+enum class NearbyStopsSheetValue {
+    Collapsed,
+    HalfExpanded,
+    Expanded,
+}
 
-@Composable
-internal fun HomeRoute(
-    onSearchClick: () -> Unit,
-    onNotificationsClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    HomeScreen(
-        onSearchClick = onSearchClick,
-        onNotificationsClick = onNotificationsClick,
-        onProfileClick = onProfileClick,
-        modifier = modifier,
+internal fun nearbyStopsSheetAnchors(
+    screenHeight: Float,
+    collapsedHeight: Float,
+): Map<NearbyStopsSheetValue, Float> {
+    val halfExpanded = screenHeight / 2f
+    val collapsed = (screenHeight - collapsedHeight).coerceAtLeast(halfExpanded)
+    return mapOf(
+        NearbyStopsSheetValue.Collapsed to collapsed,
+        NearbyStopsSheetValue.HalfExpanded to halfExpanded,
+        NearbyStopsSheetValue.Expanded to 0f,
     )
 }

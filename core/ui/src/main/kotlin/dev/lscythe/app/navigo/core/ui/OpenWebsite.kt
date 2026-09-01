@@ -13,22 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.home.impl
+package dev.lscythe.app.navigo.core.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalUriHandler
 
 @Composable
-internal fun HomeRoute(
-    onSearchClick: () -> Unit,
-    onNotificationsClick: () -> Unit,
-    onProfileClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    HomeScreen(
-        onSearchClick = onSearchClick,
-        onNotificationsClick = onNotificationsClick,
-        onProfileClick = onProfileClick,
-        modifier = modifier,
-    )
+fun rememberOpenWebsite(url: String): () -> Unit {
+    val uriHandler = LocalUriHandler.current
+    return remember(uriHandler) { { uriHandler.openUri(url) } }
 }

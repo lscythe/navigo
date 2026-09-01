@@ -19,10 +19,14 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import dev.lscythe.app.navigo.core.navigation.Navigator
 import dev.lscythe.app.navigo.feature.home.api.HomeNavKey
-import dev.lscythe.app.navigo.feature.home.impl.HomeScreen
+import dev.lscythe.app.navigo.feature.home.impl.HomeRoute
 
 fun EntryProviderScope<NavKey>.homeEntry(navigator: Navigator) {
     entry<HomeNavKey> {
-        HomeScreen()
+        HomeRoute(
+            onSearchClick = {},
+            onNotificationsClick = {},
+            onProfileClick = {},
+        )
     }
 }

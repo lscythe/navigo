@@ -15,11 +15,37 @@
  */
 package dev.lscythe.app.navigo.feature.home.impl
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import org.maplibre.compose.map.MaplibreMap
+import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
+import dev.lscythe.app.navigo.feature.home.impl.content.HomeMap
+import dev.lscythe.app.navigo.feature.home.impl.content.HomeNearbyStopsLayer
+import dev.lscythe.app.navigo.feature.home.impl.content.HomeTopBar
 
 @Composable
-internal fun HomeScreen(modifier: Modifier = Modifier) {
-    MaplibreMap {}
+internal fun HomeScreen(
+    onSearchClick: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        HomeMap()
+        HomeTopBar(
+            profileInitials = "AK",
+            notificationCount = 3,
+            onSearchClick = onSearchClick,
+            onNotificationsClick = onNotificationsClick,
+            onProfileClick = onProfileClick,
+            modifier =
+                Modifier.padding(
+                    horizontal = NavigoSpacing.screen,
+                    vertical = NavigoSpacing.item,
+                ),
+        )
+        HomeNearbyStopsLayer()
+    }
 }
