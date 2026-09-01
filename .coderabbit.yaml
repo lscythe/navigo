@@ -1,0 +1,50 @@
+language: en-US
+early_access: true
+
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  review_status: true
+  review_progress: true
+  review_details: false
+  collapse_walkthrough: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  auto_apply_labels: false
+  suggested_reviewers: true
+  auto_assign_reviewers: false
+  path_filters:
+    - '!**/build/**'
+    - '!**/generated/**'
+    - '!**/local.properties'
+    - '!**/*.keystore'
+    - '!**/*.jks'
+  path_instructions:
+    - path: '**/*.kt'
+      instructions: |
+        Review for idiomatic Kotlin, coroutine and Flow lifecycle safety,
+        public API stability, platform separation, and testability.
+    - path: '**/*.gradle.kts'
+      instructions: |
+        Review build logic for reproducibility, dependency hygiene, configuration
+        cache compatibility, and unnecessary coupling between platforms.
+    - path: '.github/**'
+      instructions: |
+        Review workflow permissions, untrusted-input handling, action pinning,
+        secret exposure, and branch-trigger behavior.
+    - path: '**/*.yml'
+      instructions: |
+        Check schema correctness, accidental secret exposure, and safe handling
+        of untrusted values.
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
