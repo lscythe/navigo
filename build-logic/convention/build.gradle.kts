@@ -41,6 +41,7 @@ dependencies {
     compileOnly(libs.android.multiplatform.library.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
+    implementation(libs.kotest.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.kover.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)

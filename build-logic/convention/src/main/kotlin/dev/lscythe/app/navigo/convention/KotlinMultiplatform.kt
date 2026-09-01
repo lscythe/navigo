@@ -76,6 +76,9 @@ internal fun Project.configureMultiplatformLibrary() {
         extensions.configure<KotlinMultiplatformAndroidLibraryExtension> {
             compileSdk = COMPILE_SDK
             minSdk = MIN_SDK
+            withHostTest {
+                isIncludeAndroidResources = true
+            }
         }
     }
 
