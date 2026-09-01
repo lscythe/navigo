@@ -26,7 +26,6 @@ androidxSavedStateCompose = "1.5.0"
 androidxTracing = "2.0.0"
 androidxWindowManager = "1.3.0"
 androidxWork = "2.11.2"
-apollo = "5.0.1"
 composeGuard = "2.6.0"
 dependencyGuard = "0.5.0"
 firebaseAnalytics = "23.2.0"
@@ -99,7 +98,6 @@ androidx-tracing-ktx = { module = "androidx.tracing:tracing-ktx", version.ref = 
 androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidxWindowManager" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "androidxWork" }
-apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junitVintage" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
@@ -169,7 +167,6 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-lint = { id = "com.android.lint", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
-apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-guard = { id = "com.joetr.compose.guard", version.ref = "composeGuard" }
