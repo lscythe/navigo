@@ -1,0 +1,43 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  merge_group:
+
+permissions:
+  pull-requests: read
+  contents: read
+
+jobs:
+  validate:
+    name: Validate PR template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate required sections
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          set -eu
+
+          for heading in \
+            '## Summary' \
+            '## Related issue' \
+            '## Specification' \
+            '## Acceptance criteria' \
+            '## Verification' \
+            '## Review checklist'
+          do
+            printf '%s\n' "$PR_BODY" | grep -Fq "$heading" || {
+              echo "Missing required section: $heading"
+              exit 1
+            }
+          done
+
+          printf '%s\n' "$PR_BODY" | grep -Eq '^-[[:space:]]+\[[ xX]\]' || {
+            echo 'Acceptance criteria must contain at least one checkbox.'
+            exit 1
+          }
