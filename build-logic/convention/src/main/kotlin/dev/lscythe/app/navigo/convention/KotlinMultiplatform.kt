@@ -16,6 +16,7 @@
 package dev.lscythe.app.navigo.convention
 
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.dsl.KotlinMultiplatformAndroidLibraryExtension
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.testing.Test
@@ -25,6 +26,7 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
     commonExtension.apply {
@@ -59,6 +61,27 @@ internal fun Project.configureKotlinJvm() {
     configureKotlin<KotlinJvmProjectExtension>()
 }
 
+internal fun Project.configureMultiplatformLibrary() {
+    extensions.configure<KotlinMultiplatformExtension> {
+        applyDefaultHierarchyTemplate()
+
+        jvm("desktop") {
+            compilerOptions {
+                jvmTarget = JVM_TARGET
+            }
+        }
+        iosArm64()
+        iosSimulatorArm64()
+
+        extensions.configure<KotlinMultiplatformAndroidLibraryExtension> {
+            compileSdk = COMPILE_SDK
+            minSdk = MIN_SDK
+        }
+    }
+
+    configureKotlin<KotlinMultiplatformExtension>()
+}
+
 private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
     configure<T> {
         val warningsAsErrors =
@@ -69,11 +92,20 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
                 }
                 .orElse(false)
         when (this) {
-            is KotlinAndroidProjectExtension -> compilerOptions
-            is KotlinJvmProjectExtension -> compilerOptions
-            else -> TODO("Unsupported project extension $this ${T::class}")
-        }.apply {
-            jvmTarget = JVM_TARGET
-            allWarningsAsErrors = warningsAsErrors
+            is KotlinMultiplatformExtension ->
+                compilerOptions.apply {
+                    allWarningsAsErrors = warningsAsErrors
+                }
+            is KotlinAndroidProjectExtension ->
+                compilerOptions.apply {
+                    jvmTarget = JVM_TARGET
+                    allWarningsAsErrors = warningsAsErrors
+                }
+            is KotlinJvmProjectExtension ->
+                compilerOptions.apply {
+                    jvmTarget = JVM_TARGET
+                    allWarningsAsErrors = warningsAsErrors
+                }
+            else -> error("Unsupported project extension $this ${T::class}")
         }
     }

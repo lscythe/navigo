@@ -38,7 +38,7 @@ kotlin {
 dependencies {
     implementation(files(libs::class.java.superclass.protectionDomain.codeSource.location))
     compileOnly(libs.android.gradlePlugin)
-    compileOnly(libs.android.gradlePlugin.implementation)
+    compileOnly(libs.android.multiplatform.library.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)

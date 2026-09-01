@@ -150,7 +150,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle-api", version.ref = "androidGradlePlugin" }
-android-gradlePlugin-implementation = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+android-multiplatform-library-gradlePlugin = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "androidGradlePlugin" }
 android-tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
