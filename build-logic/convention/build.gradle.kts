@@ -38,6 +38,7 @@ kotlin {
 dependencies {
     implementation(files(libs::class.java.superclass.protectionDomain.codeSource.location))
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.gradlePlugin.implementation)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
@@ -100,6 +101,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = "navigo.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("multiplatformLibrary") {
+            id = "navigo.multiplatform.library"
+            implementationClass = "KotlinMultiplatformLibraryConventionPlugin"
         }
         register("metro") {
             id = "navigo.metro"

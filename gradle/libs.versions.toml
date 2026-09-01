@@ -150,6 +150,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle-api", version.ref = "androidGradlePlugin" }
+android-gradlePlugin-implementation = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 android-tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -192,6 +193,7 @@ navigo-android-lint = { id = "navigo.android.lint" }
 navigo-android-room = { id = "navigo.android.room" }
 navigo-android-test = { id = "navigo.android.test" }
 navigo-jvm-library = { id = "navigo.jvm.library" }
+navigo-multiplatform-library = { id = "navigo.multiplatform.library" }
 navigo-metro = { id = "navigo.metro" }
 navigo-root = { id = "navigo.root" }
 
