@@ -14,9 +14,16 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.feature.api)
+    alias(libs.plugins.navigo.multiplatform.library)
+    alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.api"
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.feature.onboarding.api"
+    }
+
+    sourceSets.commonMain.dependencies {
+        api(project(":core:navigation"))
+    }
 }

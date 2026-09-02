@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.compose)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.navigation"
-}
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.navigation"
+    }
 
-dependencies {
-    api(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.savedstate.compose)
-    implementation(libs.androidx.lifecycle.viewModel.navigation3)
+    sourceSets.commonMain.dependencies {
+        api(libs.androidx.navigation3.runtime)
+        implementation(libs.androidx.savedstate.compose)
+        implementation(libs.androidx.lifecycle.viewModel.navigation3)
+    }
 }

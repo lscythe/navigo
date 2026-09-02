@@ -28,11 +28,20 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.savedstate.serialization.SavedStateConfiguration
+import kotlinx.serialization.modules.SerializersModule
 
 /** Create a single navigation back stack that persists configuration changes and process death. */
 @Composable
-fun rememberNavigationState(startKey: NavKey): NavigationState {
-    val backStack = rememberNavBackStack(startKey)
+fun rememberNavigationState(
+    startKey: NavKey,
+    serializersModule: SerializersModule,
+): NavigationState {
+    val configuration =
+        remember(serializersModule) {
+            SavedStateConfiguration { this.serializersModule = serializersModule }
+        }
+    val backStack = rememberNavBackStack(configuration, startKey)
     return remember(backStack) { NavigationState(backStack) }
 }
 

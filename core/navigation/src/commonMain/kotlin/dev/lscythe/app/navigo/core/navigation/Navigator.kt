@@ -33,6 +33,18 @@ class Navigator(val state: NavigationState) {
         if (key != state.currentKey) state.backStack.add(key)
     }
 
+    /** Replace the current navigation key while preserving earlier history. */
+    fun replaceCurrent(key: NavKey) {
+        if (key == state.currentKey) return
+        state.backStack[state.backStack.lastIndex] = key
+    }
+
+    /** Clear all navigation history and make [key] the new root. */
+    fun resetTo(key: NavKey) {
+        state.backStack.clear()
+        state.backStack.add(key)
+    }
+
     /** Go back to the previous navigation key. */
     fun goBack() {
         check(state.backStack.size > 1) { "You cannot go back from the start route" }

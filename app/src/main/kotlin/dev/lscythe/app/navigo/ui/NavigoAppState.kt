@@ -23,10 +23,14 @@ import dev.lscythe.app.navigo.core.navigation.NavigationState
 import dev.lscythe.app.navigo.core.navigation.Navigator
 import dev.lscythe.app.navigo.core.navigation.rememberNavigationState
 import dev.lscythe.app.navigo.core.ui.TrackDisposableJank
+import kotlinx.serialization.modules.SerializersModule
 
 @Composable
-fun rememberNavigoAppState(startKey: NavKey): NavigoAppState {
-    val navigationState = rememberNavigationState(startKey)
+fun rememberNavigoAppState(
+    startKey: NavKey,
+    serializersModule: SerializersModule,
+): NavigoAppState {
+    val navigationState = rememberNavigationState(startKey, serializersModule)
     NavigationTrackingSideEffect(navigationState)
     return remember(navigationState) { NavigoAppState(navigationState) }
 }

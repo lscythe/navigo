@@ -68,6 +68,40 @@ class NavigatorTest :
                 listOf(TestStartKey, TestFirstKey, TestSecondKey, TestFirstKey)
         }
 
+        test("replaces the current key") {
+            navigator.navigate(TestFirstKey)
+
+            navigator.replaceCurrent(TestSecondKey)
+
+            navigationState.backStack shouldContainExactly listOf(TestStartKey, TestSecondKey)
+            navigationState.currentKey shouldBe TestSecondKey
+        }
+
+        test("does not replace the current key with itself") {
+            navigator.navigate(TestFirstKey)
+
+            navigator.replaceCurrent(TestFirstKey)
+
+            navigationState.backStack shouldContainExactly listOf(TestStartKey, TestFirstKey)
+        }
+
+        test("replaces the start key") {
+            navigator.replaceCurrent(TestFirstKey)
+
+            navigationState.backStack shouldContainExactly listOf(TestFirstKey)
+            navigationState.currentKey shouldBe TestFirstKey
+        }
+
+        test("resets the stack to one key") {
+            navigator.navigate(TestFirstKey)
+            navigator.navigate(TestSecondKey)
+
+            navigator.resetTo(TestFirstKey)
+
+            navigationState.backStack shouldContainExactly listOf(TestFirstKey)
+            navigationState.currentKey shouldBe TestFirstKey
+        }
+
         test("pops the current key") {
             navigator.navigate(TestFirstKey)
 
