@@ -1,0 +1,5 @@
+# Default owner for all repository files.
+* @lscythe
+
+# Keep repository automation and security changes under explicit ownership.
+/.github/ @lscythe

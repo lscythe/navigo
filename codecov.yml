@@ -1,0 +1,36 @@
+codecov:
+  require_ci_to_pass: true
+  notify:
+    wait_for_ci: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        branches:
+          - main
+    patch:
+      default:
+        target: 80%
+        threshold: 0%
+
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false
+
+github_checks: true
+ignore:
+  - "**/generated/**"
+  - "**/src/**/commonTest/**"
+  - "**/src/**/jvmTest/**"
+  - "**/src/**/androidTest/**"
+  - "**/src/**/iosTest/**"
+  - "**/src/**/jsTest/**"
+  - "**/src/**/wasmJsTest/**"
+  - "**/src/**/benchmark/**"
