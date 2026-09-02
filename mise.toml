@@ -1,4 +1,4 @@
 [tools]
 hk = "latest"
 "github:ZacSweers/kempt" = "latest"
-java = "temurin-21"
+java = "temurin-25"
