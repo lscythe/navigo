@@ -107,10 +107,6 @@ gradlePlugin {
             id = "navigo.multiplatform.library.compose"
             implementationClass = "KotlinMultiplatformLibraryComposeConventionPlugin"
         }
-        register("multiplatformSqlDelight") {
-            id = "navigo.multiplatform.sqldelight"
-            implementationClass = "KotlinMultiplatformSqlDelightConventionPlugin"
-        }
         register("metro") {
             id = "navigo.metro"
             implementationClass = "MetroConventionPlugin"
