@@ -13,17 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.analytics
+package dev.lscythe.app.navigo.core.monitoring.kermit
 
-import co.touchlab.kermit.Logger
-import dev.zacsweers.metro.AppScope
+import dev.lscythe.app.navigo.core.monitoring.Tracer
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
 
-@SingleIn(AppScope::class)
 @Inject
-internal class StubAnalyticsHelper : AnalyticsHelper {
-    override fun logEvent(event: AnalyticsEvent) {
-        Logger.d(tag = "StubAnalyticsHelper") { "Received analytics event: $event" }
-    }
+class StubTracer : Tracer {
+    override fun <T> trace(name: String, operation: String, block: () -> T): T = block()
 }

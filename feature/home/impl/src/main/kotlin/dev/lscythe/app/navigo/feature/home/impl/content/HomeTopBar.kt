@@ -58,7 +58,7 @@ internal fun HomeTopBar(
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val profileContentDescription = stringResource(R.string.feature_home_profile)
+    val profileContentDescription = stringResource(R.string.feature_home_impl_profile)
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = CircleShape,
@@ -87,7 +87,7 @@ internal fun HomeTopBar(
                         size = 24.dp,
                     )
                     Text(
-                        text = stringResource(R.string.feature_home_search_destination),
+                        text = stringResource(R.string.feature_home_impl_search_destination),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
@@ -105,7 +105,8 @@ internal fun HomeTopBar(
                 ) {
                     NavigoIcon(
                         imageVector = NavigoIcons.Notification,
-                        contentDescription = stringResource(R.string.feature_home_notifications),
+                        contentDescription =
+                            stringResource(R.string.feature_home_impl_notifications),
                         size = 24.dp,
                     )
                 }

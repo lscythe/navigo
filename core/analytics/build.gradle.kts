@@ -25,7 +25,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
+    implementation(libs.kermit)
 
     prodGoogleImplementation(libs.firebase.analytics.get())
 }

@@ -95,7 +95,7 @@ private fun MaptoolkitLogo(
     onClick: (() -> Unit)? = rememberOpenWebsite("https://www.maptoolkit.com"),
 ) {
     Image(
-        painter = painterResource(R.drawable.img_maptoolkit),
+        painter = painterResource(R.drawable.feature_home_impl_img_maptoolkit),
         contentDescription = contentDescription,
         modifier =
             modifier

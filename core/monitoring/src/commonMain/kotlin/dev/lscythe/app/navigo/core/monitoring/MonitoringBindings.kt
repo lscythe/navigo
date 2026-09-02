@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.analytics
+package dev.lscythe.app.navigo.core.monitoring
 
-import co.touchlab.kermit.Logger
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 
-@SingleIn(AppScope::class)
-@Inject
-internal class StubAnalyticsHelper : AnalyticsHelper {
-    override fun logEvent(event: AnalyticsEvent) {
-        Logger.d(tag = "StubAnalyticsHelper") { "Received analytics event: $event" }
-    }
+@ContributesTo(AppScope::class)
+@BindingContainer
+object MonitoringBindings {
+    @Provides
+    fun provideCrashReporter(backend: MonitoringBackend): CrashReporter = backend.crashReporter
+
+    @Provides fun provideAppLogger(backend: MonitoringBackend): AppLogger = backend.appLogger
+
+    @Provides fun provideTracer(backend: MonitoringBackend): Tracer = backend.tracer
 }

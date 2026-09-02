@@ -17,7 +17,6 @@ package dev.lscythe.app.navigo
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -26,8 +25,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.metrics.performance.JankStats
 import androidx.navigation3.runtime.entryProvider
+import co.touchlab.kermit.Severity
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
-import dev.lscythe.app.navigo.core.monitoring.StructuredLogger
+import dev.lscythe.app.navigo.core.monitoring.AppLogger
 import dev.lscythe.app.navigo.core.navigation.Navigator
 import dev.lscythe.app.navigo.feature.home.api.HomeNavKey
 import dev.lscythe.app.navigo.feature.home.impl.navigation.homeEntry
@@ -46,7 +46,7 @@ import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 @ContributesIntoMap(AppScope::class, binding<Activity>())
 class MainActivity(
     private val viewModelFactory: MetroViewModelFactory,
-    private val logger: StructuredLogger,
+    private val logger: AppLogger,
 ) : ComponentActivity() {
 
     override val defaultViewModelProviderFactory: ViewModelProvider.Factory
@@ -81,7 +81,7 @@ class MainActivity(
             JankStats.createAndTrack(window) { frameData ->
                 if (frameData.isJank) {
                     logger.log(
-                        priority = Log.WARN,
+                        severity = Severity.Warn,
                         message = "Janky frame",
                         attributes = mapOf("frameData" to frameData.toString()),
                     )

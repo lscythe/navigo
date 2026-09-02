@@ -16,26 +16,28 @@
 package dev.lscythe.app.navigo
 
 import android.app.Application
+import dev.lscythe.app.navigo.core.monitoring.MonitoringConfig
 import dev.lscythe.app.navigo.core.monitoring.MonitoringEnvironment
-import dev.lscythe.app.navigo.core.monitoring.initializeMonitoring
 import dev.lscythe.app.navigo.di.NavigoGraph
 import dev.zacsweers.metro.createGraph
 import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import dev.zacsweers.metrox.android.MetroApplication
-import timber.log.Timber
 
 class NavigoApplication : Application(), MetroApplication {
     private lateinit var appGraph: NavigoGraph
 
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
-        initializeMonitoring(
-            context = this,
-            dsn = BuildConfig.SENTRY_DSN,
-            environment = MonitoringEnvironment.valueOf(BuildConfig.MONITORING_ENVIRONMENT),
-        )
         appGraph = createGraph<NavigoGraph>()
+        appGraph.monitoringBackend.initialize(
+            MonitoringConfig(
+                dsn = BuildConfig.SENTRY_DSN,
+                environment =
+                    MonitoringEnvironment.entries.single {
+                        it.name.equals(BuildConfig.FLAVOR_channel, ignoreCase = true)
+                    },
+            )
+        )
         appGraph.profileVerifierLogger()
     }
 

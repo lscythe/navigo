@@ -15,11 +15,11 @@
  */
 package dev.lscythe.app.navigo.util
 
-import android.util.Log
 import androidx.profileinstaller.ProfileVerifier
 import androidx.profileinstaller.ProfileVerifier.CompilationStatus.RESULT_CODE_PROFILE_ENQUEUED_FOR_COMPILATION
+import co.touchlab.kermit.Severity
 import dev.lscythe.app.navigo.core.common.coroutines.ApplicationScope
-import dev.lscythe.app.navigo.core.monitoring.StructuredLogger
+import dev.lscythe.app.navigo.core.monitoring.AppLogger
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.guava.await
@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @Inject
 class ProfileVerifierLogger(
     @ApplicationScope private val scope: CoroutineScope,
-    private val logger: StructuredLogger,
+    private val logger: AppLogger,
 ) {
     operator fun invoke() {
         scope.launch {
@@ -41,7 +41,7 @@ class ProfileVerifierLogger(
                     else -> "not_compiled"
                 }
             logger.log(
-                priority = Log.DEBUG,
+                severity = Severity.Debug,
                 message = "Baseline profile status",
                 attributes =
                     mapOf(

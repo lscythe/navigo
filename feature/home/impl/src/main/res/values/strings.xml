@@ -1,6 +1,6 @@
 <resources>
-    <string name="feature_home_search_destination">Where to, friend?</string>
-    <string name="feature_home_notifications">Notifications</string>
-    <string name="feature_home_profile">Profile</string>
+    <string name="feature_home_impl_search_destination">Where to, friend?</string>
+    <string name="feature_home_impl_notifications">Notifications</string>
+    <string name="feature_home_impl_profile">Profile</string>
     <string name="feature_home_impl_maptoolkit_logo_description">maptoolkit logo</string>
 </resources>

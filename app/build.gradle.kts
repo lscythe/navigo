@@ -40,6 +40,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+val monitoringProvider = providers.gradleProperty("monitoringProvider").orElse("Sentry")
+
 android {
     namespace = "dev.lscythe.app.navigo"
 
@@ -56,7 +58,6 @@ android {
 
     productFlavors {
         getByName("staging") {
-            buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Staging\"")
             buildConfigField(
                 "String",
                 "API_BASE_URL",
@@ -64,7 +65,6 @@ android {
             )
         }
         getByName("beta") {
-            buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Beta\"")
             buildConfigField(
                 "String",
                 "API_BASE_URL",
@@ -72,7 +72,6 @@ android {
             )
         }
         getByName("rc") {
-            buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Rc\"")
             buildConfigField(
                 "String",
                 "API_BASE_URL",
@@ -80,7 +79,6 @@ android {
             )
         }
         getByName("prod") {
-            buildConfigField("String", "MONITORING_ENVIRONMENT", "\"Prod\"")
             buildConfigField(
                 "String",
                 "API_BASE_URL",
@@ -108,10 +106,7 @@ android {
                     .map(String::toBooleanStrict)
                     .getOrElse(true)
             applicationIdSuffix = NavigoBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
 
             signingConfig = signingConfigs.named("debug").get()
         }
@@ -171,12 +166,16 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModel.navigation3)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)
+    when (monitoringProvider.get()) {
+        "Kermit" -> implementation(project(":core:monitoring-kermit"))
+        "Sentry" -> implementation(project(":core:monitoring-sentry"))
+        else -> error("Unsupported monitoringProvider: ${monitoringProvider.get()}")
+    }
     implementation(libs.androidx.window.core)
 
     implementation(libs.metro.android)
     implementation(libs.metro.viewmodel)
     implementation(libs.metro.viewmodel.compose)
-    implementation(libs.timber)
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
 }

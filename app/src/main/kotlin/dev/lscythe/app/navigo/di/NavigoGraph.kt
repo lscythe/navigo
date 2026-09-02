@@ -16,6 +16,7 @@
 package dev.lscythe.app.navigo.di
 
 import dev.lscythe.app.navigo.BuildConfig
+import dev.lscythe.app.navigo.core.monitoring.MonitoringBackend
 import dev.lscythe.app.navigo.core.network.BaseUrl
 import dev.lscythe.app.navigo.util.ProfileVerifierLogger
 import dev.zacsweers.metro.AppScope
@@ -35,4 +36,5 @@ object NavigoNetworkBindings {
 @DependencyGraph(AppScope::class)
 interface NavigoGraph : MetroAppComponentProviders, ViewModelGraph {
     val profileVerifierLogger: ProfileVerifierLogger
+    val monitoringBackend: MonitoringBackend
 }

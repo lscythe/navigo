@@ -57,6 +57,8 @@ include(
     ":core:datastore",
     ":core:designsystem",
     ":core:monitoring",
+    ":core:monitoring-kermit",
+    ":core:monitoring-sentry",
     ":core:navigation",
     ":core:network",
     ":core:testing",
