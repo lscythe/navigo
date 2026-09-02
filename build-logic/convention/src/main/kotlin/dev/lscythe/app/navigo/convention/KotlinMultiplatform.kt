@@ -56,6 +56,7 @@ internal fun Project.configureKotlinJvm() {
     }
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+        jvmArgs("--enable-native-access=ALL-UNNAMED")
     }
 
     configureKotlin<KotlinJvmProjectExtension>()
@@ -80,6 +81,10 @@ internal fun Project.configureMultiplatformLibrary() {
                 isIncludeAndroidResources = true
             }
         }
+    }
+
+    tasks.withType<Test>().configureEach {
+        jvmArgs("--enable-native-access=ALL-UNNAMED")
     }
 
     configureKotlin<KotlinMultiplatformExtension>()
