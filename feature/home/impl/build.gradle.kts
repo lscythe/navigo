@@ -14,35 +14,32 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
-    alias(libs.plugins.navigo.metro)
+    alias(libs.plugins.navigo.multiplatform.feature.impl)
     alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.home.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.feature.home.impl"
+        androidResources.enable = true
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":feature:home:api"))
+            implementation(libs.compose.multiplatform.resources)
+            implementation(libs.maplibre.compose)
+        }
+        androidMain.dependencies {
+            runtimeOnly(libs.maplibre.compose.opengl.runtime)
+        }
+        desktopTest.dependencies {
+            implementation(project(":core:testing-screenshot"))
+        }
+    }
 }
 
-dependencies {
-    implementation(project(":feature:home:api"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:designsystem"))
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.metro.viewmodel)
-    implementation(libs.metro.viewmodel.compose)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.tracing.ktx)
-
-    testImplementation(libs.robolectric)
-    testImplementation(libs.junit.vintage.engine)
-    testImplementation(project(":core:testing-screenshot"))
-
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.maplibre.compose)
-    runtimeOnly(libs.maplibre.compose.opengl.runtime)
+compose.resources {
+    packageOfResClass = "dev.lscythe.app.navigo.feature.home.impl.generated.resources"
+    publicResClass = false
 }
