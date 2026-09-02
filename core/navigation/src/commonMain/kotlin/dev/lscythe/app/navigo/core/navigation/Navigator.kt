@@ -45,6 +45,15 @@ class Navigator(val state: NavigationState) {
         state.backStack.add(key)
     }
 
+    /** Remove every key after the most recent occurrence of [key]. */
+    fun backTo(key: NavKey) {
+        val targetIndex = state.backStack.indexOfLast { it == key }
+        check(targetIndex >= 0) { "Navigation key $key is not in the back stack" }
+        if (targetIndex < state.backStack.lastIndex) {
+            state.backStack.subList(targetIndex + 1, state.backStack.size).clear()
+        }
+    }
+
     /** Go back to the previous navigation key. */
     fun goBack() {
         check(state.backStack.size > 1) { "You cannot go back from the start route" }

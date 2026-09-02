@@ -102,6 +102,33 @@ class NavigatorTest :
             navigationState.currentKey shouldBe TestFirstKey
         }
 
+        test("goes back to an existing key") {
+            navigator.navigate(TestFirstKey)
+            navigator.navigate(TestSecondKey)
+            navigator.navigate(TestFirstKey)
+            navigator.navigate(TestSecondKey)
+
+            navigator.backTo(TestFirstKey)
+
+            navigationState.backStack shouldContainExactly
+                listOf(TestStartKey, TestFirstKey, TestSecondKey, TestFirstKey)
+            navigationState.currentKey shouldBe TestFirstKey
+        }
+
+        test("does nothing when going back to the current key") {
+            navigator.navigate(TestFirstKey)
+
+            navigator.backTo(TestFirstKey)
+
+            navigationState.backStack shouldContainExactly listOf(TestStartKey, TestFirstKey)
+        }
+
+        test("throws when the back target is absent") {
+            shouldThrow<IllegalStateException> {
+                navigator.backTo(TestFirstKey)
+            }
+        }
+
         test("pops the current key") {
             navigator.navigate(TestFirstKey)
 
