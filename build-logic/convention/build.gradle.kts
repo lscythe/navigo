@@ -73,9 +73,9 @@ gradlePlugin {
             id = "navigo.multiplatform.feature.api"
             implementationClass = "KotlinMultiplatformFeatureApiConventionPlugin"
         }
-        register("androidFeatureImpl") {
-            id = "navigo.android.feature.impl"
-            implementationClass = "AndroidFeatureImplConventionPlugin"
+        register("multiplatformFeatureImpl") {
+            id = "navigo.multiplatform.feature.impl"
+            implementationClass = "MultiplatformFeatureImplConventionPlugin"
         }
         register("androidLibrary") {
             id = "navigo.android.library"

@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
+    alias(libs.plugins.navigo.android.library)
+    alias(libs.plugins.navigo.android.library.compose)
+    alias(libs.plugins.navigo.metro)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -26,6 +28,18 @@ android {
 
 dependencies {
     implementation(project(":feature:home:api"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:designsystem"))
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.tracing.ktx)
+
+    testImplementation(libs.robolectric)
+    testImplementation(libs.junit.vintage.engine)
+    testImplementation(project(":core:testing-screenshot"))
 
     implementation(libs.kotlinx.serialization.json)
 

@@ -14,19 +14,31 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
+    alias(libs.plugins.navigo.multiplatform.feature.impl)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.feature.onboarding.impl"
+        androidResources.enable = true
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":feature:onboarding:api"))
+            implementation(project(":feature:home:api"))
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.compose.multiplatform.resources)
+        }
+        commonTest.dependencies {
+            implementation(project(":core:testing-screenshot"))
+        }
+    }
 }
 
-dependencies {
-    implementation(project(":feature:onboarding:api"))
-    implementation(project(":feature:home:api"))
-
-    implementation(libs.kotlinx.serialization.json)
+compose.resources {
+    packageOfResClass = "dev.lscythe.app.navigo.feature.onboarding.impl.generated.resources"
+    publicResClass = false
 }
