@@ -38,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
@@ -48,7 +47,15 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBo
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_apply
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_english
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_indonesian
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_sheet_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_sheet_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_system_default
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_system_default_description
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,15 +68,15 @@ fun LanguageSelectionBottomSheet(
     sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
 ) {
     NavigoModalBottomSheet(
-        title = stringResource(R.string.core_ui_language_sheet_title),
-        description = stringResource(R.string.core_ui_language_sheet_description),
+        title = stringResource(Res.string.core_ui_language_sheet_title),
+        description = stringResource(Res.string.core_ui_language_sheet_description),
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         sheetState = sheetState,
     ) {
         LanguageRow(
-            title = stringResource(R.string.core_ui_language_system_default),
-            description = stringResource(R.string.core_ui_language_system_default_description),
+            title = stringResource(Res.string.core_ui_language_system_default),
+            description = stringResource(Res.string.core_ui_language_system_default_description),
             selected = selectedLanguage == null,
             onClick = { onLanguageSelected(null) },
         )
@@ -99,7 +106,7 @@ fun LanguageSelectionBottomSheet(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                 ),
         ) {
-            Text(text = stringResource(R.string.core_ui_language_apply))
+            Text(text = stringResource(Res.string.core_ui_language_apply))
         }
     }
 }
@@ -137,8 +144,8 @@ private fun LanguageRow(
 @Composable
 private fun SupportedLanguage.displayName(): String =
     when (this) {
-        SupportedLanguage.English -> stringResource(R.string.core_ui_language_english)
-        SupportedLanguage.Indonesian -> stringResource(R.string.core_ui_language_indonesian)
+        SupportedLanguage.English -> stringResource(Res.string.core_ui_language_english)
+        SupportedLanguage.Indonesian -> stringResource(Res.string.core_ui_language_indonesian)
     }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- General / Common -->
     <string name="core_ui_app_name">Navigo</string>
-    <!-- endregion -->
-    <!-- Feature: Onboarding -->
     <string name="core_ui_onboarding_feed_page_title">Two feeds. One map of what\'s really running.</string>
     <string name="core_ui_onboarding_feed_page_description">Navigo combines the operator\'s live feed with crowdsourced rider reports to cover the rest of the network, including microtrans, minibuses, and buses with turned-off trackers.</string>
     <string name="core_ui_onboarding_gps_feed_title">A GPS dot can\'t tell you if you\'ll fit.</string>
@@ -64,10 +61,8 @@
     <string name="core_ui_legal_sheet_accept">Accept</string>
     <string name="core_ui_onboarding_profile_color_picker_title">Pick an avatar colour</string>
     <string name="core_ui_onboarding_profile_color_picker_description">Choose any colour for your avatar.</string>
-    <!-- Seed color selection -->
     <string name="core_ui_color_picker_hex_label">Hex colour</string>
     <string name="core_ui_color_picker_apply">Apply</string>
-    <!-- Language selection -->
     <string name="core_ui_language_sheet_title">Language</string>
     <string name="core_ui_language_sheet_description">Changes the app only, stop names stay as the operator writes them.</string>
     <string name="core_ui_language_system_default">System default</string>
@@ -75,6 +70,4 @@
     <string name="core_ui_language_english">English</string>
     <string name="core_ui_language_indonesian">Bahasa Indonesia</string>
     <string name="core_ui_language_apply">Apply</string>
-    <!-- endregion -->
-    <!-- endregion -->
 </resources>

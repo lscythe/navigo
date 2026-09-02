@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.lscythe.app.navigo.core.designsystem.brand.NavigoLogo
@@ -43,14 +42,32 @@ import dev.lscythe.app.navigo.core.designsystem.icon.status.Signal
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_app_name
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_notification_sample_category
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_notification_sample_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_notification_sample_time
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_notification_sample_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_page_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_page_first_item
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_page_second_item
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_alarm_page_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_feed_page_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_feed_page_first_item
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_feed_page_second_item
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_feed_page_third_item
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_feed_page_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_gps_disclosure_note
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_gps_feed_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_gps_feed_title
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 
 private val feedCheckList =
     persistentListOf(
-        R.string.core_ui_onboarding_feed_page_first_item,
-        R.string.core_ui_onboarding_feed_page_second_item,
-        R.string.core_ui_onboarding_feed_page_third_item,
+        Res.string.core_ui_onboarding_feed_page_first_item,
+        Res.string.core_ui_onboarding_feed_page_second_item,
+        Res.string.core_ui_onboarding_feed_page_third_item,
     )
 
 private val gpsRoutes =
@@ -77,8 +94,8 @@ private val gpsRoutes =
 
 private val alarmCheckList =
     persistentListOf(
-        R.string.core_ui_onboarding_alarm_page_first_item,
-        R.string.core_ui_onboarding_alarm_page_second_item,
+        Res.string.core_ui_onboarding_alarm_page_first_item,
+        Res.string.core_ui_onboarding_alarm_page_second_item,
     )
 
 @Composable
@@ -111,8 +128,8 @@ internal fun OnboardingFeedPage(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
     ) {
         OnboardingPageIntro(
-            title = stringResource(R.string.core_ui_onboarding_feed_page_title),
-            description = stringResource(R.string.core_ui_onboarding_feed_page_description),
+            title = stringResource(Res.string.core_ui_onboarding_feed_page_title),
+            description = stringResource(Res.string.core_ui_onboarding_feed_page_description),
         )
         Column(
             modifier = Modifier.padding(top = NavigoSpacing.element),
@@ -141,8 +158,8 @@ internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
             OnboardingPageIntro(
-                title = stringResource(R.string.core_ui_onboarding_gps_feed_title),
-                description = stringResource(R.string.core_ui_onboarding_gps_feed_description),
+                title = stringResource(Res.string.core_ui_onboarding_gps_feed_title),
+                description = stringResource(Res.string.core_ui_onboarding_gps_feed_description),
             )
             Column(
                 modifier = Modifier.padding(top = NavigoSpacing.element),
@@ -158,7 +175,7 @@ internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
         }
 
         NavigoDisclosureNote(
-            text = stringResource(R.string.core_ui_onboarding_gps_disclosure_note),
+            text = stringResource(Res.string.core_ui_onboarding_gps_disclosure_note),
             icon = NavigoIcons.ExclamationCircle,
             iconTint = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary.copy(0.2f),
@@ -184,19 +201,19 @@ internal fun OnboardingAlarmPage(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
     ) {
         OnboardingPageIntro(
-            title = stringResource(R.string.core_ui_onboarding_alarm_page_title),
-            description = stringResource(R.string.core_ui_onboarding_alarm_page_description),
+            title = stringResource(Res.string.core_ui_onboarding_alarm_page_title),
+            description = stringResource(Res.string.core_ui_onboarding_alarm_page_description),
         )
         NavigoAlertCard(
-            source = stringResource(R.string.core_ui_app_name).uppercase(),
+            source = stringResource(Res.string.core_ui_app_name).uppercase(),
             category =
-                stringResource(R.string.core_ui_onboarding_alarm_notification_sample_category)
+                stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_category)
                     .uppercase(),
-            title = stringResource(R.string.core_ui_onboarding_alarm_notification_sample_title),
+            title = stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_title),
             description =
-                stringResource(R.string.core_ui_onboarding_alarm_notification_sample_description),
+                stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_description),
             timestamp =
-                stringResource(R.string.core_ui_onboarding_alarm_notification_sample_time)
+                stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_time)
                     .lowercase(),
             icon = NavigoLogo,
             containerColor = MaterialTheme.colorScheme.onPrimary,

@@ -15,7 +15,6 @@
  */
 package dev.lscythe.app.navigo.core.ui.color
 
-import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -52,11 +51,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColorInt
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBottomSheet
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoUnderlinedTextField
@@ -65,7 +61,14 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorTheme
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_color_picker_apply
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_color_picker_hex_label
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
+import org.jetbrains.compose.resources.stringResource
 
 /**
  * Displays a modal HSV color picker with hexadecimal input and an explicit apply action.
@@ -155,7 +158,7 @@ fun ColorSelectionBottomSheet(
                             value = hsv[2]
                         }
                     },
-                    label = stringResource(R.string.core_ui_color_picker_hex_label).uppercase(),
+                    label = stringResource(Res.string.core_ui_color_picker_hex_label).uppercase(),
                     modifier = Modifier.weight(1f),
                     isError = !validHex,
                 )
@@ -170,7 +173,7 @@ fun ColorSelectionBottomSheet(
                         contentColor = MaterialTheme.colorScheme.onPrimary,
                     ),
             ) {
-                Text(stringResource(R.string.core_ui_color_picker_apply))
+                Text(stringResource(Res.string.core_ui_color_picker_apply))
             }
         }
     }
@@ -267,24 +270,53 @@ private fun HueSlider(hue: Float, onHueChange: (Float) -> Unit) {
     }
 }
 
-private fun hsvColor(hue: Float, saturation: Float, value: Float): Color =
-    Color(AndroidColor.HSVToColor(floatArrayOf(hue, saturation, value)))
+internal fun hsvColor(hue: Float, saturation: Float, value: Float): Color {
+    val chroma = value * saturation
+    val section = ((hue % 360f) + 360f) % 360f / 60f
+    val intermediate = chroma * (1f - abs(section % 2f - 1f))
+    val (red, green, blue) =
+        when (section.toInt()) {
+            0 -> Triple(chroma, intermediate, 0f)
+            1 -> Triple(intermediate, chroma, 0f)
+            2 -> Triple(0f, chroma, intermediate)
+            3 -> Triple(0f, intermediate, chroma)
+            4 -> Triple(intermediate, 0f, chroma)
+            else -> Triple(chroma, 0f, intermediate)
+        }
+    val match = value - chroma
+    return Color(red + match, green + match, blue + match)
+}
 
-private fun Color.toHsv(): FloatArray =
-    FloatArray(3).also {
-        AndroidColor.colorToHSV(toArgb(), it)
-    }
-
-private fun Color.toHex(): String = "#%06X".format(toArgb() and 0xFFFFFF)
-
-private fun String.parseHexColor(): Color? {
-    val normalized = trim().removePrefix("#")
-    if (
-        normalized.length != 6 ||
-            normalized.any { !it.isDigit() && it.uppercaseChar() !in 'A'..'F' }
+internal fun Color.toHsv(): FloatArray {
+    val maximum = max(red, max(green, blue))
+    val minimum = min(red, min(green, blue))
+    val delta = maximum - minimum
+    val hue =
+        when {
+            delta == 0f -> 0f
+            maximum == red -> 60f * (((green - blue) / delta) % 6f)
+            maximum == green -> 60f * ((blue - red) / delta + 2f)
+            else -> 60f * ((red - green) / delta + 4f)
+        }
+    return floatArrayOf(
+        if (hue < 0f) hue + 360f else hue,
+        if (maximum == 0f) 0f else delta / maximum,
+        maximum,
     )
-        return null
-    return Color("#$normalized".toColorInt())
+}
+
+internal fun Color.toHex(): String {
+    val rgb =
+        ((red * 255).roundToInt() shl 16) or
+            ((green * 255).roundToInt() shl 8) or
+            (blue * 255).roundToInt()
+    return "#" + rgb.toString(16).uppercase().padStart(6, '0')
+}
+
+internal fun String.parseHexColor(): Color? {
+    val normalized = trim().removePrefix("#")
+    if (normalized.length != 6 || normalized.any { it.digitToIntOrNull(16) == null }) return null
+    return Color(0xFF000000 or normalized.toLong(16))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

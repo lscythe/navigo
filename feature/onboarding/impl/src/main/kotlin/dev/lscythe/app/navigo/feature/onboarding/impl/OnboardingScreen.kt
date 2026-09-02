@@ -57,7 +57,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
@@ -72,7 +71,9 @@ import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_back
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_skip_button_label
 import dev.lscythe.app.navigo.core.ui.locale.LanguageSelectionBottomSheet
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingIntroduction
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingPageCount
@@ -80,6 +81,7 @@ import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingPermissi
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingProfile
 import dev.lscythe.app.navigo.feature.onboarding.impl.legal.LegalDocumentsBottomSheet
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 private const val PageCount = OnboardingPageCount
 private const val PageDurationMillis = 5_000
@@ -270,7 +272,7 @@ private fun OnboardingHeader(
                         NavigoIcon(
                             imageVector = NavigoIcons.ArrowLeft,
                             contentDescription =
-                                stringResource(R.string.core_ui_onboarding_permissions_back),
+                                stringResource(Res.string.core_ui_onboarding_permissions_back),
                         )
                     }
                 } else {
@@ -327,7 +329,7 @@ private fun OnboardingHeader(
                     contentPadding = PaddingValues(horizontal = 4.dp),
                 ) {
                     Text(
-                        text = stringResource(R.string.core_ui_onboarding_skip_button_label),
+                        text = stringResource(Res.string.core_ui_onboarding_skip_button_label),
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.labelLarge,
                         fontSize = 13.sp,

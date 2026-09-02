@@ -44,7 +44,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -66,8 +65,33 @@ import dev.lscythe.app.navigo.core.designsystem.icon.action.Paint
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
 import dev.lscythe.app.navigo.core.ui.color.ColorSelectionBottomSheet
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_english
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_indonesian
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_analytics_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_analytics_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_avatar_colour_label
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_color_picker_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_color_picker_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_crash_reports_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_crash_reports_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_custom_avatar_colour
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_language_label
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_name_label
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_name_placeholder
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_open_map
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_privacy_label
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_privacy_link
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_required
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_ride_guest
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_terms_joiner
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_terms_link
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_terms_prefix
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_terms_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_profile_title
+import org.jetbrains.compose.resources.stringResource
 
 private val AvatarColors =
     listOf(
@@ -105,8 +129,8 @@ internal fun OnboardingProfile(
             verticalArrangement = Arrangement.spacedBy(NavigoSpacing.section),
         ) {
             OnboardingPageIntro(
-                title = stringResource(R.string.core_ui_onboarding_profile_title),
-                description = stringResource(R.string.core_ui_onboarding_profile_description),
+                title = stringResource(Res.string.core_ui_onboarding_profile_title),
+                description = stringResource(Res.string.core_ui_onboarding_profile_description),
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -125,12 +149,13 @@ internal fun OnboardingProfile(
                     onValueChange = { name = it },
                     modifier = Modifier.weight(1f),
                     label =
-                        stringResource(R.string.core_ui_onboarding_profile_name_label).uppercase(),
-                    hint = stringResource(R.string.core_ui_onboarding_profile_name_placeholder),
+                        stringResource(Res.string.core_ui_onboarding_profile_name_label)
+                            .uppercase(),
+                    hint = stringResource(Res.string.core_ui_onboarding_profile_name_placeholder),
                 )
             }
             ProfileSection(
-                stringResource(R.string.core_ui_onboarding_profile_avatar_colour_label)
+                stringResource(Res.string.core_ui_onboarding_profile_avatar_colour_label)
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
                     AvatarColors.forEach { color ->
@@ -199,14 +224,14 @@ internal fun OnboardingProfile(
                             imageVector = NavigoIcons.Paint,
                             contentDescription =
                                 stringResource(
-                                    R.string.core_ui_onboarding_profile_custom_avatar_colour
+                                    Res.string.core_ui_onboarding_profile_custom_avatar_colour
                                 ),
                             tint = Color.White,
                         )
                     }
                 }
             }
-            ProfileSection(stringResource(R.string.core_ui_onboarding_profile_language_label)) {
+            ProfileSection(stringResource(Res.string.core_ui_onboarding_profile_language_label)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
                     SupportedLanguage.entries.forEach { option ->
                         NavigoChoiceChip(
@@ -215,34 +240,35 @@ internal fun OnboardingProfile(
                             label =
                                 when (option) {
                                     SupportedLanguage.English ->
-                                        stringResource(R.string.core_ui_language_english)
+                                        stringResource(Res.string.core_ui_language_english)
                                     SupportedLanguage.Indonesian ->
-                                        stringResource(R.string.core_ui_language_indonesian)
+                                        stringResource(Res.string.core_ui_language_indonesian)
                                 },
                         )
                     }
                 }
             }
-            ProfileSection(stringResource(R.string.core_ui_onboarding_profile_privacy_label)) {
+            ProfileSection(stringResource(Res.string.core_ui_onboarding_profile_privacy_label)) {
                 ConsentRow(
-                    title = stringResource(R.string.core_ui_onboarding_profile_analytics_title),
+                    title = stringResource(Res.string.core_ui_onboarding_profile_analytics_title),
                     description =
-                        stringResource(R.string.core_ui_onboarding_profile_analytics_description),
+                        stringResource(Res.string.core_ui_onboarding_profile_analytics_description),
                     checked = analyticsEnabled,
                     onCheckedChange = { analyticsEnabled = it },
                 )
                 ConsentRow(
-                    title = stringResource(R.string.core_ui_onboarding_profile_crash_reports_title),
+                    title =
+                        stringResource(Res.string.core_ui_onboarding_profile_crash_reports_title),
                     description =
                         stringResource(
-                            R.string.core_ui_onboarding_profile_crash_reports_description
+                            Res.string.core_ui_onboarding_profile_crash_reports_description
                         ),
                     checked = crashReportsEnabled,
                     onCheckedChange = { crashReportsEnabled = it },
                 )
             }
             ProfileSection(
-                stringResource(R.string.core_ui_onboarding_profile_terms_title),
+                stringResource(Res.string.core_ui_onboarding_profile_terms_title),
                 required = true,
             ) {
                 Row(
@@ -258,7 +284,7 @@ internal fun OnboardingProfile(
                         text =
                             buildAnnotatedString {
                                 append(
-                                    "${stringResource(R.string.core_ui_onboarding_profile_terms_prefix).trim()} "
+                                    "${stringResource(Res.string.core_ui_onboarding_profile_terms_prefix).trim()} "
                                 )
                                 withStyle(
                                     SpanStyle(
@@ -269,12 +295,12 @@ internal fun OnboardingProfile(
                                 ) {
                                     append(
                                         stringResource(
-                                            R.string.core_ui_onboarding_profile_terms_link
+                                            Res.string.core_ui_onboarding_profile_terms_link
                                         )
                                     )
                                 }
                                 append(
-                                    " ${stringResource(R.string.core_ui_onboarding_profile_terms_joiner)} "
+                                    " ${stringResource(Res.string.core_ui_onboarding_profile_terms_joiner)} "
                                 )
                                 withStyle(
                                     SpanStyle(
@@ -285,7 +311,7 @@ internal fun OnboardingProfile(
                                 ) {
                                     append(
                                         stringResource(
-                                            R.string.core_ui_onboarding_profile_privacy_link
+                                            Res.string.core_ui_onboarding_profile_privacy_link
                                         )
                                     )
                                 }
@@ -302,22 +328,22 @@ internal fun OnboardingProfile(
                 enabled = legalDocumentsRead,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
             ) {
-                Text(stringResource(R.string.core_ui_onboarding_profile_open_map))
+                Text(stringResource(Res.string.core_ui_onboarding_profile_open_map))
             }
             NavigoTextButton(
                 onClick = onContinue,
                 enabled = legalDocumentsRead,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(stringResource(R.string.core_ui_onboarding_profile_ride_guest))
+                Text(stringResource(Res.string.core_ui_onboarding_profile_ride_guest))
             }
         }
     }
     if (showColorPicker) {
         ColorSelectionBottomSheet(
-            title = stringResource(R.string.core_ui_onboarding_profile_color_picker_title),
+            title = stringResource(Res.string.core_ui_onboarding_profile_color_picker_title),
             description =
-                stringResource(R.string.core_ui_onboarding_profile_color_picker_description),
+                stringResource(Res.string.core_ui_onboarding_profile_color_picker_description),
             selectedColor = customColor,
             onApply = { selectedColor ->
                 customColor = selectedColor
@@ -344,7 +370,7 @@ private fun ProfileSection(
             Text(title.uppercase(), style = MaterialTheme.typography.labelSmall)
             if (required) {
                 Text(
-                    stringResource(R.string.core_ui_onboarding_profile_required).uppercase(),
+                    stringResource(Res.string.core_ui_onboarding_profile_required).uppercase(),
                     modifier =
                         Modifier.background(
                                 MaterialTheme.colorScheme.surfaceContainerHighest,

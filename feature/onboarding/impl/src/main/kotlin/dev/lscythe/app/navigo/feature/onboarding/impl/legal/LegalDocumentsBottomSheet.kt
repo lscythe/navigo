@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -46,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.text.style.TextAlign
@@ -61,7 +59,18 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBo
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowDown
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_accept
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_continue_to_privacy
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_continue_to_terms
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_decline
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_metadata
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_privacy
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_read_to_continue
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_summary
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_terms
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -107,7 +116,7 @@ internal fun LegalDocumentsBottomSheet(
         title = document.title,
         description =
             stringResource(
-                R.string.core_ui_legal_sheet_metadata,
+                Res.string.core_ui_legal_sheet_metadata,
                 document.version,
                 document.readingTimeMinutes,
             ),
@@ -152,7 +161,7 @@ internal fun LegalDocumentsBottomSheet(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
                     Text(
-                        text = stringResource(R.string.core_ui_legal_sheet_summary),
+                        text = stringResource(Res.string.core_ui_legal_sheet_summary),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -211,7 +220,7 @@ internal fun LegalDocumentsBottomSheet(
                 onClick = onDismissRequest,
                 modifier = Modifier.weight(1f).heightIn(min = 54.dp),
             ) {
-                Text(stringResource(R.string.core_ui_legal_sheet_decline))
+                Text(stringResource(Res.string.core_ui_legal_sheet_decline))
             }
             NavigoButton(
                 onClick = {
@@ -233,18 +242,19 @@ internal fun LegalDocumentsBottomSheet(
     }
 }
 
-private val LegalDocumentType.labelResource: Int
+private val LegalDocumentType.labelResource: StringResource
     get() =
         when (this) {
-            LegalDocumentType.Terms -> R.string.core_ui_legal_sheet_terms
-            LegalDocumentType.Privacy -> R.string.core_ui_legal_sheet_privacy
+            LegalDocumentType.Terms -> Res.string.core_ui_legal_sheet_terms
+            LegalDocumentType.Privacy -> Res.string.core_ui_legal_sheet_privacy
         }
 
-private val LegalPrimaryAction.labelResource: Int
+private val LegalPrimaryAction.labelResource: StringResource
     get() =
         when (this) {
-            LegalPrimaryAction.ReadToContinue -> R.string.core_ui_legal_sheet_read_to_continue
-            LegalPrimaryAction.ContinueToTerms -> R.string.core_ui_legal_sheet_continue_to_terms
-            LegalPrimaryAction.ContinueToPrivacy -> R.string.core_ui_legal_sheet_continue_to_privacy
-            LegalPrimaryAction.Accept -> R.string.core_ui_legal_sheet_accept
+            LegalPrimaryAction.ReadToContinue -> Res.string.core_ui_legal_sheet_read_to_continue
+            LegalPrimaryAction.ContinueToTerms -> Res.string.core_ui_legal_sheet_continue_to_terms
+            LegalPrimaryAction.ContinueToPrivacy ->
+                Res.string.core_ui_legal_sheet_continue_to_privacy
+            LegalPrimaryAction.Accept -> Res.string.core_ui_legal_sheet_accept
         }

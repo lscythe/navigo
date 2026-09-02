@@ -29,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
@@ -40,7 +39,16 @@ import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.R
+import dev.lscythe.app.navigo.core.ui.generated.resources.Res
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_allow_now
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_ask_later
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_location_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_location_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_notifications_description
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_notifications_title
+import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_title
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun OnboardingPermissions(
@@ -53,26 +61,29 @@ internal fun OnboardingPermissions(
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.section)) {
             OnboardingPageIntro(
-                title = stringResource(R.string.core_ui_onboarding_permissions_title),
-                description = stringResource(R.string.core_ui_onboarding_permissions_description),
+                title = stringResource(Res.string.core_ui_onboarding_permissions_title),
+                description = stringResource(Res.string.core_ui_onboarding_permissions_description),
             )
             Column {
                 PermissionRow(
                     icon = NavigoIcons.MapPin,
-                    title = stringResource(R.string.core_ui_onboarding_permissions_location_title),
+                    title =
+                        stringResource(Res.string.core_ui_onboarding_permissions_location_title),
                     description =
                         stringResource(
-                            R.string.core_ui_onboarding_permissions_location_description
+                            Res.string.core_ui_onboarding_permissions_location_description
                         ),
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = NavigoSpacing.container))
                 PermissionRow(
                     icon = NavigoIcons.Notification,
                     title =
-                        stringResource(R.string.core_ui_onboarding_permissions_notifications_title),
+                        stringResource(
+                            Res.string.core_ui_onboarding_permissions_notifications_title
+                        ),
                     description =
                         stringResource(
-                            R.string.core_ui_onboarding_permissions_notifications_description
+                            Res.string.core_ui_onboarding_permissions_notifications_description
                         ),
                 )
             }
@@ -82,10 +93,10 @@ internal fun OnboardingPermissions(
                 onClick = onContinue,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
             ) {
-                Text(stringResource(R.string.core_ui_onboarding_permissions_allow_now))
+                Text(stringResource(Res.string.core_ui_onboarding_permissions_allow_now))
             }
             NavigoTextButton(onClick = onContinue, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(R.string.core_ui_onboarding_permissions_ask_later))
+                Text(stringResource(Res.string.core_ui_onboarding_permissions_ask_later))
             }
         }
     }
