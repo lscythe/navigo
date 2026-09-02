@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: build-${{ github.run_id }}
-          path: app/build/outputs/**/*.{apk,aab}
+          path: app/android/build/outputs/**/*.{apk,aab}
           if-no-files-found: ignore
           retention-days: 3
 

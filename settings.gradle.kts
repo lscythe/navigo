@@ -42,7 +42,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "Navigo"
 
-include(":app")
+include(
+    ":app:android",
+    ":app:shared",
+    ":app:desktop",
+    ":app:ios",
+)
 
 include(
     ":api:auth",
