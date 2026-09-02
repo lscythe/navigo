@@ -183,7 +183,7 @@ sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 navigo-android-application = { id = "navigo.android.application" }
 navigo-android-application-compose = { id = "navigo.android.application.compose" }
 navigo-android-application-flavors = { id = "navigo.android.application.flavors" }
-navigo-android-feature-api = { id = "navigo.android.feature.api" }
+navigo-multiplatform-feature-api = { id = "navigo.multiplatform.feature.api" }
 navigo-android-feature-impl = { id = "navigo.android.feature.impl" }
 navigo-android-library = { id = "navigo.android.library" }
 navigo-android-library-compose = { id = "navigo.android.library.compose" }

@@ -71,9 +71,9 @@ gradlePlugin {
             id = "navigo.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
-        register("androidFeatureApi") {
-            id = "navigo.android.feature.api"
-            implementationClass = "AndroidFeatureApiConventionPlugin"
+        register("multiplatformFeatureApi") {
+            id = "navigo.multiplatform.feature.api"
+            implementationClass = "KotlinMultiplatformFeatureApiConventionPlugin"
         }
         register("androidFeatureImpl") {
             id = "navigo.android.feature.impl"
