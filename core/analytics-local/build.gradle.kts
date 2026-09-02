@@ -13,18 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.analytics
+plugins {
+    alias(libs.plugins.navigo.multiplatform.library)
+    alias(libs.plugins.navigo.metro)
+}
 
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.ContributesTo
-import dev.zacsweers.metro.Provides
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.analytics.local"
+    }
 
-@ContributesTo(AppScope::class)
-@BindingContainer
-internal object AnalyticsBindings {
-
-    @Provides
-    fun provideAnalyticsHelper(stubAnalyticsHelper: StubAnalyticsHelper): AnalyticsHelper =
-        stubAnalyticsHelper
+    sourceSets.commonMain.dependencies {
+        implementation(project(":core:analytics"))
+        implementation(libs.kermit)
+    }
 }

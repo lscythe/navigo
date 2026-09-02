@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,8 @@ import androidx.metrics.performance.JankStats
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import co.touchlab.kermit.Severity
+import dev.lscythe.app.navigo.core.analytics.AnalyticsHelper
+import dev.lscythe.app.navigo.core.analytics.LocalAnalyticsHelper
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.monitoring.AppLogger
 import dev.lscythe.app.navigo.core.navigation.Navigator
@@ -51,6 +54,7 @@ import kotlinx.serialization.modules.subclass
 @ContributesIntoMap(AppScope::class, binding<Activity>())
 class MainActivity(
     private val viewModelFactory: MetroViewModelFactory,
+    private val analyticsHelper: AnalyticsHelper,
     private val logger: AppLogger,
 ) : ComponentActivity() {
 
@@ -87,11 +91,13 @@ class MainActivity(
                 homeEntry(navigator)
             }
 
-            NavigoTheme {
-                NavigoApp(
-                    appState = appState,
-                    entryProvider = entryProvider,
-                )
+            CompositionLocalProvider(LocalAnalyticsHelper provides analyticsHelper) {
+                NavigoTheme {
+                    NavigoApp(
+                        appState = appState,
+                        entryProvider = entryProvider,
+                    )
+                }
             }
         }
         jankStats =

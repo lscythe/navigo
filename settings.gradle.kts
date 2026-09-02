@@ -52,6 +52,8 @@ include(
 
 include(
     ":core:analytics",
+    ":core:analytics-firebase",
+    ":core:analytics-local",
     ":core:common",
     ":core:database",
     ":core:datastore",

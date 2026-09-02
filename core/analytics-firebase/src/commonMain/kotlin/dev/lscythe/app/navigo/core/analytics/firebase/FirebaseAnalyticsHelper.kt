@@ -13,20 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.analytics
+package dev.lscythe.app.navigo.core.analytics.firebase
 
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.logEvent
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.analytics.analytics
+import dev.lscythe.app.navigo.core.analytics.AnalyticsEvent
+import dev.lscythe.app.navigo.core.analytics.AnalyticsHelper
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 
 @Inject
-internal class FirebaseAnalyticsHelper(private val firebaseAnalytics: FirebaseAnalytics) :
-    AnalyticsHelper {
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
+class FirebaseAnalyticsHelper : AnalyticsHelper {
     override fun logEvent(event: AnalyticsEvent) {
-        firebaseAnalytics.logEvent(event.type) {
-            for (extra in event.extras) {
-                param(extra.key, extra.value)
-            }
-        }
+        Firebase.analytics.logEvent(
+            name = event.type,
+            parameters = event.extras.associate { it.key to it.value },
+        )
     }
 }
