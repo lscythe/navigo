@@ -197,11 +197,7 @@ navigo-android-application-compose = { id = "navigo.android.application.compose"
 navigo-android-application-flavors = { id = "navigo.android.application.flavors" }
 navigo-multiplatform-feature-api = { id = "navigo.multiplatform.feature.api" }
 navigo-multiplatform-feature-impl = { id = "navigo.multiplatform.feature.impl" }
-navigo-android-library = { id = "navigo.android.library" }
-navigo-android-library-compose = { id = "navigo.android.library.compose" }
 navigo-android-lint = { id = "navigo.android.lint" }
-navigo-android-test = { id = "navigo.android.test" }
-navigo-jvm-library = { id = "navigo.jvm.library" }
 navigo-multiplatform-library = { id = "navigo.multiplatform.library" }
 navigo-multiplatform-library-compose = { id = "navigo.multiplatform.library.compose" }
 navigo-metro = { id = "navigo.metro" }

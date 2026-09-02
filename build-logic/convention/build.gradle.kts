@@ -77,25 +77,9 @@ gradlePlugin {
             id = "navigo.multiplatform.feature.impl"
             implementationClass = "MultiplatformFeatureImplConventionPlugin"
         }
-        register("androidLibrary") {
-            id = "navigo.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
-        }
-        register("androidLibraryCompose") {
-            id = "navigo.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
-        }
         register("androidLint") {
             id = "navigo.android.lint"
             implementationClass = "AndroidLintConventionPlugin"
-        }
-        register("androidTest") {
-            id = "navigo.android.test"
-            implementationClass = "AndroidTestConventionPlugin"
-        }
-        register("jvmLibrary") {
-            id = "navigo.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
         }
         register("multiplatformLibrary") {
             id = "navigo.multiplatform.library"
