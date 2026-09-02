@@ -152,7 +152,7 @@ dependencies {
     prodHuaweiImplementation(project(":core:analytics-local"))
     implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
-    implementation(project(":core:datastore"))
+    implementation(project(":core:persistence"))
     implementation(project(":core:monitoring"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))

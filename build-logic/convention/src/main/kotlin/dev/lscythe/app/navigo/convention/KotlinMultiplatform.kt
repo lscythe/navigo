@@ -98,6 +98,7 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
             is KotlinMultiplatformExtension ->
                 compilerOptions.apply {
                     allWarningsAsErrors = warningsAsErrors
+                    freeCompilerArgs.add("-Xexpect-actual-classes")
                 }
             is KotlinAndroidProjectExtension ->
                 compilerOptions.apply {

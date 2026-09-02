@@ -56,7 +56,7 @@ include(
     ":core:analytics-local",
     ":core:common",
     ":core:database",
-    ":core:datastore",
+    ":core:persistence",
     ":core:designsystem",
     ":core:monitoring",
     ":core:monitoring-kermit",

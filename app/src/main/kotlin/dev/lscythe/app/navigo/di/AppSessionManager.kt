@@ -18,11 +18,11 @@ package dev.lscythe.app.navigo.di
 import dev.lscythe.app.navigo.api.auth.PublicAuthApi
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
-import dev.lscythe.app.navigo.core.datastore.SessionPreference
-import dev.lscythe.app.navigo.core.datastore.datasource.SessionPreferenceDataSource
 import dev.lscythe.app.navigo.core.network.ApiResponse
 import dev.lscythe.app.navigo.core.network.SessionManager
 import dev.lscythe.app.navigo.core.network.SessionTokens
+import dev.lscythe.app.navigo.core.persistence.SessionPreference
+import dev.lscythe.app.navigo.core.persistence.datasource.SessionPreferenceDataSource
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
