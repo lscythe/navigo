@@ -16,24 +16,14 @@
 package dev.lscythe.app.navigo.core.designsystem.component
 
 import androidx.compose.material3.Text
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.runComposeUiTest
-import com.github.takahirom.roborazzi.RoborazziOptions
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
-import io.github.takahirom.roborazzi.captureRoboImage
+import dev.lscythe.app.navigo.core.testing.screenshot.captureIosScreenshot
 import kotlin.test.Test
 
 class MultiplatformScreenshotTest {
-    @OptIn(ExperimentalTestApi::class)
     @Test
-    fun theme() = runComposeUiTest {
-        setContent { NavigoTheme(disableDynamicTheming = true) { Text("Navigo") } }
-        onRoot()
-            .captureRoboImage(
-                composeUiTest = this,
-                filePath = "src/test/screenshots-multiplatform/ios/theme.png",
-                roborazziOptions = RoborazziOptions(),
-            )
-    }
+    fun theme() =
+        captureIosScreenshot("src/test/screenshots-multiplatform/ios/theme.png") {
+            NavigoTheme(disableDynamicTheming = true) { Text("Navigo") }
+        }
 }

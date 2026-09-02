@@ -40,7 +40,9 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoUnderli
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.ExclamationCircle
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
+import dev.lscythe.app.navigo.core.designsystem.token.MaterialKolorConfig
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
+import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.testing.screenshot.captureMultiTheme
 import org.junit.Rule
 import org.junit.Test
@@ -87,7 +89,19 @@ class ComponentScreenshotTests {
         capture("NavigoBrandConstrainedWidth") { NavigoBrand(Modifier.width(120.dp)) }
 
     private fun capture(name: String, content: @Composable () -> Unit) {
-        composeTestRule.captureMultiTheme(name) { content() }
+        composeTestRule.captureMultiTheme(
+            name = name,
+            theme = { isDark, useMaterialKolor, themedContent ->
+                NavigoTheme(
+                    isDarkTheme = isDark,
+                    disableDynamicTheming = true,
+                    materialKolor = MaterialKolorConfig().takeIf { useMaterialKolor },
+                    content = themedContent,
+                )
+            },
+        ) {
+            content()
+        }
     }
 }
 

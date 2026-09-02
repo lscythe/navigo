@@ -53,7 +53,9 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoSwitch
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoTextButton
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Circle
+import dev.lscythe.app.navigo.core.designsystem.token.MaterialKolorConfig
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
+import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.testing.screenshot.captureMultiTheme
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.Rule
@@ -148,7 +150,19 @@ class AtomScreenshotTests {
         capture("PagerIndicator") { NavigoPagerIndicator(4, 1, 0.65f) }
 
     private fun capture(name: String, content: @Composable () -> Unit) {
-        composeTestRule.captureMultiTheme(name) { content() }
+        composeTestRule.captureMultiTheme(
+            name = name,
+            theme = { isDark, useMaterialKolor, themedContent ->
+                NavigoTheme(
+                    isDarkTheme = isDark,
+                    disableDynamicTheming = true,
+                    materialKolor = MaterialKolorConfig().takeIf { useMaterialKolor },
+                    content = themedContent,
+                )
+            },
+        ) {
+            content()
+        }
     }
 }
 

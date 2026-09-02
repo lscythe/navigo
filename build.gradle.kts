@@ -23,6 +23,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.dependencyGuard) apply false
     alias(libs.plugins.gms) apply false
+    alias(libs.plugins.kotest) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kover) apply false

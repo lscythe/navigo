@@ -40,26 +40,19 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(kotlin("test"))
+            implementation(project(":core:testing-screenshot"))
         }
         desktopTest.dependencies {
             implementation(libs.compose.multiplatform.ui.test)
-            implementation(libs.roborazzi.compose.desktop)
         }
         appleTest.dependencies {
             implementation(libs.compose.multiplatform.ui.test)
-            implementation(libs.roborazzi.compose.ios)
         }
         androidHostTest.dependencies {
             implementation(libs.androidx.compose.ui.test)
             implementation(libs.androidx.compose.ui.testManifest)
             implementation(libs.robolectric)
             implementation(libs.junit.vintage.engine)
-            implementation(
-                project(
-                    path = ":core:testing-screenshot",
-                    configuration = "stagingGoogleReleaseRuntimeElements",
-                )
-            )
         }
     }
 }

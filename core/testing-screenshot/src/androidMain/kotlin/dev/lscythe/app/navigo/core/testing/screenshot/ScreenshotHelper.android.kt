@@ -18,8 +18,6 @@ package dev.lscythe.app.navigo.core.testing.screenshot
 import android.graphics.Bitmap.CompressFormat.PNG
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -37,29 +35,17 @@ import com.github.takahirom.roborazzi.RoborazziATFAccessibilityCheckOptions
 import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker
 import com.github.takahirom.roborazzi.RoborazziATFAccessibilityChecker.CheckLevel
 import com.github.takahirom.roborazzi.RoborazziOptions
-import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
-import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.checkRoboAccessibility
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckPreset
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityViewCheckResult
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityViewCheckException
 import com.google.android.apps.common.testing.accessibility.framework.utils.contrast.BitmapImage
-import dev.lscythe.app.navigo.core.designsystem.token.MaterialKolorConfig
-import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import java.io.File
 import java.io.FileOutputStream
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 import org.robolectric.RuntimeEnvironment
-
-val DefaultRoborazziOptions =
-    RoborazziOptions(
-        // Pixel-perfect matching
-        compareOptions = CompareOptions(changeThreshold = 0f),
-        // Reduce the size of the PNGs
-        recordOptions = RecordOptions(resizeScale = 0.5),
-    )
 
 enum class DefaultTestDevices(val description: String, val spec: String) {
     PHONE("phone", "spec:shape=Normal,width=640,height=360,unit=dp,dpi=480"),
@@ -154,56 +140,48 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
     }
 }
 
-/** Takes screenshots for requested deterministic static Android and Material Kolor themes. */
+/** Captures deterministic dark/light and default/alternate theme combinations. */
 fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.captureMultiTheme(
     name: String,
     overrideFileName: String? = null,
     shouldCompareDarkMode: Boolean = true,
-    shouldCompareMaterialKolor: Boolean = true,
-    content: @Composable (desc: String) -> Unit,
+    shouldCompareAlternateTheme: Boolean = true,
+    theme:
+        @Composable
+        (isDark: Boolean, useAlternateTheme: Boolean, content: @Composable () -> Unit) -> Unit,
+    content: @Composable (description: String) -> Unit,
 ) {
-    val darkModeValues = if (shouldCompareDarkMode) listOf(true, false) else listOf(false)
-    val materialKolorValues =
-        if (shouldCompareMaterialKolor) listOf(MaterialKolorConfig(), null) else listOf(null)
-
-    var darkMode by mutableStateOf(true)
-    var materialKolor by mutableStateOf<MaterialKolorConfig?>(null)
-
-    this.setContent {
+    var isDarkMode by mutableStateOf(true)
+    var useAlternateTheme by mutableStateOf(false)
+    setContent {
         CompositionLocalProvider(LocalInspectionMode provides true) {
-            NavigoTheme(
-                isDarkTheme = darkMode,
-                materialKolor = materialKolor,
-            ) {
-                key(darkMode, materialKolor) {
-                    Surface(color = MaterialTheme.colorScheme.background) {
-                        content(
-                            generateDescription(
-                                shouldCompareDarkMode = shouldCompareDarkMode,
-                                darkMode = darkMode,
-                                shouldCompareMaterialKolor = shouldCompareMaterialKolor,
-                                materialKolor = materialKolor,
-                            )
+            theme(isDarkMode, useAlternateTheme) {
+                key(isDarkMode, useAlternateTheme) {
+                    content(
+                        generateDescription(
+                            shouldCompareDarkMode,
+                            isDarkMode,
+                            shouldCompareAlternateTheme,
+                            useAlternateTheme,
                         )
-                    }
+                    )
                 }
             }
         }
     }
 
     val filename = overrideFileName ?: name
-    darkModeValues.forEach { isDarkMode ->
-        darkMode = isDarkMode
-        val darkModeDescription = if (isDarkMode) "dark" else "light"
-
-        materialKolorValues.forEach { config ->
-            materialKolor = config
-            val themeDescription = if (config == null) "androidTheme" else "materialKolor"
-
-            this.onRoot()
+    val darkModes = if (shouldCompareDarkMode) listOf(true, false) else listOf(false)
+    val alternateThemes = if (shouldCompareAlternateTheme) listOf(true, false) else listOf(false)
+    darkModes.forEach { darkMode ->
+        isDarkMode = darkMode
+        alternateThemes.forEach { alternateTheme ->
+            useAlternateTheme = alternateTheme
+            onRoot()
                 .captureRoboImage(
                     "src/test/screenshots/$name/" +
-                        "${filename}_${darkModeDescription}_${themeDescription}_notDynamic.png",
+                        "${filename}_${if (darkMode) "dark" else "light"}_" +
+                        "${if (alternateTheme) "materialKolor" else "androidTheme"}_notDynamic.png",
                     roborazziOptions = DefaultRoborazziOptions,
                 )
         }
@@ -213,11 +191,11 @@ fun <A : ComponentActivity> AndroidComposeTestRule<ActivityScenarioRule<A>, A>.c
 private fun generateDescription(
     shouldCompareDarkMode: Boolean,
     darkMode: Boolean,
-    shouldCompareMaterialKolor: Boolean,
-    materialKolor: MaterialKolorConfig?,
+    shouldCompareAlternateTheme: Boolean,
+    useAlternateTheme: Boolean,
 ): String = buildList {
     if (shouldCompareDarkMode) add(if (darkMode) "Dark" else "Light")
-    if (shouldCompareMaterialKolor) add(if (materialKolor == null) "Default" else "Material Kolor")
+    if (shouldCompareAlternateTheme) add(if (useAlternateTheme) "Alternate" else "Default")
 }
     .joinToString(" ")
 

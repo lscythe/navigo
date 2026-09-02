@@ -149,6 +149,7 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazzi-accessibility-check = { module = "io.github.takahirom.roborazzi:roborazzi-accessibility-check", version.ref = "roborazzi" }
 roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
+roborazzi-core = { module = "io.github.takahirom.roborazzi:roborazzi-core", version.ref = "roborazzi" }
 roborazzi-compose-ios = { module = "io.github.takahirom.roborazzi:roborazzi-compose-ios", version.ref = "roborazzi" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
@@ -203,7 +204,6 @@ navigo-android-test = { id = "navigo.android.test" }
 navigo-jvm-library = { id = "navigo.jvm.library" }
 navigo-multiplatform-library = { id = "navigo.multiplatform.library" }
 navigo-multiplatform-library-compose = { id = "navigo.multiplatform.library.compose" }
-navigo-multiplatform-sqldelight = { id = "navigo.multiplatform.sqldelight" }
 navigo-metro = { id = "navigo.metro" }
 navigo-root = { id = "navigo.root" }
 
