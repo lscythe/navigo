@@ -61,13 +61,13 @@ gradlePlugin {
             id = "navigo.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationCompose") {
-            id = "navigo.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
         register("androidApplicationFlavors") {
             id = "navigo.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        }
+        register("desktopApplication") {
+            id = "navigo.desktop.application"
+            implementationClass = "DesktopApplicationConventionPlugin"
         }
         register("multiplatformFeatureApi") {
             id = "navigo.multiplatform.feature.api"
@@ -76,10 +76,6 @@ gradlePlugin {
         register("multiplatformFeatureImpl") {
             id = "navigo.multiplatform.feature.impl"
             implementationClass = "MultiplatformFeatureImplConventionPlugin"
-        }
-        register("androidLint") {
-            id = "navigo.android.lint"
-            implementationClass = "AndroidLintConventionPlugin"
         }
         register("multiplatformLibrary") {
             id = "navigo.multiplatform.library"

@@ -33,7 +33,6 @@ import dev.lscythe.app.navigo.convention.NavigoBuildType
 plugins {
     alias(libs.plugins.navigo.android.application)
     alias(libs.plugins.navigo.android.application.flavors)
-    alias(libs.plugins.navigo.android.application.compose)
     alias(libs.plugins.navigo.metro)
     alias(libs.plugins.baselineprofile)
     alias(libs.plugins.roborazzi)

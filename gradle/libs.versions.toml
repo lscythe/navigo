@@ -193,11 +193,10 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 
 navigo-android-application = { id = "navigo.android.application" }
-navigo-android-application-compose = { id = "navigo.android.application.compose" }
 navigo-android-application-flavors = { id = "navigo.android.application.flavors" }
+navigo-desktop-application = { id = "navigo.desktop.application" }
 navigo-multiplatform-feature-api = { id = "navigo.multiplatform.feature.api" }
 navigo-multiplatform-feature-impl = { id = "navigo.multiplatform.feature.impl" }
-navigo-android-lint = { id = "navigo.android.lint" }
 navigo-multiplatform-library = { id = "navigo.multiplatform.library" }
 navigo-multiplatform-library-compose = { id = "navigo.multiplatform.library.compose" }
 navigo-metro = { id = "navigo.metro" }
