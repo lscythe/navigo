@@ -47,6 +47,7 @@ ksp = "2.3.11"
 ktfmt = "0.64"
 ktor = "3.5.2"
 maplibre = "0.15.0"
+maplibreNativeFfi = "0.202608.3"
 material = "1.14.0"
 materialKolor = "5.0.0"
 metro = "1.4.1"
@@ -82,6 +83,7 @@ compose-multiplatform-ui = { module = "org.jetbrains.compose.ui:ui", version.ref
 compose-multiplatform-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
 compose-multiplatform-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "composeMultiplatformAdaptive" }
 compose-multiplatform-material3-adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "composeMultiplatformAdaptive" }
+compose-multiplatform-desktop-jvm = { module = "org.jetbrains.compose.desktop:desktop-jvm", version.ref = "composeMultiplatform" }
 compose-multiplatform-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "composeMultiplatformNavigation3" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidxComposeRuntime" }
 androidx-compose-runtime-tracing = { module = "androidx.compose.runtime:runtime-tracing", version.ref = "androidxComposeRuntimeTracing" }
@@ -140,6 +142,7 @@ lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "an
 lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "androidTools" }
 maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre" }
 maplibre-compose-opengl-runtime = { module = "org.maplibre.compose:maplibre-compose-runtime-opengl-android", version.ref = "maplibre" }
+maplibre-native-ffi-runtime-metal = { module = "org.maplibre.nativeffi:maplibre-native-ffi-runtime-metal", version.ref = "maplibreNativeFfi" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 metro-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
