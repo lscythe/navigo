@@ -47,7 +47,6 @@ ksp = "2.3.11"
 ktfmt = "0.64"
 ktor = "3.5.2"
 maplibre = "0.15.0"
-maplibreNativeFfi = "0.202608.3"
 material = "1.14.0"
 materialKolor = "5.0.0"
 metro = "1.4.1"
@@ -142,7 +141,11 @@ lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "an
 lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "androidTools" }
 maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre" }
 maplibre-compose-opengl-runtime = { module = "org.maplibre.compose:maplibre-compose-runtime-opengl-android", version.ref = "maplibre" }
-maplibre-native-ffi-runtime-metal = { module = "org.maplibre.nativeffi:maplibre-native-ffi-runtime-metal", version.ref = "maplibreNativeFfi" }
+maplibre-compose-metal-runtime-macos-arm64 = { module = "org.maplibre.compose:maplibre-compose-runtime-metal-macos-arm64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-linux-arm64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-linux-arm64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-linux-x64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-linux-x64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-windows-arm64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-windows-arm64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-windows-x64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-windows-x64", version.ref = "maplibre" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 metro-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
