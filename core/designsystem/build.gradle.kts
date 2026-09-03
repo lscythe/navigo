@@ -14,31 +14,50 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
+    alias(libs.plugins.navigo.multiplatform.library)
+    alias(libs.plugins.navigo.multiplatform.library.compose)
     alias(libs.plugins.roborazzi)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.designsystem"
-    testOptions.unitTests.isIncludeAndroidResources = true
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.designsystem"
+        androidResources.enable = true
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.compose.multiplatform.foundation)
+            api(libs.compose.multiplatform.material3)
+            api(libs.compose.multiplatform.runtime)
+            api(libs.compose.multiplatform.ui)
+            api(libs.material.kolor)
+            api(libs.kotlinx.collections)
+            implementation(libs.compose.multiplatform.resources)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.compose.material3)
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation(project(":core:testing-screenshot"))
+        }
+        desktopTest.dependencies {
+            implementation(libs.compose.multiplatform.ui.test)
+        }
+        appleTest.dependencies {
+            implementation(libs.compose.multiplatform.ui.test)
+        }
+        androidHostTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+            implementation(libs.androidx.compose.ui.testManifest)
+            implementation(libs.robolectric)
+            implementation(libs.junit.vintage.engine)
+        }
+    }
 }
 
-dependencies {
-    api(libs.androidx.compose.foundation)
-    api(libs.androidx.compose.foundation.layout)
-    api(libs.androidx.compose.material3)
-    api(libs.androidx.compose.material3.adaptive)
-    api(libs.androidx.compose.material3.navigationSuite)
-    api(libs.androidx.compose.runtime)
-    api(libs.androidx.compose.ui.util)
-    api(libs.material.kolor)
-    api(libs.kotlinx.collections)
-
-    testImplementation(libs.androidx.compose.ui.test)
-    testImplementation(libs.androidx.compose.ui.testManifest)
-
-    testImplementation(libs.robolectric)
-    testImplementation(libs.junit.vintage.engine)
-    testImplementation(project(":core:testing-screenshot"))
+compose.resources {
+    packageOfResClass = "dev.lscythe.app.navigo.core.designsystem.generated.resources"
+    publicResClass = false
 }

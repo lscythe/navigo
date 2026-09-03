@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
+    alias(libs.plugins.compose)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.analytics"
-}
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.analytics"
+    }
 
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.timber)
-
-    prodGoogleImplementation(libs.firebase.analytics.get())
+    sourceSets.commonMain.dependencies {
+        implementation(libs.androidx.compose.runtime)
+    }
 }

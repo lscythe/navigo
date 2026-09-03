@@ -14,22 +14,39 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.jvm.library)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
     alias(libs.plugins.kotlin.serialization)
 }
 
-dependencies {
-    implementation(project(":core:common"))
-    api(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.auth)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.websockets)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.kotlinx.serialization.json)
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.network"
+    }
 
-    testImplementation(project(":core:testing"))
-    testImplementation(libs.ktor.client.mock)
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:common"))
+            api(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.websockets)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.kotlinx.serialization.json)
+        }
+        commonTest.dependencies {
+            implementation(project(":core:testing"))
+            implementation(libs.ktor.client.mock)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+        desktopMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+    }
 }

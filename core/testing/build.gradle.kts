@@ -14,5 +14,11 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.jvm.library)
+    alias(libs.plugins.navigo.multiplatform.library)
+}
+
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.testing"
+    }
 }

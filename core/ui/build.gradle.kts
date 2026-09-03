@@ -14,20 +14,32 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
+    alias(libs.plugins.navigo.multiplatform.library)
+    alias(libs.plugins.navigo.multiplatform.library.compose)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.ui"
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.ui"
+        androidResources.enable = true
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":core:common"))
+            api(project(":core:analytics"))
+            api(project(":core:designsystem"))
+            api(libs.kotlinx.datetime)
+            api(libs.compose.multiplatform.resources)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
+            api(libs.androidx.metrics)
+        }
+    }
 }
 
-dependencies {
-    api(project(":core:common"))
-    api(project(":core:analytics"))
-    api(project(":core:designsystem"))
-
-    implementation(libs.androidx.core.ktx)
-    api(libs.androidx.metrics)
-    api(libs.kotlinx.datetime)
+compose.resources {
+    packageOfResClass = "dev.lscythe.app.navigo.core.ui.generated.resources"
+    publicResClass = true
 }

@@ -13,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.`kotlin-dsl`
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -25,25 +23,27 @@ plugins {
 group = "dev.lscythe.app.navigo.buildlogic"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
+        jvmTarget = JvmTarget.JVM_25
     }
 }
 
 dependencies {
     implementation(files(libs::class.java.superclass.protectionDomain.codeSource.location))
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.multiplatform.library.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
+    implementation(libs.kotest.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.kover.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(libs.room3.gradlePlugin)
+    implementation(libs.sqldelight.gradlePlugin)
     implementation(libs.kotest.assertions.core)
     lintChecks(libs.androidx.lint.gradle)
 }
@@ -61,45 +61,29 @@ gradlePlugin {
             id = "navigo.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidApplicationCompose") {
-            id = "navigo.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
-        }
         register("androidApplicationFlavors") {
             id = "navigo.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
-        register("androidFeatureApi") {
-            id = "navigo.android.feature.api"
-            implementationClass = "AndroidFeatureApiConventionPlugin"
+        register("desktopApplication") {
+            id = "navigo.desktop.application"
+            implementationClass = "DesktopApplicationConventionPlugin"
         }
-        register("androidFeatureImpl") {
-            id = "navigo.android.feature.impl"
-            implementationClass = "AndroidFeatureImplConventionPlugin"
+        register("multiplatformFeatureApi") {
+            id = "navigo.multiplatform.feature.api"
+            implementationClass = "KotlinMultiplatformFeatureApiConventionPlugin"
         }
-        register("androidLibrary") {
-            id = "navigo.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+        register("multiplatformFeatureImpl") {
+            id = "navigo.multiplatform.feature.impl"
+            implementationClass = "MultiplatformFeatureImplConventionPlugin"
         }
-        register("androidLibraryCompose") {
-            id = "navigo.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        register("multiplatformLibrary") {
+            id = "navigo.multiplatform.library"
+            implementationClass = "KotlinMultiplatformLibraryConventionPlugin"
         }
-        register("androidLint") {
-            id = "navigo.android.lint"
-            implementationClass = "AndroidLintConventionPlugin"
-        }
-        register("androidRoom") {
-            id = "navigo.android.room"
-            implementationClass = "AndroidRoomConventionPlugin"
-        }
-        register("androidTest") {
-            id = "navigo.android.test"
-            implementationClass = "AndroidTestConventionPlugin"
-        }
-        register("jvmLibrary") {
-            id = "navigo.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
+        register("multiplatformLibraryCompose") {
+            id = "navigo.multiplatform.library.compose"
+            implementationClass = "KotlinMultiplatformLibraryComposeConventionPlugin"
         }
         register("metro") {
             id = "navigo.metro"

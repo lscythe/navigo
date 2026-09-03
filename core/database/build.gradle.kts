@@ -14,11 +14,35 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.room)
+    alias(libs.plugins.navigo.multiplatform.library)
+    alias(libs.plugins.sqldelight)
     alias(libs.plugins.navigo.metro)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.database"
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.database"
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines.extensions)
+        }
+        androidMain.dependencies {
+            implementation(libs.sqldelight.android.driver)
+        }
+        desktopMain.dependencies {
+            implementation(libs.sqldelight.sqlite.driver)
+        }
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native.driver)
+        }
+    }
+}
+
+sqldelight {
+    databases.create("NavigoDatabase") {
+        packageName.set("dev.lscythe.app.navigo.core.database")
+    }
 }

@@ -42,7 +42,12 @@ dependencyResolutionManagement {
 
 rootProject.name = "Navigo"
 
-include(":app")
+include(
+    ":app:android",
+    ":app:shared",
+    ":app:desktop",
+    ":app:ios",
+)
 
 include(
     ":api:auth",
@@ -52,13 +57,15 @@ include(
 
 include(
     ":core:analytics",
+    ":core:analytics-firebase",
+    ":core:analytics-local",
     ":core:common",
     ":core:database",
-    ":core:datastore",
-    ":core:datastore-proto",
-    ":core:datastore-test",
+    ":core:persistence",
     ":core:designsystem",
     ":core:monitoring",
+    ":core:monitoring-kermit",
+    ":core:monitoring-sentry",
     ":core:navigation",
     ":core:network",
     ":core:testing",
@@ -73,9 +80,9 @@ include(
     ":feature:onboarding:impl",
 )
 
-check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
+check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_25)) {
     """
-    Navigo requires JDK 21+ but it is currently using JDK ${JavaVersion.current()}.
+    Navigo requires JDK 25+ but it is currently using JDK ${JavaVersion.current()}.
     Java Home: [${System.getProperty("java.home")}]
     https://developer.android.com/build/jdks#jdk-config-in-studio
     """

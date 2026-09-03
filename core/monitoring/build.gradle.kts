@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.monitoring"
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.monitoring"
+    }
 
     sourceSets {
-        listOf("beta", "rc", "prod").forEach { flavor ->
-            getByName(flavor) {
-                kotlin.directories.add("src/sentryEnabled/kotlin")
-                manifest.srcFile("src/sentryEnabled/AndroidManifest.xml")
-            }
+        commonMain.dependencies {
+            api(libs.kermit)
         }
     }
-}
-
-dependencies {
-    listOf("beta", "rc", "prod").forEach { flavor ->
-        add("${flavor}Implementation", libs.sentry.android)
-    }
-
-    implementation(libs.timber)
 }
