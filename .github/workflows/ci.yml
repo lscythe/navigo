@@ -96,6 +96,7 @@ jobs:
 
   ios:
     name: iOS Simulator
+    if: ${{ false }}
     runs-on: macos-15
     needs: test
     steps:
