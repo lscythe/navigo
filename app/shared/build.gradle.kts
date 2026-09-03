@@ -38,4 +38,10 @@ kotlin {
         implementation(libs.compose.multiplatform.material3.adaptive)
         implementation(libs.compose.multiplatform.material3.adaptive.navigation3)
     }
+
+    sourceSets.commonTest.dependencies {
+        implementation(libs.kotest.framework.engine)
+        implementation(libs.kotest.assertions.core)
+        implementation(libs.kotlinx.serialization.json)
+    }
 }

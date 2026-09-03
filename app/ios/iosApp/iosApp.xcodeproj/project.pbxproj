@@ -18,7 +18,7 @@
 		AC = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B6, B7); runOnlyForDeploymentPostprocessing = 0; };
 		AD = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		AE = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		AF = {isa = PBXShellScriptBuildPhase; buildActionMask = 2147483647; files = (); inputPaths = (); name = "Compile Kotlin Framework"; outputPaths = ("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/NavigoApp.framework"); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh; shellScript = "cd \"$SRCROOT/../../../..\"\n./gradlew :app:ios:embedAndSignAppleFrameworkForXcode\n"; };
+		AF = {isa = PBXShellScriptBuildPhase; buildActionMask = 2147483647; files = (); inputPaths = (); name = "Compile Kotlin Framework"; outputPaths = ("$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/NavigoApp.framework"); runOnlyForDeploymentPostprocessing = 0; shellPath = /bin/sh; shellScript = "cd \"$SRCROOT/../../..\"\n./gradlew :app:ios:embedAndSignAppleFrameworkForXcode\n"; };
 		B1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigoApp.swift; sourceTree = "<group>"; };
 		B2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B3 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };

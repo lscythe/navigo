@@ -34,3 +34,6 @@ ignore:
   - "**/src/**/jsTest/**"
   - "**/src/**/wasmJsTest/**"
   - "**/src/**/benchmark/**"
+  - "app/android/**"
+  - "app/desktop/**"
+  - "app/ios/**"
