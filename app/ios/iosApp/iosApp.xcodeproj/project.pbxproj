@@ -8,7 +8,7 @@
 		A2 = {isa = XCConfigurationList; buildConfigurations = (A6, A7); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 		A3 = {isa = PBXGroup; children = (A8, A4, A9); sourceTree = "<group>"; };
 		A4 = {isa = PBXGroup; children = (AA); name = Products; sourceTree = "<group>"; };
-		A5 = {isa = PBXNativeTarget; buildConfigurationList = AB; buildPhases = (AC, AD, AE, AF); buildRules = (); dependencies = (); name = iosApp; productName = Navigo; productReference = AA; productType = "com.apple.product-type.application"; };
+		A5 = {isa = PBXNativeTarget; buildConfigurationList = AB; buildPhases = (AF, AC, AD, AE); buildRules = (); dependencies = (); name = iosApp; productName = Navigo; productReference = AA; productType = "com.apple.product-type.application"; };
 		A6 = {isa = XCBuildConfiguration; baseConfigurationReference = A9; buildSettings = {}; name = Debug; };
 		A7 = {isa = XCBuildConfiguration; baseConfigurationReference = A9; buildSettings = {}; name = Release; };
 		A8 = {isa = PBXGroup; children = (B1, B2, B3); path = iosApp; sourceTree = "<group>"; };
@@ -22,8 +22,8 @@
 		B1 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigoApp.swift; sourceTree = "<group>"; };
 		B2 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B3 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B4 = {isa = XCBuildConfiguration; baseConfigurationReference = A9; buildSettings = { INFOPLIST_FILE = iosApp/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks"; OTHER_LDFLAGS = "$(inherited) -lc++ -lz -framework CoreFoundation -framework CoreGraphics -framework CoreText -framework Foundation -framework ImageIO -framework Metal -framework QuartzCore"; SWIFT_VERSION = 5.0; }; name = Debug; };
-		B5 = {isa = XCBuildConfiguration; baseConfigurationReference = A9; buildSettings = { INFOPLIST_FILE = iosApp/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks"; OTHER_LDFLAGS = "$(inherited) -lc++ -lz -framework CoreFoundation -framework CoreGraphics -framework CoreText -framework Foundation -framework ImageIO -framework Metal -framework QuartzCore"; SWIFT_VERSION = 5.0; }; name = Release; };
+		B4 = {isa = XCBuildConfiguration; baseConfigurationReference = A9; buildSettings = { FRAMEWORK_SEARCH_PATHS = "$(inherited) $(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)"; INFOPLIST_FILE = iosApp/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks"; OTHER_LDFLAGS = "$(inherited) -lc++ -lz -framework CoreFoundation -framework CoreGraphics -framework CoreText -framework Foundation -framework ImageIO -framework Metal -framework QuartzCore"; SWIFT_VERSION = 5.0; }; name = Debug; };
+		B5 = {isa = XCBuildConfiguration; baseConfigurationReference = A9; buildSettings = { FRAMEWORK_SEARCH_PATHS = "$(inherited) $(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)"; INFOPLIST_FILE = iosApp/Info.plist; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks"; OTHER_LDFLAGS = "$(inherited) -lc++ -lz -framework CoreFoundation -framework CoreGraphics -framework CoreText -framework Foundation -framework ImageIO -framework Metal -framework QuartzCore"; SWIFT_VERSION = 5.0; }; name = Release; };
 		B6 = {isa = PBXBuildFile; fileRef = B1; };
 		B7 = {isa = PBXBuildFile; fileRef = B2; };
 	};
