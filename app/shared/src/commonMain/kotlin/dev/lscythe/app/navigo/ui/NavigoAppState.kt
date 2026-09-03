@@ -22,7 +22,6 @@ import androidx.navigation3.runtime.NavKey
 import dev.lscythe.app.navigo.core.navigation.NavigationState
 import dev.lscythe.app.navigo.core.navigation.Navigator
 import dev.lscythe.app.navigo.core.navigation.rememberNavigationState
-import dev.lscythe.app.navigo.core.ui.TrackDisposableJank
 import kotlinx.serialization.modules.SerializersModule
 
 @Composable
@@ -40,11 +39,4 @@ class NavigoAppState(val navigationState: NavigationState) {
     val navigator = Navigator(navigationState)
 }
 
-/** Stores information about navigation events to be used with JankStats */
-@Composable
-private fun NavigationTrackingSideEffect(navigationState: NavigationState) {
-    TrackDisposableJank(navigationState.currentKey) { metricsHolder ->
-        metricsHolder.state?.putState("Navigation", navigationState.currentKey.toString())
-        onDispose {}
-    }
-}
+@Composable internal expect fun NavigationTrackingSideEffect(navigationState: NavigationState)

@@ -20,34 +20,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.metrics.performance.JankStats
-import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entryProvider
 import co.touchlab.kermit.Severity
+import dev.lscythe.app.navigo.app.NavigoRoot
 import dev.lscythe.app.navigo.core.analytics.AnalyticsHelper
-import dev.lscythe.app.navigo.core.analytics.LocalAnalyticsHelper
-import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import dev.lscythe.app.navigo.core.monitoring.AppLogger
-import dev.lscythe.app.navigo.core.navigation.Navigator
-import dev.lscythe.app.navigo.feature.home.api.HomeNavKey
-import dev.lscythe.app.navigo.feature.home.impl.navigation.homeEntry
-import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
-import dev.lscythe.app.navigo.feature.onboarding.impl.navigation.onboardingEntry
-import dev.lscythe.app.navigo.ui.NavigoApp
-import dev.lscythe.app.navigo.ui.rememberNavigoAppState
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.binding
 import dev.zacsweers.metrox.android.ActivityKey
 import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
 
 @Inject
 @ActivityKey
@@ -70,35 +55,7 @@ class MainActivity(
         super.onCreate(savedInstanceState)
 
         setContent {
-            val appState =
-                rememberNavigoAppState(
-                    startKey = HomeNavKey,
-                    serializersModule =
-                        remember {
-                            SerializersModule {
-                                polymorphic(NavKey::class) {
-                                    subclass(HomeNavKey.serializer())
-                                    subclass(OnboardingNavKey.serializer())
-                                }
-                            }
-                        },
-                )
-
-            val navigator = remember { Navigator(appState.navigationState) }
-
-            val entryProvider = entryProvider {
-                onboardingEntry(navigator)
-                homeEntry(navigator)
-            }
-
-            CompositionLocalProvider(LocalAnalyticsHelper provides analyticsHelper) {
-                NavigoTheme {
-                    NavigoApp(
-                        appState = appState,
-                        entryProvider = entryProvider,
-                    )
-                }
-            }
+            NavigoRoot(analyticsHelper = analyticsHelper)
         }
         jankStats =
             JankStats.createAndTrack(window) { frameData ->

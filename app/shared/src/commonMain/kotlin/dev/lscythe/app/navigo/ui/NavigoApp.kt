@@ -23,8 +23,6 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigation3.rememberListDetailSceneStrategy
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
@@ -53,7 +51,7 @@ internal fun NavigoAppContent(
     modifier: Modifier = Modifier,
     windowAdaptiveInfo: WindowAdaptiveInfo = currentWindowAdaptiveInfoV2(),
 ) {
-    Scaffold(modifier = modifier.semantics { testTagsAsResourceId = true }) { contentPadding ->
+    Scaffold(modifier = modifier.navigoTestSemantics()) { contentPadding ->
         val listDetailStrategy = rememberListDetailSceneStrategy<NavKey>()
 
         NavDisplay(
