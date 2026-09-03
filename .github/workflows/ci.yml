@@ -14,6 +14,15 @@ on:
       - '**/*.md'
       - 'docs/**'
   merge_group:
+  workflow_dispatch:
+
+env:
+  GRADLE_OPTS: >-
+    -Dorg.gradle.jvmargs=-Xmx4096M
+    -Dorg.gradle.daemon=false
+    -Dorg.gradle.parallel=true
+    -Dorg.gradle.caching=true
+    -Dorg.gradle.configuration-cache.parallel=false
 
 permissions:
   contents: read
@@ -24,91 +33,104 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
+  test:
+    name: Shared tests
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-
-      - name: Set up JDK 25
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
-
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
-
-      - name: Assemble
-        run: ./gradlew assemble --stacktrace -Dorg.gradle.configuration-cache.parallel=false
-      - name: Upload build artifacts
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: ./.github/actions/gradle-setup
+      - name: Run tests
+        run: ./gradlew test
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
-          name: build-${{ github.run_id }}
-          path: app/android/build/outputs/**/*.{apk,aab}
+          name: test-reports
+          path: '**/build/reports/tests/'
           if-no-files-found: ignore
+          retention-days: 3
+
+  android:
+    name: Android
+    runs-on: ubuntu-24.04
+    needs: test
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Set up Gradle
+        uses: ./.github/actions/gradle-setup
+      - name: Build staging APK
+        run: ./gradlew :app:android:assembleStagingGoogleDebug
+      - name: Upload Android APK
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: android-apk
+          path: app/android/build/outputs/apk/stagingGoogle/debug/*.apk
+          if-no-files-found: error
           retention-days: 3
 
   desktop:
     name: Desktop (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    needs: test
     strategy:
       fail-fast: false
       matrix:
         os: [macos-15, ubuntu-24.04, windows-2025]
-    runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repository
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-      - name: Set up JDK 25
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        uses: ./.github/actions/gradle-setup
       - name: Package Desktop application
-        run: ./gradlew :app:desktop:packageDistributionForCurrentOS --stacktrace -Dorg.gradle.configuration-cache.parallel=false
+        run: ./gradlew :app:desktop:packageDistributionForCurrentOS
+      - name: Upload Desktop package
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: desktop-${{ matrix.os }}
+          path: app/desktop/build/compose/binaries/main/**
+          if-no-files-found: error
+          retention-days: 3
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
+  ios:
+    name: iOS Simulator
+    runs-on: macos-15
+    needs: test
     steps:
       - name: Check out repository
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-
-      - name: Set up JDK 25
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
-
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
-
-      - name: Test
-        run: ./gradlew test --stacktrace -Dorg.gradle.configuration-cache.parallel=false
+        uses: ./.github/actions/gradle-setup
+      - name: Build iOS Simulator application
+        run: |
+          xcodebuild build \
+            -project app/ios/iosApp/iosApp.xcodeproj \
+            -configuration Debug \
+            -scheme iosApp \
+            -sdk iphonesimulator \
+            -derivedDataPath build/ios \
+            CODE_SIGNING_ALLOWED=NO
+      - name: Upload iOS Simulator application
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        with:
+          name: ios-simulator-app
+          path: build/ios/Build/Products/Debug-iphonesimulator/*.app
+          if-no-files-found: error
+          retention-days: 3
 
   coverage:
     name: Coverage
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    needs: test
     steps:
       - name: Check out repository
         uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
-      - name: Set up JDK 25
-        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
-        with:
-          distribution: temurin
-          java-version: '25'
-          cache: gradle
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        uses: ./.github/actions/gradle-setup
       - name: Generate coverage
-        run: ./gradlew koverXmlReport --stacktrace -Dorg.gradle.configuration-cache.parallel=false
+        run: ./gradlew koverXmlReport
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
         with:
@@ -116,11 +138,10 @@ jobs:
           files: '**/build/reports/kover/**/*.xml'
           fail_ci_if_error: true
 
-
   dependency-review:
     name: Dependency vulnerability and license check
     if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Dependency review
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
