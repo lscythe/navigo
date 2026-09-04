@@ -3,7 +3,11 @@ updates:
   - package-ecosystem: gradle
     directory: /
     schedule:
-      interval: weekly
+      interval: daily
+    cooldown:
+      semver-patch-days: 3
+      semver-minor-days: 7
+      semver-major-days: 14
     open-pull-requests-limit: 10
 
   - package-ecosystem: github-actions
