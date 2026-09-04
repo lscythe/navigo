@@ -96,7 +96,6 @@ jobs:
 
   ios:
     name: iOS Simulator
-    if: ${{ false }}
     runs-on: macos-15
     needs: test
     steps:
@@ -110,7 +109,7 @@ jobs:
             -project app/ios/iosApp/iosApp.xcodeproj \
             -configuration Debug \
             -scheme iosApp \
-            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build/ios \
             CODE_SIGNING_ALLOWED=NO
       - name: Upload iOS Simulator application
