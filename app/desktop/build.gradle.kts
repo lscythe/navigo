@@ -50,7 +50,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Rpm)
             packageName = "Navigo"
-            packageVersion = "1.0.0"
+            packageVersion = libs.versions.appVersionName.get()
         }
     }
 }
