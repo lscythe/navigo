@@ -86,6 +86,21 @@ jobs:
         uses: ./.github/actions/gradle-setup
       - name: Package Desktop application
         run: ./gradlew :app:desktop:packageDistributionForCurrentOS
+      - name: Display Desktop packaging logs
+        if: failure()
+        shell: bash
+        run: |
+          shopt -s nullglob
+          logs=(app/desktop/build/compose/logs/createDistributable/*.txt)
+          if (( ${#logs[@]} == 0 )); then
+            echo "No createDistributable logs found."
+            exit 0
+          fi
+          for log in "${logs[@]}"; do
+            echo "::group::$log"
+            cat "$log"
+            echo "::endgroup::"
+          done
       - name: Upload Desktop package
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
