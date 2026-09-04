@@ -21,6 +21,29 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
 }
 
+tasks.register("generateIosVersionConfig") {
+    val versionCode = libs.versions.appVersionCode
+    val versionName = libs.versions.appVersionName
+    val outputFile = layout.buildDirectory.file("generated/ios/Version.xcconfig")
+
+    inputs.property("appVersionCode", versionCode)
+    inputs.property("appVersionName", versionName)
+    outputs.file(outputFile)
+
+    doLast {
+        outputFile.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(
+                """
+                CURRENT_PROJECT_VERSION=${versionCode.get()}
+                MARKETING_VERSION=${versionName.get()}
+                """
+                    .trimIndent() + "\n"
+            )
+        }
+    }
+}
+
 kotlin {
     listOf(iosArm64(), iosSimulatorArm64()).forEach { target ->
         target.binaries.framework {

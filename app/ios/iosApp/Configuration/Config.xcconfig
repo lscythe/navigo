@@ -1,7 +1,6 @@
+#include? "../../build/generated/ios/Version.xcconfig"
+
 TEAM_ID=
 
 PRODUCT_NAME=Navigo
 PRODUCT_BUNDLE_IDENTIFIER=dev.lscythe.app.navigo
-
-CURRENT_PROJECT_VERSION=1
-MARKETING_VERSION=0.1.0
