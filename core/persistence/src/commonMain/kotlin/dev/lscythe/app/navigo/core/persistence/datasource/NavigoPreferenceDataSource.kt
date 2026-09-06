@@ -40,6 +40,16 @@ class NavigoPreferenceDataSource(@PreferencesKSafe private val ksafe: KSafe) {
 
     suspend fun completeOnboarding() = update { copy(hasCompletedOnboarding = true) }
 
+    suspend fun setPrivacyChoices(
+        analyticsEnabled: Boolean,
+        crashReportsEnabled: Boolean,
+    ) = update {
+        copy(
+            analyticsEnabled = analyticsEnabled,
+            crashReportsEnabled = crashReportsEnabled,
+        )
+    }
+
     private suspend fun update(transform: UserPreference.() -> UserPreference) {
         mutationMutex.withLock {
             val current = ksafe.get(USER_PREFERENCE_KEY, UserPreference())

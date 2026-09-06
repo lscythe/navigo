@@ -78,4 +78,6 @@ data class UserPreference(
     val language: Language = Language.System,
     val theme: ThemePreference = ThemePreference(),
     val hasCompletedOnboarding: Boolean = false,
+    val analyticsEnabled: Boolean = false,
+    val crashReportsEnabled: Boolean = false,
 )

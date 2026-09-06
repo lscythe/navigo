@@ -29,6 +29,35 @@ import kotlinx.coroutines.flow.first
 
 class KSafeDataSourceTest :
     FunSpec({
+        test("privacy choices default to disabled") {
+            val preference = dev.lscythe.app.navigo.core.persistence.UserPreference()
+
+            preference.analyticsEnabled shouldBe false
+            preference.crashReportsEnabled shouldBe false
+        }
+
+        test("privacy choices persist together and preserve existing preferences") {
+            val ksafe = isolatedKSafe("privacy_choices")
+            try {
+                val dataSource = NavigoPreferenceDataSource(ksafe)
+                dataSource.setLanguage(Language.Indonesian)
+
+                dataSource.setPrivacyChoices(
+                    analyticsEnabled = true,
+                    crashReportsEnabled = false,
+                )
+
+                dataSource.data.first().let { preference ->
+                    preference.language shouldBe Language.Indonesian
+                    preference.analyticsEnabled shouldBe true
+                    preference.crashReportsEnabled shouldBe false
+                }
+            } finally {
+                ksafe.clearAll()
+                ksafe.close()
+            }
+        }
+
         test("preference mutations preserve concurrently updated fields") {
             val ksafe = isolatedKSafe("preferences")
             try {
