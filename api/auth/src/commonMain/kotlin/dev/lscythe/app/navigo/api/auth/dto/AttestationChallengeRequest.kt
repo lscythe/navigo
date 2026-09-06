@@ -15,14 +15,11 @@
  */
 package dev.lscythe.app.navigo.api.auth.dto
 
-import kotlin.time.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IntegrityChallengeResponse(
-    val id: String,
-    val nonce: String,
+data class AttestationChallengeRequest(
+    val provider: String,
     val action: String,
-    val protocolVersion: String,
-    val expiresAt: Instant,
+    val packageName: String,
 )

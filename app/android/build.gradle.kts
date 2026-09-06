@@ -60,28 +60,28 @@ android {
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"${providers.gradleProperty("navigoStagingApiBaseUrl").get()}\"",
+                "\"${providers.gradleProperty("navigoNonProdApiBaseUrl").get()}\"",
             )
         }
         getByName("beta") {
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"${providers.gradleProperty("navigoApiBaseUrl").get()}\"",
+                "\"${providers.gradleProperty("navigoNonProdApiBaseUrl").get()}\"",
             )
         }
         getByName("rc") {
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"${providers.gradleProperty("navigoApiBaseUrl").get()}\"",
+                "\"${providers.gradleProperty("navigoNonProdApiBaseUrl").get()}\"",
             )
         }
         getByName("prod") {
             buildConfigField(
                 "String",
                 "API_BASE_URL",
-                "\"${providers.gradleProperty("navigoApiBaseUrl").get()}\"",
+                "\"${providers.gradleProperty("navigoProdApiBaseUrl").get()}\"",
             )
         }
     }

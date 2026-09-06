@@ -1,0 +1,33 @@
+{
+  "routes": [
+    {
+      "id": "route-1",
+      "name": "Blok M - Kota",
+      "shortName": "1",
+      "color": "123456",
+      "textColor": "ffffff",
+      "variants": [
+        {
+          "id": "variant-1",
+          "headsign": "Kota",
+          "polyline": "encoded-polyline"
+        }
+      ]
+    }
+  ],
+  "stops": [
+    {
+      "id": "stop-1",
+      "name": "Monas",
+      "location": {
+        "latitude": -6.175,
+        "longitude": 106.827
+      }
+    }
+  ],
+  "freshness": {
+    "observedAt": "2026-08-28T05:00:00Z",
+    "receivedAt": "2026-08-28T05:00:01Z",
+    "stale": false
+  }
+}

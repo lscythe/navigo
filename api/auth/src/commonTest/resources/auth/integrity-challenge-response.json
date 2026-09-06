@@ -1,7 +1,8 @@
 {
   "id": "challenge-id",
   "nonce": "base64url-nonce",
+  "provider": "play-integrity",
   "action": "create-session",
-  "protocolVersion": "v1",
+  "protocolVersion": "v2",
   "expiresAt": "2026-08-28T05:02:00Z"
 }

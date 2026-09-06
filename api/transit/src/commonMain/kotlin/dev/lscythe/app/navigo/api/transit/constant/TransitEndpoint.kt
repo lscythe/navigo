@@ -21,4 +21,5 @@ object TransitEndpoint {
     const val BUSES = "v1/buses"
     const val TRIP_PLANS = "v1/trip-plans"
     const val SEARCH_RESULTS = "v1/search-results"
+    const val MAP_DATA = "v1/map-data"
 }

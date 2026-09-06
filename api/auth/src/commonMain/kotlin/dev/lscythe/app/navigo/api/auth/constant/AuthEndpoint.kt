@@ -16,7 +16,8 @@
 package dev.lscythe.app.navigo.api.auth.constant
 
 object AuthEndpoint {
-    const val INTEGRITY_CHALLENGES = "v1/integrity-challenges"
+    const val ATTESTATION_CHALLENGES = "v1/attestation-challenges"
+    const val ATTESTATION_ENROLLMENTS = "v1/attestation-enrollments"
     const val SESSIONS = "v1/sessions"
     const val SESSION_REFRESHES = "v1/session-refreshes"
     const val CURRENT_SESSION = "v1/sessions/current"

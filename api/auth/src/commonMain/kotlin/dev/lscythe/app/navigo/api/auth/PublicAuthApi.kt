@@ -15,17 +15,23 @@
  */
 package dev.lscythe.app.navigo.api.auth
 
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeRequest
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeResponse
+import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeResponse
+import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
 
 interface PublicAuthApi {
-    suspend fun createIntegrityChallenge(
-        request: IntegrityChallengeRequest
-    ): ApiResponse<IntegrityChallengeResponse>
+    suspend fun createAttestationChallenge(
+        request: AttestationChallengeRequest
+    ): ApiResponse<AttestationChallengeResponse>
+
+    suspend fun createAttestationEnrollment(
+        request: AttestationEnrollmentRequest
+    ): ApiResponse<AttestationEnrollmentResponse>
 
     suspend fun createSession(request: SessionRequest): ApiResponse<SessionResponse>
 
