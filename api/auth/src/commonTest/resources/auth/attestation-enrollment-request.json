@@ -1,0 +1,7 @@
+{
+  "challengeId": "challenge-id",
+  "androidKeyAttestation": {
+    "certificateChain": ["certificate-one", "certificate-two"],
+    "publicKeyId": "public-key-id"
+  }
+}

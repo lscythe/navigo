@@ -17,8 +17,4 @@ package dev.lscythe.app.navigo.api.auth.dto
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class PlayIntegrityRequest(
-    val token: String,
-    val requestHash: String,
-)
+@Serializable data class PlayIntegrityRequest(val token: String)

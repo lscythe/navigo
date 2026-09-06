@@ -16,8 +16,10 @@
 package dev.lscythe.app.navigo.api.auth
 
 import dev.lscythe.app.navigo.api.auth.constant.AuthEndpoint
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeRequest
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeResponse
+import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeResponse
+import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
@@ -36,10 +38,16 @@ import io.ktor.client.request.setBody
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 internal class PublicAuthApiImpl(@PublicClient private val httpClient: HttpClient) : PublicAuthApi {
-    override suspend fun createIntegrityChallenge(
-        request: IntegrityChallengeRequest
-    ): ApiResponse<IntegrityChallengeResponse> = safeRequest {
-        httpClient.post(AuthEndpoint.INTEGRITY_CHALLENGES) { setBody(request) }
+    override suspend fun createAttestationChallenge(
+        request: AttestationChallengeRequest
+    ): ApiResponse<AttestationChallengeResponse> = safeRequest {
+        httpClient.post(AuthEndpoint.ATTESTATION_CHALLENGES) { setBody(request) }
+    }
+
+    override suspend fun createAttestationEnrollment(
+        request: AttestationEnrollmentRequest
+    ): ApiResponse<AttestationEnrollmentResponse> = safeRequest {
+        httpClient.post(AuthEndpoint.ATTESTATION_ENROLLMENTS) { setBody(request) }
     }
 
     override suspend fun createSession(request: SessionRequest): ApiResponse<SessionResponse> =

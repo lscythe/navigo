@@ -16,9 +16,12 @@
 package dev.lscythe.app.navigo.api.auth
 
 import dev.lscythe.app.navigo.api.auth.constant.AuthAction
+import dev.lscythe.app.navigo.api.auth.dto.AndroidEnrollmentEvidenceRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeResponse
+import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentRequest
+import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentResponse
 import dev.lscythe.app.navigo.api.auth.dto.DevelopmentEvidenceRequest
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeRequest
-import dev.lscythe.app.navigo.api.auth.dto.IntegrityChallengeResponse
 import dev.lscythe.app.navigo.api.auth.dto.PlayIntegrityRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
@@ -45,10 +48,10 @@ import kotlinx.serialization.json.Json
 
 class AuthApiTest :
     FunSpec({
-        test("creates an integrity challenge") {
+        test("creates an attestation challenge") {
             val engine = MockEngine { request ->
                 request.method shouldBe HttpMethod.Post
-                request.url.encodedPath shouldBe "/v1/integrity-challenges"
+                request.url.encodedPath shouldBe "/v1/attestation-challenges"
                 val body = request.body as TextContent
                 body.contentType shouldBe ContentType.Application.Json
                 Json.parseToJsonElement(body.text) shouldBe
@@ -67,20 +70,62 @@ class AuthApiTest :
             val api: PublicAuthApi = PublicAuthApiImpl(client)
 
             val result =
-                api.createIntegrityChallenge(
-                    IntegrityChallengeRequest(action = AuthAction.CREATE_SESSION)
+                api.createAttestationChallenge(
+                    AttestationChallengeRequest(
+                        provider = "play-integrity",
+                        action = AuthAction.CREATE_SESSION,
+                        packageName = "dev.lscythe.app.navigo.staging",
+                    )
                 )
 
             result shouldBe
                 ApiResponse.Success(
-                    IntegrityChallengeResponse(
+                    AttestationChallengeResponse(
                         id = "challenge-id",
                         nonce = "base64url-nonce",
+                        provider = "play-integrity",
                         action = "create-session",
-                        protocolVersion = "v1",
+                        protocolVersion = "v2",
                         expiresAt = Instant.parse("2026-08-28T05:02:00Z"),
                     )
                 )
+        }
+
+        test("creates an attestation enrollment") {
+            val engine = MockEngine { request ->
+                request.method shouldBe HttpMethod.Post
+                request.url.encodedPath shouldBe "/v1/attestation-enrollments"
+                val body = request.body as TextContent
+                Json.parseToJsonElement(body.text) shouldBe
+                    Json.parseToJsonElement(
+                        readResource("auth/attestation-enrollment-request.json")
+                    )
+                respond(
+                    content = readResource("auth/attestation-enrollment-response.json"),
+                    status = HttpStatusCode.Created,
+                    headers = io.ktor.http.headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val client =
+                HttpClient(engine) {
+                    defaultRequest { contentType(ContentType.Application.Json) }
+                    install(ContentNegotiation) { json() }
+                }
+            val api: PublicAuthApi = PublicAuthApiImpl(client)
+
+            val result =
+                api.createAttestationEnrollment(
+                    AttestationEnrollmentRequest(
+                        challengeId = "challenge-id",
+                        androidKeyAttestation =
+                            AndroidEnrollmentEvidenceRequest(
+                                certificateChain = listOf("certificate-one", "certificate-two"),
+                                publicKeyId = "public-key-id",
+                            ),
+                    )
+                )
+
+            result shouldBe ApiResponse.Success(AttestationEnrollmentResponse("enrollment-id"))
         }
 
         test("creates a session") {
@@ -108,11 +153,7 @@ class AuthApiTest :
                 api.createSession(
                     SessionRequest(
                         challengeId = "challenge-id",
-                        playIntegrity =
-                            PlayIntegrityRequest(
-                                token = "provider-token",
-                                requestHash = "request-hash",
-                            ),
+                        playIntegrity = PlayIntegrityRequest(token = "provider-token"),
                     )
                 )
 
@@ -167,7 +208,7 @@ class AuthApiTest :
             shouldThrow<IllegalArgumentException> {
                 SessionRequest(
                     challengeId = "challenge-id",
-                    playIntegrity = PlayIntegrityRequest("token", "hash"),
+                    playIntegrity = PlayIntegrityRequest("token"),
                     development = DevelopmentEvidenceRequest("payload", "signature", "key"),
                 )
             }
