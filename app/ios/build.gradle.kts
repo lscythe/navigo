@@ -73,6 +73,7 @@ kotlin {
 
     sourceSets.iosMain.dependencies {
         implementation(project(":app:shared"))
+        implementation(project(":data:auth"))
         implementation(project(":core:analytics-local"))
         implementation(libs.metro.viewmodel)
         implementation(libs.metro.viewmodel.compose)

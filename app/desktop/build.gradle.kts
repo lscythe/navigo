@@ -39,6 +39,7 @@ val maplibreRuntime =
 
 dependencies {
     implementation(project(":app:shared"))
+    implementation(project(":data:auth"))
     implementation(libs.compose.multiplatform.desktop.jvm)
     implementation(project(":core:analytics-local"))
     implementation(libs.metro.viewmodel)

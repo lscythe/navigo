@@ -56,6 +56,11 @@ include(
 )
 
 include(
+    ":domain:auth",
+    ":data:auth",
+)
+
+include(
     ":core:analytics",
     ":core:analytics-firebase",
     ":core:analytics-local",
