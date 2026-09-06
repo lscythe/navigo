@@ -28,6 +28,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":feature:onboarding:api"))
+            implementation(project(":data:legal"))
+            implementation(project(":domain:legal"))
+            implementation(project(":domain:settings"))
+            implementation(project(":feature:onboarding:domain"))
             implementation(project(":feature:home:api"))
             implementation(project(":core:resources"))
             implementation(libs.kotlinx.serialization.json)

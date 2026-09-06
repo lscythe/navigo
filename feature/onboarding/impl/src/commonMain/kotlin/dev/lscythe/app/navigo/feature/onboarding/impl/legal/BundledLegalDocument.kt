@@ -16,53 +16,14 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl.legal
 
 import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
-import dev.lscythe.app.navigo.feature.onboarding.impl.generated.resources.Res
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 
-@Serializable
 internal enum class LegalDocumentType(val assetDirectory: String) {
-    @SerialName("terms") Terms("terms"),
-    @SerialName("privacy") Privacy("privacy"),
+    Terms("terms"),
+    Privacy("privacy"),
 }
-
-@Serializable
-private data class BundledLegalDocument(
-    val slug: LegalDocumentType,
-    val language: String,
-    val version: String,
-    val title: String,
-    val readingTimeMinutes: Int,
-    val summaryHtml: String,
-    val bodyHtml: String,
-)
 
 internal fun legalAssetPath(
     type: LegalDocumentType,
     language: SupportedLanguage?,
 ): String =
     "${type.assetDirectory}/${language?.languageTag ?: SupportedLanguage.English.languageTag}.json"
-
-private val json = Json { ignoreUnknownKeys = true }
-
-internal suspend fun loadBundledLegalDocument(
-    type: LegalDocumentType,
-    language: SupportedLanguage?,
-): LegalDocumentUiModel =
-    json
-        .decodeFromString<BundledLegalDocument>(
-            Res.readBytes("files/${legalAssetPath(type, language)}").decodeToString()
-        )
-        .toUiModel()
-
-private fun BundledLegalDocument.toUiModel(): LegalDocumentUiModel =
-    LegalDocumentUiModel(
-        type = slug,
-        languageTag = language,
-        version = version,
-        title = title,
-        readingTimeMinutes = readingTimeMinutes,
-        summaryHtml = summaryHtml,
-        bodyHtml = bodyHtml,
-    )

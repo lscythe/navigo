@@ -38,7 +38,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -47,7 +46,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoLinearProgressIndicator
@@ -73,26 +71,23 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LegalDocumentsBottomSheet(
-    language: SupportedLanguage?,
+    documents: dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet,
     onAccept: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val documents by
-        produceState<Map<LegalDocumentType, LegalDocumentUiModel>?>(null, language) {
-            value =
-                LegalDocumentType.entries.associateWith {
-                    loadBundledLegalDocument(it, language)
-                }
-        }
-    if (documents == null) return
+    val documentsByType =
+        mapOf(
+            LegalDocumentType.Terms to documents.terms.toUiModel(LegalDocumentType.Terms),
+            LegalDocumentType.Privacy to documents.privacy.toUiModel(LegalDocumentType.Privacy),
+        )
     val sheetState =
         rememberBottomSheetState(
             initialValue = SheetValue.Hidden,
             enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
         )
     var readingState by remember { mutableStateOf(LegalReadingState()) }
-    val document = checkNotNull(documents?.get(readingState.activeDocument))
+    val document = checkNotNull(documentsByType[readingState.activeDocument])
     val termsScrollState = rememberScrollState()
     val privacyScrollState = rememberScrollState()
     val scrollState =
@@ -240,6 +235,24 @@ internal fun LegalDocumentsBottomSheet(
         }
     }
 }
+
+private fun dev.lscythe.app.navigo.domain.legal.model.LegalDocument.toUiModel(
+    type: LegalDocumentType
+) =
+    LegalDocumentUiModel(
+        type = type,
+        languageTag =
+            when (language) {
+                dev.lscythe.app.navigo.domain.settings.model.AppLanguage.English -> "en"
+                dev.lscythe.app.navigo.domain.settings.model.AppLanguage.Indonesian -> "id"
+                dev.lscythe.app.navigo.domain.settings.model.AppLanguage.System -> ""
+            },
+        version = version,
+        title = title,
+        readingTimeMinutes = readingTimeMinutes,
+        summaryHtml = summaryHtml,
+        bodyHtml = bodyHtml,
+    )
 
 private val LegalDocumentType.labelResource: StringResource
     get() =

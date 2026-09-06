@@ -16,12 +16,48 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet
+import dev.lscythe.app.navigo.domain.settings.model.AppLanguage
+import dev.lscythe.app.navigo.feature.onboarding.domain.model.OnboardingFailure
+import dev.lscythe.app.navigo.feature.onboarding.domain.model.OnboardingResult
+import dev.lscythe.app.navigo.feature.onboarding.domain.usecase.LoadOnboardingLegalDocumentsUseCase
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+data class OnboardingUiState(
+    val legalDocuments: LegalDocumentSet? = null,
+    val legalLoading: Boolean = false,
+    val legalFailure: OnboardingFailure? = null,
+)
 
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class)
-class OnboardingViewModel : ViewModel() {}
+class OnboardingViewModel(
+    private val loadOnboardingLegalDocuments: LoadOnboardingLegalDocumentsUseCase
+) : ViewModel() {
+    private val mutableState = MutableStateFlow(OnboardingUiState())
+    val state: StateFlow<OnboardingUiState> = mutableState.asStateFlow()
+
+    fun loadLegalDocuments(language: AppLanguage) {
+        mutableState.value = mutableState.value.copy(legalLoading = true, legalFailure = null)
+        viewModelScope.launch {
+            mutableState.value =
+                when (val result = loadOnboardingLegalDocuments(language)) {
+                    is OnboardingResult.Success -> OnboardingUiState(legalDocuments = result.value)
+                    is OnboardingResult.Failure -> OnboardingUiState(legalFailure = result.failure)
+                }
+        }
+    }
+
+    fun clearLegalDocuments() {
+        mutableState.value = OnboardingUiState()
+    }
+}

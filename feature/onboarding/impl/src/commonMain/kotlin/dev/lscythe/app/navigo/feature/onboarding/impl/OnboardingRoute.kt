@@ -16,7 +16,10 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.lscythe.app.navigo.domain.settings.model.AppLanguage
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
@@ -25,5 +28,19 @@ internal fun OnboardingRoute(
     viewModel: OnboardingViewModel = metroViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    OnboardingScreen(onContinue = navigateHome, modifier = modifier)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    OnboardingScreen(
+        legalDocuments = state.legalDocuments,
+        onLoadLegalDocuments = { language -> viewModel.loadLegalDocuments(language.toDomain()) },
+        onClearLegalDocuments = viewModel::clearLegalDocuments,
+        onContinue = navigateHome,
+        modifier = modifier,
+    )
 }
+
+private fun dev.lscythe.app.navigo.core.common.locale.SupportedLanguage.toDomain() =
+    when (this) {
+        dev.lscythe.app.navigo.core.common.locale.SupportedLanguage.English -> AppLanguage.English
+        dev.lscythe.app.navigo.core.common.locale.SupportedLanguage.Indonesian ->
+            AppLanguage.Indonesian
+    }

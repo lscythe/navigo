@@ -75,6 +75,7 @@ import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_back
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_skip_button_label
 import dev.lscythe.app.navigo.core.ui.locale.LanguageSelectionBottomSheet
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingIntroduction
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingPageCount
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingPermissions
@@ -96,6 +97,9 @@ private enum class OnboardingStage {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OnboardingScreen(
+    legalDocuments: LegalDocumentSet?,
+    onLoadLegalDocuments: (SupportedLanguage) -> Unit,
+    onClearLegalDocuments: () -> Unit,
     onContinue: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -225,20 +229,28 @@ internal fun OnboardingScreen(
             onLanguageSelected = { pendingLanguage = it },
             onApply = {
                 selectedLanguage = pendingLanguage
+                legalDocumentsRead = false
+                onClearLegalDocuments()
                 dismissLanguageSelector()
             },
             onDismissRequest = dismissLanguageSelector,
         )
     }
     if (showLegalDocuments) {
-        LegalDocumentsBottomSheet(
-            language = selectedLanguage,
-            onAccept = {
-                legalDocumentsRead = true
-                showLegalDocuments = false
-            },
-            onDismissRequest = { showLegalDocuments = false },
-        )
+        val language = selectedLanguage
+        LaunchedEffect(showLegalDocuments, language) {
+            if (language != null) onLoadLegalDocuments(language)
+        }
+        legalDocuments?.let { documents ->
+            LegalDocumentsBottomSheet(
+                documents = documents,
+                onAccept = {
+                    legalDocumentsRead = true
+                    showLegalDocuments = false
+                },
+                onDismissRequest = { showLegalDocuments = false },
+            )
+        }
     }
 }
 
@@ -348,6 +360,11 @@ private fun OnboardingHeader(
 @Composable
 private fun OnboardingScreenPreview() {
     NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingScreen(onContinue = {})
+        OnboardingScreen(
+            legalDocuments = null,
+            onLoadLegalDocuments = {},
+            onClearLegalDocuments = {},
+            onContinue = {},
+        )
     }
 }
