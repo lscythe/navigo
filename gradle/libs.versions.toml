@@ -1,6 +1,6 @@
 [versions]
 appVersionCode = "1"
-appVersionName = "0.1.0"
+appVersionName = "1.0.0"
 androidGradlePlugin = "9.4.0"
 androidTools = "32.4.0"
 androidxActivity = "1.13.0"
