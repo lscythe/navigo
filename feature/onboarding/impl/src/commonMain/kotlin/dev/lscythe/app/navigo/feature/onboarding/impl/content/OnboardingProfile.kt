@@ -33,11 +33,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -91,6 +94,7 @@ import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_prof
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_profile_terms_title
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_profile_title
 import dev.lscythe.app.navigo.core.ui.color.ColorSelectionBottomSheet
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 private val AvatarColors =
@@ -119,6 +123,19 @@ internal fun OnboardingProfile(
     var language by remember { mutableStateOf(SupportedLanguage.Indonesian) }
     var analyticsEnabled by remember { mutableStateOf(false) }
     var crashReportsEnabled by remember { mutableStateOf(false) }
+    val sheetState =
+        rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
+    val scope = rememberCoroutineScope()
+    val dismissColorPickerDialog = {
+        scope.launch {
+            sheetState.hide()
+            if (!sheetState.isVisible) showColorPicker = false
+        }
+        Unit
+    }
 
     Column(
         modifier = modifier.fillMaxSize().padding(horizontal = NavigoSpacing.screen),
@@ -196,6 +213,7 @@ internal fun OnboardingProfile(
                                     } else Modifier
                                 )
                                 .clickable {
+                                    scope.launch { sheetState.show() }
                                     showColorPicker = true
                                 }
                                 .padding(if (customColorSelected) 5.dp else 0.dp),
@@ -235,6 +253,7 @@ internal fun OnboardingProfile(
                                 when (option) {
                                     SupportedLanguage.English ->
                                         stringResource(Res.string.language_english)
+
                                     SupportedLanguage.Indonesian ->
                                         stringResource(Res.string.language_indonesian)
                                 },
@@ -329,13 +348,15 @@ internal fun OnboardingProfile(
             title = stringResource(Res.string.onboarding_profile_color_picker_title),
             description = stringResource(Res.string.onboarding_profile_color_picker_description),
             selectedColor = customColor,
+            sheetState = sheetState,
             onApply = { selectedColor ->
                 customColor = selectedColor
                 avatarColor = selectedColor
                 customColorSelected = true
                 showColorPicker = false
+                dismissColorPickerDialog()
             },
-            onDismissRequest = { showColorPicker = false },
+            onDismissRequest = dismissColorPickerDialog,
         )
     }
 }

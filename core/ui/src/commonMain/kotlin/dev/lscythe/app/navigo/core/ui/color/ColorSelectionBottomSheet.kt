@@ -91,13 +91,7 @@ fun ColorSelectionBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     description: String? = null,
-    sheetState: SheetState =
-        rememberBottomSheetState(
-            initialValue = SheetValue.Expanded,
-            confirmValueChange = { targetValue ->
-                targetValue == SheetValue.Expanded
-            },
-        ),
+    sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
 ) {
     val initialHsv = remember(selectedColor) { selectedColor.toHsv() }
     var hue by remember(selectedColor) { mutableFloatStateOf(initialHsv[0]) }
@@ -121,6 +115,7 @@ fun ColorSelectionBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
         sheetGesturesEnabled = false,
+        dragHandle = null,
     ) {
         Column(
             modifier =

@@ -30,6 +30,8 @@ import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
 import dev.lscythe.app.navigo.feature.onboarding.impl.navigation.onboardingEntry
 import dev.lscythe.app.navigo.ui.NavigoApp
 import dev.lscythe.app.navigo.ui.rememberNavigoAppState
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
@@ -44,16 +46,20 @@ internal fun navigoSerializersModule() = SerializersModule {
 @Composable
 fun NavigoRoot(
     analyticsHelper: AnalyticsHelper,
+    viewModelFactory: MetroViewModelFactory,
     modifier: Modifier = Modifier,
 ) {
     val serializersModule = remember { navigoSerializersModule() }
-    val appState = rememberNavigoAppState(HomeNavKey, serializersModule)
+    val appState = rememberNavigoAppState(OnboardingNavKey, serializersModule)
     val entryProvider = entryProvider {
         onboardingEntry(appState.navigator)
         homeEntry(appState.navigator)
     }
 
-    CompositionLocalProvider(LocalAnalyticsHelper provides analyticsHelper) {
+    CompositionLocalProvider(
+        LocalAnalyticsHelper provides analyticsHelper,
+        LocalMetroViewModelFactory provides viewModelFactory,
+    ) {
         NavigoTheme {
             NavigoApp(
                 appState = appState,

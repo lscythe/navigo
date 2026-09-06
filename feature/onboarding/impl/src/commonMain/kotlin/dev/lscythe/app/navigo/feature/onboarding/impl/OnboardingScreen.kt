@@ -108,7 +108,11 @@ internal fun OnboardingScreen(
         mutableStateOf<SupportedLanguage?>(SupportedLanguage.Indonesian)
     }
     var pendingLanguage by remember { mutableStateOf(selectedLanguage) }
-    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+    val sheetState =
+        rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
     val scope = rememberCoroutineScope()
     val dismissLanguageSelector = {
         scope.launch {

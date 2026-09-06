@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoPagerIndicator
@@ -75,8 +76,8 @@ internal fun OnboardingIntroduction(
         Text(
             stringResource(
                 Res.string.onboarding_pager_indicator_format,
-                pagerState.currentPage + 1,
-                OnboardingPageCount,
+                (pagerState.currentPage + 1).toString().padStart(2, '0'),
+                OnboardingPageCount.toString().padStart(2, '0'),
             ),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.primary,
@@ -86,7 +87,10 @@ internal fun OnboardingIntroduction(
             OnboardingRouteBackground(
                 pagerProgress = routePagerProgress,
                 modifier =
-                    Modifier.align(Alignment.BottomCenter).fillMaxWidth().fillMaxHeight(0.5f),
+                    Modifier.align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f)
+                        .alpha(0.5f),
             )
             HorizontalPager(
                 state = pagerState,

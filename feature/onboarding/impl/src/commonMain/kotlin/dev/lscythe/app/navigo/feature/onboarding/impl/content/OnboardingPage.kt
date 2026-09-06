@@ -178,7 +178,7 @@ internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
             text = stringResource(Res.string.onboarding_gps_disclosure_note),
             icon = NavigoIcons.ExclamationCircle,
             iconTint = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.secondary.copy(0.2f),
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onBackground,
             alignment = Alignment.Top,
             textStyle = MaterialTheme.typography.bodyMedium,
@@ -287,7 +287,7 @@ private fun OnboardingGpsPageRouteItem(
     enabled: Boolean = false,
 ) {
     val color =
-        if (enabled) MaterialTheme.colorScheme.primary
+        if (enabled) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
         else MaterialTheme.colorScheme.surfaceContainerHigh
 
     val avatarTextColor =
