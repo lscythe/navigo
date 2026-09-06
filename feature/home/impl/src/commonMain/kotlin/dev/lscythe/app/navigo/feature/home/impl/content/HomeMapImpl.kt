@@ -27,10 +27,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res as SharedRes
+import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_maptoolkit_logo_description
 import dev.lscythe.app.navigo.core.ui.rememberOpenWebsite
 import dev.lscythe.app.navigo.feature.home.impl.generated.resources.Res
 import dev.lscythe.app.navigo.feature.home.impl.generated.resources.feature_home_impl_img_maptoolkit
-import dev.lscythe.app.navigo.feature.home.impl.generated.resources.feature_home_impl_maptoolkit_logo_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.maplibre.compose.camera.CameraPosition
@@ -89,7 +90,7 @@ internal fun HomeMap() {
 private fun MaptoolkitLogo(
     modifier: Modifier = Modifier,
     contentDescription: String? =
-        stringResource(Res.string.feature_home_impl_maptoolkit_logo_description),
+        stringResource(SharedRes.string.feature_home_impl_maptoolkit_logo_description),
     onClick: (() -> Unit)? = rememberOpenWebsite(HomeMaptoolkitUrl),
 ) {
     Image(

@@ -71,9 +71,9 @@ import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.generated.resources.Res
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_back
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_skip_button_label
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_back
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_skip_button_label
 import dev.lscythe.app.navigo.core.ui.locale.LanguageSelectionBottomSheet
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingIntroduction
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingPageCount

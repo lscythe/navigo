@@ -33,6 +33,7 @@ kotlin {
             api(libs.compose.multiplatform.ui)
             api(libs.material.kolor)
             api(libs.kotlinx.collections)
+            implementation(project(":core:resources"))
             implementation(libs.compose.multiplatform.resources)
         }
         androidMain.dependencies {

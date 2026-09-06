@@ -46,10 +46,10 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorTheme
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.feature.home.impl.generated.resources.Res
-import dev.lscythe.app.navigo.feature.home.impl.generated.resources.feature_home_impl_notifications
-import dev.lscythe.app.navigo.feature.home.impl.generated.resources.feature_home_impl_profile
-import dev.lscythe.app.navigo.feature.home.impl.generated.resources.feature_home_impl_search_destination
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_notifications
+import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_profile
+import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_search_destination
 import org.jetbrains.compose.resources.stringResource
 
 @Composable

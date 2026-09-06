@@ -57,16 +57,16 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBo
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowDown
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.generated.resources.Res
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_accept
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_continue_to_privacy
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_continue_to_terms
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_decline
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_metadata
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_privacy
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_read_to_continue
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_summary
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_legal_sheet_terms
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_accept
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_continue_to_privacy
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_continue_to_terms
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_decline
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_metadata
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_privacy
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_read_to_continue
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_summary
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_terms
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import dev.lscythe.app.navigo.convention.TranslationParityTask
+
 plugins {
     alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.multiplatform.library.compose)
@@ -20,27 +22,31 @@ plugins {
 
 kotlin {
     android {
-        namespace = "dev.lscythe.app.navigo.core.ui"
+        namespace = "dev.lscythe.app.navigo.core.resources"
         androidResources.enable = true
     }
 
-    sourceSets {
-        commonMain.dependencies {
-            api(project(":core:common"))
-            api(project(":core:analytics"))
-            api(project(":core:designsystem"))
-            api(project(":core:resources"))
-            api(libs.kotlinx.datetime)
-            api(libs.compose.multiplatform.resources)
-        }
-        androidMain.dependencies {
-            implementation(libs.androidx.core.ktx)
-            api(libs.androidx.metrics)
-        }
+    sourceSets.commonMain.dependencies {
+        implementation(libs.compose.multiplatform.runtime)
+        api(libs.compose.multiplatform.resources)
     }
 }
 
 compose.resources {
-    packageOfResClass = "dev.lscythe.app.navigo.core.ui.generated.resources"
+    packageOfResClass = "dev.lscythe.app.navigo.core.resources.generated.resources"
     publicResClass = true
+}
+
+val checkTranslations =
+    tasks.register<TranslationParityTask>("checkTranslations") {
+        sourceFile.set(
+            layout.projectDirectory.file("src/commonMain/composeResources/values/strings.xml")
+        )
+        translationFile.set(
+            layout.projectDirectory.file("src/commonMain/composeResources/values-id/strings.xml")
+        )
+    }
+
+tasks.named("check").configure {
+    dependsOn(checkTranslations)
 }

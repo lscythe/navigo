@@ -62,6 +62,7 @@ include(
     ":core:common",
     ":core:database",
     ":core:persistence",
+    ":core:resources",
     ":core:designsystem",
     ":core:monitoring",
     ":core:monitoring-kermit",

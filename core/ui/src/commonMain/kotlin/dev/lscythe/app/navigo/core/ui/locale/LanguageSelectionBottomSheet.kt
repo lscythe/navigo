@@ -47,14 +47,14 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBo
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.generated.resources.Res
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_apply
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_english
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_indonesian
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_sheet_description
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_sheet_title
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_system_default
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_language_system_default_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_apply
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_english
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_indonesian
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_sheet_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_sheet_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_system_default
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_system_default_description
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -39,15 +39,15 @@ import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.generated.resources.Res
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_allow_now
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_ask_later
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_description
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_location_description
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_location_title
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_notifications_description
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_notifications_title
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_allow_now
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_ask_later
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_location_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_location_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_notifications_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_notifications_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_title
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
