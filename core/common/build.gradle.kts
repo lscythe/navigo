@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.jvm.library)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
 }
 
-dependencies {
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.datetime)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.common"
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.datetime)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+        }
+    }
 }

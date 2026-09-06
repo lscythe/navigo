@@ -1,0 +1,32 @@
+name: Dependency Submission
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  submit-gradle:
+    name: Submit Gradle dependencies
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - name: Set up JDK 25
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+      - name: Submit Gradle dependency graph
+        uses: gradle/actions/dependency-submission@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        with:
+          dependency-graph: generate-and-submit

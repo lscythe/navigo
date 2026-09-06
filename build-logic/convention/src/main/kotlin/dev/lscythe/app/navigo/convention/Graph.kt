@@ -92,26 +92,6 @@ internal enum class PluginType(val id: String, val ref: String, val style: Strin
         ref = "android-application",
         style = "fill:#CAFFBF,stroke:#000,stroke-width:2px,color:#000",
     ),
-    AndroidFeature(
-        id = "navigo.android.feature",
-        ref = "android-feature",
-        style = "fill:#FFD6A5,stroke:#000,stroke-width:2px,color:#000",
-    ),
-    AndroidLibrary(
-        id = "navigo.android.library",
-        ref = "android-library",
-        style = "fill:#9BF6FF,stroke:#000,stroke-width:2px,color:#000",
-    ),
-    AndroidTest(
-        id = "navigo.android.test",
-        ref = "android-test",
-        style = "fill:#A0C4FF,stroke:#000,stroke-width:2px,color:#000",
-    ),
-    Jvm(
-        id = "navigo.jvm.library",
-        ref = "jvm-library",
-        style = "fill:#BDB2FF,stroke:#000,stroke-width:2px,color:#000",
-    ),
     Unknown(
         id = "?",
         ref = "unknown",
@@ -248,23 +228,9 @@ private abstract class GraphDumpTask : DefaultTask() {
 
     private fun legend() = buildString {
         appendLine("graph TB")
-        listOf(
-                "application" to PluginType.AndroidApplication,
-                "feature" to PluginType.AndroidFeature,
-                "library" to PluginType.AndroidLibrary,
-                "jvm" to PluginType.Jvm,
-            )
-            .forEach { (name, type) ->
-                appendLine(name.alias(indent = 2, type))
-            }
-        appendLine()
-        listOf(
-                Dependency("application", "implementation", "feature"),
-                Dependency("library", "api", "jvm"),
-            )
-            .forEach {
-                appendLine(it.link(indent = 2))
-            }
+        listOf("application" to PluginType.AndroidApplication).forEach { (name, type) ->
+            appendLine(name.alias(indent = 2, type))
+        }
         appendLine()
         PluginType.entries.forEach { appendLine(it.classDef()) }
     }

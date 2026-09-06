@@ -1,40 +1,44 @@
 [versions]
 appVersionCode = "1"
 appVersionName = "0.1.0"
-androidGradlePlugin = "9.3.1"
-androidTools = "32.3.1"
+androidGradlePlugin = "9.4.0"
+androidTools = "32.4.0"
 androidxActivity = "1.13.0"
 androidxAppCompat = "1.8.0"
 androidxBrowser = "1.10.0"
-androidxComposeFoundation = "1.13.0-alpha01"
-androidxComposeMaterial3 = "1.5.0-alpha26"
-androidxComposeMaterial3Adaptive = "1.3.0"
-androidxComposeRuntime = "1.13.0-alpha01"
-androidxComposeRuntimeTracing = "1.13.0-alpha01"
-androidxComposeUI = "1.13.0-alpha01"
+androidxComposeFoundation = "1.13.0-alpha02"
+androidxComposeMaterial3 = "1.5.0-alpha27"
+androidxComposeMaterial3Adaptive = "1.4.0-alpha01"
+androidxComposeRuntime = "1.13.0-alpha02"
+androidxComposeRuntimeTracing = "1.13.0-alpha02"
+androidxComposeUI = "1.13.0-alpha02"
 androidxCore = "1.19.0"
 androidxCoreSplashscreen = "1.2.0"
-androidxDataStore = "1.2.1"
 androidxLifecycle = "2.11.0"
 androidxLifecycleViewModelNavigation3 = "2.11.0"
 androidxLintGradle = "1.0.0"
-androidxMacroBenchmark = "1.5.0-rc01"
+androidxMacroBenchmark = "1.5.0-rc02"
 androidxMetrics = "1.0.0"
-androidxNavigation3 = "1.1.6"
+androidxNavigation3 = "1.1.7"
 androidxProfileinstaller = "1.4.1"
 androidxSavedStateCompose = "1.5.0"
-androidxTracing = "2.0.0"
-androidxWindowManager = "1.3.0"
+androidxTracing = "2.0.1"
+androidxWindowManager = "1.5.1"
 androidxWork = "2.11.2"
-apollo = "5.0.1"
-composeGuard = "2.6.0"
+composeMultiplatform = "1.12.0"
+composeMultiplatformMaterial3 = "1.12.0-alpha03"
+composeMultiplatformAdaptive = "1.3.0-beta02"
+composeMultiplatformNavigation3 = "1.1.1"
 dependencyGuard = "0.5.0"
 firebaseAnalytics = "23.2.0"
+firebaseKmp = "2.7.0"
 gmsPlugin = "4.5.0"
 junitVintage = "6.1.3"
 kotest = "6.2.4"
 kotlin = "2.4.10"
-kotlinxCollection = "0.5.1"
+kermit = "2.1.0"
+ksafe = "3.1.0"
+kotlinxCollection = "0.5.2"
 kotlinxCoroutines = "1.11.0"
 kotlinxDatetime = "0.8.0"
 kotlinxSerializationJson = "1.11.0"
@@ -44,19 +48,16 @@ ktfmt = "0.64"
 ktor = "3.5.2"
 maplibre = "0.15.0"
 material = "1.14.0"
-materialKolor = "5.0.0"
-metro = "1.4.1"
+materialKolor = "5.0.1"
+metro = "1.4.2"
 mockk = "1.14.11"
-okhttp = "5.4.0"
-protobuf = "4.35.1"
-protobufPlugin = "0.10.0"
+okhttp = "5.5.0"
 robolectric = "4.16.1"
-roborazzi = "1.71.0"
-room3 = "3.0.1"
-sentry = "6.18.0"
-sentryAndroid = "8.53.0"
-timber = "5.0.1"
-tink = "1.23.0"
+roborazzi = "1.73.0"
+sqldelight = "2.3.2"
+sentry = "6.21.0"
+sentryAndroid = "8.55.0"
+sentryKmp = "0.27.0"
 turbine = "1.2.1"
 
 [libraries]
@@ -73,6 +74,16 @@ androidx-compose-material3-adaptive-navigation = { module = "androidx.compose.ma
 androidx-compose-material3-adaptive-navigation3 = { module = "androidx.compose.material3.adaptive:adaptive-navigation3", version.ref = "androidxComposeMaterial3Adaptive" }
 androidx-compose-material3-navigationSuite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "androidxComposeMaterial3Adaptive" }
 androidx-compose-material3-windowSizeClass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "androidxComposeMaterial3Adaptive" }
+compose-multiplatform-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+compose-multiplatform-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMultiplatformMaterial3" }
+compose-multiplatform-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
+compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+compose-multiplatform-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+compose-multiplatform-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
+compose-multiplatform-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "composeMultiplatformAdaptive" }
+compose-multiplatform-material3-adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "composeMultiplatformAdaptive" }
+compose-multiplatform-desktop-jvm = { module = "org.jetbrains.compose.desktop:desktop-jvm", version.ref = "composeMultiplatform" }
+compose-multiplatform-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "composeMultiplatformNavigation3" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "androidxComposeRuntime" }
 androidx-compose-runtime-tracing = { module = "androidx.compose.runtime:runtime-tracing", version.ref = "androidxComposeRuntimeTracing" }
 androidx-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidxComposeUI" }
@@ -82,8 +93,6 @@ androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling
 androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util", version.ref = "androidxComposeUI" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
-androidx-dataStore = { module = "androidx.datastore:datastore", version.ref = "androidxDataStore" }
-androidx-dataStore-core = { module = "androidx.datastore:datastore-core", version.ref = "androidxDataStore" }
 androidx-lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtimeTesting = { module = "androidx.lifecycle:lifecycle-runtime-testing", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidxLifecycleViewModelNavigation3" }
@@ -95,20 +104,24 @@ androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runt
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "androidxNavigation3" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-savedstate-compose = { module = "androidx.savedstate:savedstate-compose", version.ref = "androidxSavedStateCompose" }
+firebase-analytics-kmp = { module = "dev.gitlive:firebase-analytics", version.ref = "firebaseKmp" }
 androidx-tracing-ktx = { module = "androidx.tracing:tracing-ktx", version.ref = "androidxTracing" }
 androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidxWindowManager" }
 androidx-work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "androidxWork" }
-apollo-runtime = { module = "com.apollographql.apollo:apollo-runtime", version.ref = "apollo" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics", version.ref = "firebaseAnalytics" }
 junit-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junitVintage" }
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-assertions-kotlinx-datetime = { module = "io.kotest.extensions:kotest-assertions-kotlinx-time", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest-runner-junit4 = { module = "io.kotest:kotest-runner-junit4", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+ksafe = { module = "eu.anifantakis:ksafe", version.ref = "ksafe" }
+kotest-gradlePlugin = { module = "io.kotest:io.kotest.gradle.plugin", version.ref = "kotest" }
 kotlinx-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollection" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
@@ -117,6 +130,7 @@ ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
@@ -127,6 +141,11 @@ lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "an
 lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "androidTools" }
 maplibre-compose = { module = "org.maplibre.compose:maplibre-compose", version.ref = "maplibre" }
 maplibre-compose-opengl-runtime = { module = "org.maplibre.compose:maplibre-compose-runtime-opengl-android", version.ref = "maplibre" }
+maplibre-compose-metal-runtime-macos-arm64 = { module = "org.maplibre.compose:maplibre-compose-runtime-metal-macos-arm64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-linux-arm64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-linux-arm64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-linux-x64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-linux-x64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-windows-arm64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-windows-arm64", version.ref = "maplibre" }
+maplibre-compose-vulkan-runtime-windows-x64 = { module = "org.maplibre.compose:maplibre-compose-runtime-vulkan-windows-x64", version.ref = "maplibre" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material-kolor = { module = "com.materialkolor:material-kolor", version.ref = "materialKolor" }
 metro-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
@@ -137,25 +156,29 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 mockk-jvm = { module = "io.mockk:mockk-jvm", version.ref = "mockk" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
-protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobuf" }
-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "protobuf" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazzi-accessibility-check = { module = "io.github.takahirom.roborazzi:roborazzi-accessibility-check", version.ref = "roborazzi" }
-room3-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room3" }
-room3-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room3" }
+roborazzi-compose-desktop = { module = "io.github.takahirom.roborazzi:roborazzi-compose-desktop", version.ref = "roborazzi" }
+roborazzi-core = { module = "io.github.takahirom.roborazzi:roborazzi-core", version.ref = "roborazzi" }
+roborazzi-compose-ios = { module = "io.github.takahirom.roborazzi:roborazzi-compose-ios", version.ref = "roborazzi" }
+sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
+sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
+sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight" }
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
+sqldelight-sqlite-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sentry-android = { module = "io.sentry:sentry-android", version.ref = "sentryAndroid" }
-tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tink" }
+sentry-kmp = { module = "io.sentry:sentry-kotlin-multiplatform", version.ref = "sentryKmp" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 android-gradlePlugin = { module = "com.android.tools.build:gradle-api", version.ref = "androidGradlePlugin" }
+android-multiplatform-library-gradlePlugin = { module = "com.android.kotlin.multiplatform.library:com.android.kotlin.multiplatform.library.gradle.plugin", version.ref = "androidGradlePlugin" }
 android-tools-common = { module = "com.android.tools:common", version.ref = "androidTools" }
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kover-gradlePlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp-gradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-room3-gradlePlugin = { module = "androidx.room3:room3-gradle-plugin", version.ref = "room3" }
+sqldelight-gradlePlugin = { module = "app.cash.sqldelight:gradle-plugin", version.ref = "sqldelight" }
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-testManifest"]
@@ -165,33 +188,29 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-lint = { id = "com.android.lint", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
-apollo = { id = "com.apollographql.apollo", version.ref = "apollo" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-compose-guard = { id = "com.joetr.compose.guard", version.ref = "composeGuard" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+kotest = { id = "io.kotest", version.ref = "kotest" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
-protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
-room3 = { id = "androidx.room3", version.ref = "room3" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 
 navigo-android-application = { id = "navigo.android.application" }
-navigo-android-application-compose = { id = "navigo.android.application.compose" }
 navigo-android-application-flavors = { id = "navigo.android.application.flavors" }
-navigo-android-feature-api = { id = "navigo.android.feature.api" }
-navigo-android-feature-impl = { id = "navigo.android.feature.impl" }
-navigo-android-library = { id = "navigo.android.library" }
-navigo-android-library-compose = { id = "navigo.android.library.compose" }
-navigo-android-lint = { id = "navigo.android.lint" }
-navigo-android-room = { id = "navigo.android.room" }
-navigo-android-test = { id = "navigo.android.test" }
-navigo-jvm-library = { id = "navigo.jvm.library" }
+navigo-desktop-application = { id = "navigo.desktop.application" }
+navigo-multiplatform-feature-api = { id = "navigo.multiplatform.feature.api" }
+navigo-multiplatform-feature-impl = { id = "navigo.multiplatform.feature.impl" }
+navigo-multiplatform-library = { id = "navigo.multiplatform.library" }
+navigo-multiplatform-library-compose = { id = "navigo.multiplatform.library.compose" }
 navigo-metro = { id = "navigo.metro" }
 navigo-root = { id = "navigo.root" }
 

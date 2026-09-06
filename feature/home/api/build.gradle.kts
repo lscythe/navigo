@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.feature.api)
+    alias(libs.plugins.navigo.multiplatform.feature.api)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.home.api"
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.feature.home.api"
+    }
 }

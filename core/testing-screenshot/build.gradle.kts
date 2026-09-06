@@ -14,21 +14,36 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.library)
-    alias(libs.plugins.navigo.android.library.compose)
-    alias(libs.plugins.navigo.metro)
+    alias(libs.plugins.navigo.multiplatform.library)
+    alias(libs.plugins.navigo.multiplatform.library.compose)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.core.testing.screenshot"
-}
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.core.testing.screenshot"
+        androidResources.enable = true
+    }
 
-dependencies {
-    api(libs.bundles.androidx.compose.ui.test)
-    api(libs.roborazzi)
-    api(libs.roborazzi.accessibility.check)
-    implementation(libs.androidx.compose.ui.test)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.robolectric)
-    implementation(project(":core:designsystem"))
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.roborazzi.core)
+            api(libs.compose.multiplatform.ui.test)
+            api(libs.compose.multiplatform.foundation)
+            api(libs.compose.multiplatform.runtime)
+            api(libs.compose.multiplatform.ui)
+        }
+        androidMain.dependencies {
+            api(libs.bundles.androidx.compose.ui.test)
+            api(libs.roborazzi.accessibility.check)
+            api(libs.roborazzi)
+            implementation(libs.androidx.activity.compose)
+            implementation(libs.robolectric)
+        }
+        desktopMain.dependencies {
+            api(libs.roborazzi.compose.desktop)
+        }
+        appleMain.dependencies {
+            api(libs.roborazzi.compose.ios)
+        }
+    }
 }

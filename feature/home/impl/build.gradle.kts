@@ -14,21 +14,33 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.android.feature.impl)
+    alias(libs.plugins.navigo.multiplatform.feature.impl)
     alias(libs.plugins.roborazzi)
-    alias(libs.plugins.kotlin.serialization)
 }
 
-android {
-    namespace = "dev.lscythe.app.navigo.feature.home.impl"
-    testOptions.unitTests.isIncludeAndroidResources = true
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.feature.home.impl"
+        androidResources.enable = true
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":feature:home:api"))
+            implementation(project(":core:resources"))
+            implementation(libs.compose.multiplatform.resources)
+            implementation(libs.maplibre.compose)
+        }
+        androidMain.dependencies {
+            runtimeOnly(libs.maplibre.compose.opengl.runtime)
+        }
+        desktopTest.dependencies {
+            implementation(project(":core:testing-screenshot"))
+        }
+    }
 }
 
-dependencies {
-    implementation(project(":feature:home:api"))
-
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.maplibre.compose)
-    runtimeOnly(libs.maplibre.compose.opengl.runtime)
+compose.resources {
+    packageOfResClass = "dev.lscythe.app.navigo.feature.home.impl.generated.resources"
+    publicResClass = false
 }

@@ -14,17 +14,26 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.navigo.jvm.library)
+    alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
     alias(libs.plugins.kotlin.serialization)
 }
 
-dependencies {
-    implementation(project(":core:network"))
-    implementation(libs.kotlinx.serialization.json)
+kotlin {
+    android {
+        namespace = "dev.lscythe.app.navigo.api.transit"
+    }
 
-    testImplementation(project(":core:testing"))
-    testImplementation(libs.ktor.client.content.negotiation)
-    testImplementation(libs.ktor.client.mock)
-    testImplementation(libs.ktor.serialization.kotlinx.json)
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":core:network"))
+            implementation(libs.kotlinx.serialization.json)
+        }
+        commonTest.dependencies {
+            implementation(project(":core:testing"))
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.mock)
+            implementation(libs.ktor.serialization.kotlinx.json)
+        }
+    }
 }
