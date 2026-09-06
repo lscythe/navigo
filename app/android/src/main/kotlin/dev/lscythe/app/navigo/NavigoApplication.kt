@@ -16,6 +16,8 @@
 package dev.lscythe.app.navigo
 
 import android.app.Application
+import android.os.StrictMode
+import android.webkit.WebView
 import dev.lscythe.app.navigo.core.monitoring.MonitoringConfig
 import dev.lscythe.app.navigo.core.monitoring.MonitoringEnvironment
 import dev.lscythe.app.navigo.di.NavigoGraph
@@ -39,8 +41,39 @@ class NavigoApplication : Application(), MetroApplication {
             )
         )
         appGraph.profileVerifierLogger()
+
+        if (BuildConfig.DEBUG) {
+            setupStrictModePolicy()
+            setupWebViewDebuggingPolicy()
+        }
     }
 
     override val appComponentProviders: MetroAppComponentProviders
         get() = appGraph
+
+    private fun setupStrictModePolicy() {
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build()
+        )
+
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .detectActivityLeaks()
+                .detectLeakedRegistrationObjects()
+                .detectCleartextNetwork()
+                .penaltyLog()
+                .build()
+        )
+    }
+
+    private fun setupWebViewDebuggingPolicy() {
+        WebView.setWebContentsDebuggingEnabled(true)
+    }
 }

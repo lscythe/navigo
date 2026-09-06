@@ -18,7 +18,9 @@ package dev.lscythe.app.navigo
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
@@ -52,10 +54,20 @@ class MainActivity(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
+        enableEdgeToEdge(
+            statusBarStyle =
+                SystemBarStyle.auto(
+                    lightScrim = android.graphics.Color.TRANSPARENT,
+                    darkScrim = android.graphics.Color.TRANSPARENT,
+                )
+        )
         super.onCreate(savedInstanceState)
 
         setContent {
-            NavigoRoot(analyticsHelper = analyticsHelper)
+            NavigoRoot(
+                analyticsHelper = analyticsHelper,
+                viewModelFactory = viewModelFactory,
+            )
         }
         jankStats =
             JankStats.createAndTrack(window) { frameData ->
