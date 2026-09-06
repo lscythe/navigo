@@ -16,6 +16,7 @@
 plugins {
     alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.multiplatform.library.compose)
+    alias(libs.plugins.navigo.metro)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -33,6 +34,9 @@ kotlin {
         implementation(project(":feature:home:impl"))
         implementation(project(":feature:onboarding:api"))
         implementation(project(":feature:onboarding:impl"))
+        implementation(libs.androidx.lifecycle.viewModelCompose)
+        implementation(libs.metro.viewmodel)
+        implementation(libs.metro.viewmodel.compose)
         implementation(libs.androidx.navigation3.runtime)
         implementation(libs.compose.multiplatform.navigation3.ui)
         implementation(libs.compose.multiplatform.material3.adaptive)

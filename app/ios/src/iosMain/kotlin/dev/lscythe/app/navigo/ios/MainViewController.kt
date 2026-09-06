@@ -18,9 +18,17 @@ package dev.lscythe.app.navigo.ios
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ComposeUIViewController
 import dev.lscythe.app.navigo.app.NavigoRoot
+import dev.lscythe.app.navigo.app.NavigoViewModelGraph
 import dev.lscythe.app.navigo.core.analytics.local.LocalAnalyticsHelper
+import dev.zacsweers.metro.createGraph
 import platform.UIKit.UIViewController
 
-fun MainViewController(): UIViewController = ComposeUIViewController {
-    NavigoRoot(analyticsHelper = remember { LocalAnalyticsHelper() })
+fun MainViewController(): UIViewController {
+    val graph = createGraph<NavigoViewModelGraph>()
+    return ComposeUIViewController {
+        NavigoRoot(
+            analyticsHelper = remember { LocalAnalyticsHelper() },
+            viewModelFactory = graph.metroViewModelFactory,
+        )
+    }
 }

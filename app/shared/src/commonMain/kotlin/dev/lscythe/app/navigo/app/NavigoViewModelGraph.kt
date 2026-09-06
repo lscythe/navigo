@@ -13,17 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.onboarding.impl
+package dev.lscythe.app.navigo.app
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import dev.zacsweers.metrox.viewmodel.metroViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 
-@Composable
-internal fun OnboardingRoute(
-    navigateHome: () -> Unit,
-    viewModel: OnboardingViewModel = metroViewModel(),
-    modifier: Modifier = Modifier,
-) {
-    OnboardingScreen(onContinue = navigateHome, modifier = modifier)
-}
+@DependencyGraph(AppScope::class) interface NavigoViewModelGraph : ViewModelGraph

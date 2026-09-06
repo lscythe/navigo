@@ -17,6 +17,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     alias(libs.plugins.navigo.desktop.application)
+    alias(libs.plugins.navigo.metro)
 }
 
 val operatingSystem = System.getProperty("os.name").lowercase()
@@ -40,6 +41,8 @@ dependencies {
     implementation(project(":app:shared"))
     implementation(libs.compose.multiplatform.desktop.jvm)
     implementation(project(":core:analytics-local"))
+    implementation(libs.metro.viewmodel)
+    implementation(libs.metro.viewmodel.compose)
     implementation(libs.maplibre.compose)
     runtimeOnly(maplibreRuntime)
 }

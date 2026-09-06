@@ -19,6 +19,7 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform")
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.navigo.metro)
 }
 
 tasks.register("generateIosVersionConfig") {
@@ -73,6 +74,8 @@ kotlin {
     sourceSets.iosMain.dependencies {
         implementation(project(":app:shared"))
         implementation(project(":core:analytics-local"))
+        implementation(libs.metro.viewmodel)
+        implementation(libs.metro.viewmodel.compose)
         implementation(libs.compose.multiplatform.runtime)
         implementation(libs.compose.multiplatform.ui)
     }
