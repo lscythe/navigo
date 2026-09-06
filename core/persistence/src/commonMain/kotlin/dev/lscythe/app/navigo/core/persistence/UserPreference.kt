@@ -74,10 +74,20 @@ data class ThemePreference(
 )
 
 @Serializable
+data class LegalAcceptancePreference(
+    val version: String = "",
+    val language: Language = Language.System,
+)
+
+@Serializable
 data class UserPreference(
+    val displayName: String = "",
+    val avatarColorArgb: UInt = 0u,
     val language: Language = Language.System,
     val theme: ThemePreference = ThemePreference(),
     val hasCompletedOnboarding: Boolean = false,
     val analyticsEnabled: Boolean = false,
     val crashReportsEnabled: Boolean = false,
+    val acceptedTerms: LegalAcceptancePreference = LegalAcceptancePreference(),
+    val acceptedPrivacy: LegalAcceptancePreference = LegalAcceptancePreference(),
 )

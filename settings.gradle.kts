@@ -57,7 +57,13 @@ include(
 
 include(
     ":domain:auth",
+    ":domain:legal",
+    ":domain:settings",
+    ":domain:user",
     ":data:auth",
+    ":data:legal",
+    ":data:settings",
+    ":data:user",
 )
 
 include(
@@ -83,6 +89,8 @@ include(
     ":feature:home:api",
     ":feature:home:impl",
     ":feature:onboarding:api",
+    ":feature:onboarding:data",
+    ":feature:onboarding:domain",
     ":feature:onboarding:impl",
 )
 
