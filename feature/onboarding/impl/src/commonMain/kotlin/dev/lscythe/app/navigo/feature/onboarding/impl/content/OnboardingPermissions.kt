@@ -40,14 +40,14 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_allow_now
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_ask_later
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_location_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_location_title
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_notifications_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_notifications_title
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_permissions_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_allow_now
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_ask_later
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_location_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_location_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_notifications_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_notifications_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_title
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -61,30 +61,22 @@ internal fun OnboardingPermissions(
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.section)) {
             OnboardingPageIntro(
-                title = stringResource(Res.string.core_ui_onboarding_permissions_title),
-                description = stringResource(Res.string.core_ui_onboarding_permissions_description),
+                title = stringResource(Res.string.onboarding_permissions_title),
+                description = stringResource(Res.string.onboarding_permissions_description),
             )
             Column {
                 PermissionRow(
                     icon = NavigoIcons.MapPin,
-                    title =
-                        stringResource(Res.string.core_ui_onboarding_permissions_location_title),
+                    title = stringResource(Res.string.onboarding_permissions_location_title),
                     description =
-                        stringResource(
-                            Res.string.core_ui_onboarding_permissions_location_description
-                        ),
+                        stringResource(Res.string.onboarding_permissions_location_description),
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = NavigoSpacing.container))
                 PermissionRow(
                     icon = NavigoIcons.Notification,
-                    title =
-                        stringResource(
-                            Res.string.core_ui_onboarding_permissions_notifications_title
-                        ),
+                    title = stringResource(Res.string.onboarding_permissions_notifications_title),
                     description =
-                        stringResource(
-                            Res.string.core_ui_onboarding_permissions_notifications_description
-                        ),
+                        stringResource(Res.string.onboarding_permissions_notifications_description),
                 )
             }
         }
@@ -93,10 +85,10 @@ internal fun OnboardingPermissions(
                 onClick = onContinue,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
             ) {
-                Text(stringResource(Res.string.core_ui_onboarding_permissions_allow_now))
+                Text(stringResource(Res.string.onboarding_permissions_allow_now))
             }
             NavigoTextButton(onClick = onContinue, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(Res.string.core_ui_onboarding_permissions_ask_later))
+                Text(stringResource(Res.string.onboarding_permissions_ask_later))
             }
         }
     }

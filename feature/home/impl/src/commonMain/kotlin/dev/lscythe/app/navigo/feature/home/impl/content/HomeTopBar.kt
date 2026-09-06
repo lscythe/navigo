@@ -47,9 +47,9 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_notifications
-import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_profile
-import dev.lscythe.app.navigo.core.resources.generated.resources.feature_home_impl_search_destination
+import dev.lscythe.app.navigo.core.resources.generated.resources.home_notifications
+import dev.lscythe.app.navigo.core.resources.generated.resources.home_profile
+import dev.lscythe.app.navigo.core.resources.generated.resources.home_search_destination
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -61,7 +61,7 @@ internal fun HomeTopBar(
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val profileContentDescription = stringResource(Res.string.feature_home_impl_profile)
+    val profileContentDescription = stringResource(Res.string.home_profile)
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = CircleShape,
@@ -90,7 +90,7 @@ internal fun HomeTopBar(
                         size = 24.dp,
                     )
                     Text(
-                        text = stringResource(Res.string.feature_home_impl_search_destination),
+                        text = stringResource(Res.string.home_search_destination),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.SemiBold,
@@ -108,8 +108,7 @@ internal fun HomeTopBar(
                 ) {
                     NavigoIcon(
                         imageVector = NavigoIcons.Notification,
-                        contentDescription =
-                            stringResource(Res.string.feature_home_impl_notifications),
+                        contentDescription = stringResource(Res.string.home_notifications),
                         size = 24.dp,
                     )
                 }

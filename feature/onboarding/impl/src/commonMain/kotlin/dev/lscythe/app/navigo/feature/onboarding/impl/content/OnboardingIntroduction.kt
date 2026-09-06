@@ -44,9 +44,9 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_next_button_label
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_setup_button_label
-import dev.lscythe.app.navigo.core.resources.generated.resources.feature_onboarding_impl_pager_indicator_format
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_next_button_label
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_pager_indicator_format
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_setup_button_label
 import org.jetbrains.compose.resources.stringResource
 
 internal const val OnboardingPageCount = 3
@@ -74,7 +74,7 @@ internal fun OnboardingIntroduction(
     ) {
         Text(
             stringResource(
-                Res.string.feature_onboarding_impl_pager_indicator_format,
+                Res.string.onboarding_pager_indicator_format,
                 pagerState.currentPage + 1,
                 OnboardingPageCount,
             ),
@@ -122,9 +122,9 @@ internal fun OnboardingIntroduction(
                 Text(
                     stringResource(
                         if (isLastPage) {
-                            Res.string.core_ui_onboarding_setup_button_label
+                            Res.string.onboarding_setup_button_label
                         } else {
-                            Res.string.core_ui_onboarding_next_button_label
+                            Res.string.onboarding_next_button_label
                         }
                     )
                 )

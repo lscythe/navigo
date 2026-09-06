@@ -43,31 +43,31 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_app_name
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_notification_sample_category
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_notification_sample_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_notification_sample_time
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_notification_sample_title
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_page_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_page_first_item
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_page_second_item
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_alarm_page_title
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_feed_page_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_feed_page_first_item
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_feed_page_second_item
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_feed_page_third_item
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_feed_page_title
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_gps_disclosure_note
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_gps_feed_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_onboarding_gps_feed_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.app_name
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_notification_sample_category
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_notification_sample_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_notification_sample_time
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_notification_sample_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_page_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_page_first_item
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_page_second_item
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_alarm_page_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_feed_page_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_feed_page_first_item
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_feed_page_second_item
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_feed_page_third_item
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_feed_page_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_gps_disclosure_note
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_gps_feed_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_gps_feed_title
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 
 private val feedCheckList =
     persistentListOf(
-        Res.string.core_ui_onboarding_feed_page_first_item,
-        Res.string.core_ui_onboarding_feed_page_second_item,
-        Res.string.core_ui_onboarding_feed_page_third_item,
+        Res.string.onboarding_feed_page_first_item,
+        Res.string.onboarding_feed_page_second_item,
+        Res.string.onboarding_feed_page_third_item,
     )
 
 private val gpsRoutes =
@@ -94,8 +94,8 @@ private val gpsRoutes =
 
 private val alarmCheckList =
     persistentListOf(
-        Res.string.core_ui_onboarding_alarm_page_first_item,
-        Res.string.core_ui_onboarding_alarm_page_second_item,
+        Res.string.onboarding_alarm_page_first_item,
+        Res.string.onboarding_alarm_page_second_item,
     )
 
 @Composable
@@ -128,8 +128,8 @@ internal fun OnboardingFeedPage(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
     ) {
         OnboardingPageIntro(
-            title = stringResource(Res.string.core_ui_onboarding_feed_page_title),
-            description = stringResource(Res.string.core_ui_onboarding_feed_page_description),
+            title = stringResource(Res.string.onboarding_feed_page_title),
+            description = stringResource(Res.string.onboarding_feed_page_description),
         )
         Column(
             modifier = Modifier.padding(top = NavigoSpacing.element),
@@ -158,8 +158,8 @@ internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
             OnboardingPageIntro(
-                title = stringResource(Res.string.core_ui_onboarding_gps_feed_title),
-                description = stringResource(Res.string.core_ui_onboarding_gps_feed_description),
+                title = stringResource(Res.string.onboarding_gps_feed_title),
+                description = stringResource(Res.string.onboarding_gps_feed_description),
             )
             Column(
                 modifier = Modifier.padding(top = NavigoSpacing.element),
@@ -175,7 +175,7 @@ internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
         }
 
         NavigoDisclosureNote(
-            text = stringResource(Res.string.core_ui_onboarding_gps_disclosure_note),
+            text = stringResource(Res.string.onboarding_gps_disclosure_note),
             icon = NavigoIcons.ExclamationCircle,
             iconTint = MaterialTheme.colorScheme.primary,
             containerColor = MaterialTheme.colorScheme.secondary.copy(0.2f),
@@ -201,20 +201,19 @@ internal fun OnboardingAlarmPage(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
     ) {
         OnboardingPageIntro(
-            title = stringResource(Res.string.core_ui_onboarding_alarm_page_title),
-            description = stringResource(Res.string.core_ui_onboarding_alarm_page_description),
+            title = stringResource(Res.string.onboarding_alarm_page_title),
+            description = stringResource(Res.string.onboarding_alarm_page_description),
         )
         NavigoAlertCard(
-            source = stringResource(Res.string.core_ui_app_name).uppercase(),
+            source = stringResource(Res.string.app_name).uppercase(),
             category =
-                stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_category)
+                stringResource(Res.string.onboarding_alarm_notification_sample_category)
                     .uppercase(),
-            title = stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_title),
+            title = stringResource(Res.string.onboarding_alarm_notification_sample_title),
             description =
-                stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_description),
+                stringResource(Res.string.onboarding_alarm_notification_sample_description),
             timestamp =
-                stringResource(Res.string.core_ui_onboarding_alarm_notification_sample_time)
-                    .lowercase(),
+                stringResource(Res.string.onboarding_alarm_notification_sample_time).lowercase(),
             icon = NavigoLogo,
             containerColor = MaterialTheme.colorScheme.onPrimary,
             contentColor = MaterialTheme.colorScheme.primary,

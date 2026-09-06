@@ -48,13 +48,13 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_apply
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_english
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_indonesian
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_sheet_description
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_sheet_title
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_system_default
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_language_system_default_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_apply
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_english
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_indonesian
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_sheet_description
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_sheet_title
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_system_default
+import dev.lscythe.app.navigo.core.resources.generated.resources.language_system_default_description
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,15 +68,15 @@ fun LanguageSelectionBottomSheet(
     sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
 ) {
     NavigoModalBottomSheet(
-        title = stringResource(Res.string.core_ui_language_sheet_title),
-        description = stringResource(Res.string.core_ui_language_sheet_description),
+        title = stringResource(Res.string.language_sheet_title),
+        description = stringResource(Res.string.language_sheet_description),
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         sheetState = sheetState,
     ) {
         LanguageRow(
-            title = stringResource(Res.string.core_ui_language_system_default),
-            description = stringResource(Res.string.core_ui_language_system_default_description),
+            title = stringResource(Res.string.language_system_default),
+            description = stringResource(Res.string.language_system_default_description),
             selected = selectedLanguage == null,
             onClick = { onLanguageSelected(null) },
         )
@@ -106,7 +106,7 @@ fun LanguageSelectionBottomSheet(
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                 ),
         ) {
-            Text(text = stringResource(Res.string.core_ui_language_apply))
+            Text(text = stringResource(Res.string.language_apply))
         }
     }
 }
@@ -144,8 +144,8 @@ private fun LanguageRow(
 @Composable
 private fun SupportedLanguage.displayName(): String =
     when (this) {
-        SupportedLanguage.English -> stringResource(Res.string.core_ui_language_english)
-        SupportedLanguage.Indonesian -> stringResource(Res.string.core_ui_language_indonesian)
+        SupportedLanguage.English -> stringResource(Res.string.language_english)
+        SupportedLanguage.Indonesian -> stringResource(Res.string.language_indonesian)
     }
 
 @OptIn(ExperimentalMaterial3Api::class)

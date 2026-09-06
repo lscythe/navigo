@@ -58,15 +58,15 @@ import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowDown
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_accept
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_continue_to_privacy
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_continue_to_terms
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_decline
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_metadata
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_privacy
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_read_to_continue
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_summary
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_legal_sheet_terms
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_accept
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_continue_to_privacy
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_continue_to_terms
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_decline
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_metadata
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_privacy
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_read_to_continue
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_summary
+import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_terms
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -115,7 +115,7 @@ internal fun LegalDocumentsBottomSheet(
         title = document.title,
         description =
             stringResource(
-                Res.string.core_ui_legal_sheet_metadata,
+                Res.string.legal_sheet_metadata,
                 document.version,
                 document.readingTimeMinutes,
             ),
@@ -160,7 +160,7 @@ internal fun LegalDocumentsBottomSheet(
             ) {
                 Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
                     Text(
-                        text = stringResource(Res.string.core_ui_legal_sheet_summary),
+                        text = stringResource(Res.string.legal_sheet_summary),
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
                     )
@@ -219,7 +219,7 @@ internal fun LegalDocumentsBottomSheet(
                 onClick = onDismissRequest,
                 modifier = Modifier.weight(1f).heightIn(min = 54.dp),
             ) {
-                Text(stringResource(Res.string.core_ui_legal_sheet_decline))
+                Text(stringResource(Res.string.legal_sheet_decline))
             }
             NavigoButton(
                 onClick = {
@@ -244,16 +244,15 @@ internal fun LegalDocumentsBottomSheet(
 private val LegalDocumentType.labelResource: StringResource
     get() =
         when (this) {
-            LegalDocumentType.Terms -> Res.string.core_ui_legal_sheet_terms
-            LegalDocumentType.Privacy -> Res.string.core_ui_legal_sheet_privacy
+            LegalDocumentType.Terms -> Res.string.legal_sheet_terms
+            LegalDocumentType.Privacy -> Res.string.legal_sheet_privacy
         }
 
 private val LegalPrimaryAction.labelResource: StringResource
     get() =
         when (this) {
-            LegalPrimaryAction.ReadToContinue -> Res.string.core_ui_legal_sheet_read_to_continue
-            LegalPrimaryAction.ContinueToTerms -> Res.string.core_ui_legal_sheet_continue_to_terms
-            LegalPrimaryAction.ContinueToPrivacy ->
-                Res.string.core_ui_legal_sheet_continue_to_privacy
-            LegalPrimaryAction.Accept -> Res.string.core_ui_legal_sheet_accept
+            LegalPrimaryAction.ReadToContinue -> Res.string.legal_sheet_read_to_continue
+            LegalPrimaryAction.ContinueToTerms -> Res.string.legal_sheet_continue_to_terms
+            LegalPrimaryAction.ContinueToPrivacy -> Res.string.legal_sheet_continue_to_privacy
+            LegalPrimaryAction.Accept -> Res.string.legal_sheet_accept
         }

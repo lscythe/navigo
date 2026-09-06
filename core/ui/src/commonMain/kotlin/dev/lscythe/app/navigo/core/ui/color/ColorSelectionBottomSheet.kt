@@ -62,8 +62,8 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_color_picker_apply
-import dev.lscythe.app.navigo.core.resources.generated.resources.core_ui_color_picker_hex_label
+import dev.lscythe.app.navigo.core.resources.generated.resources.color_picker_apply
+import dev.lscythe.app.navigo.core.resources.generated.resources.color_picker_hex_label
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -158,7 +158,7 @@ fun ColorSelectionBottomSheet(
                             value = hsv[2]
                         }
                     },
-                    label = stringResource(Res.string.core_ui_color_picker_hex_label).uppercase(),
+                    label = stringResource(Res.string.color_picker_hex_label).uppercase(),
                     modifier = Modifier.weight(1f),
                     isError = !validHex,
                 )
@@ -173,7 +173,7 @@ fun ColorSelectionBottomSheet(
                         contentColor = MaterialTheme.colorScheme.onPrimary,
                     ),
             ) {
-                Text(stringResource(Res.string.core_ui_color_picker_apply))
+                Text(stringResource(Res.string.color_picker_apply))
             }
         }
     }
