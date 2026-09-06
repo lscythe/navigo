@@ -16,6 +16,7 @@
 package dev.lscythe.app.navigo.core.network
 
 import dev.lscythe.app.navigo.core.testing.readResource
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -31,6 +32,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
 
@@ -152,5 +154,28 @@ class SafeRequestTest :
 
             val error = result.shouldBeInstanceOf<ApiResponse.Error.UnknownError>()
             error.message shouldBe "kaboom"
+        }
+
+        test("request cancellation propagates") {
+            shouldThrow<CancellationException> {
+                safeRequest<TestPayload> { throw CancellationException("cancelled") }
+            }
+        }
+
+        test("response transform cancellation propagates") {
+            val engine = MockEngine { respond(content = "") }
+            val client = clientOf(engine)
+            shouldThrow<CancellationException> {
+                safeResponseRequest(
+                    block = { client.get("/") },
+                    transform = { throw CancellationException("cancelled") },
+                )
+            }
+        }
+
+        test("no-content cancellation propagates") {
+            shouldThrow<CancellationException> {
+                safeNoContentRequest { throw CancellationException("cancelled") }
+            }
         }
     })
