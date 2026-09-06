@@ -15,7 +15,9 @@
  */
 package dev.lscythe.app.navigo.desktop
 
+import dev.lscythe.app.navigo.config.AppBuildKonfig
 import dev.lscythe.app.navigo.core.network.BaseUrl
+import dev.lscythe.app.navigo.core.network.NetworkInspector
 import dev.lscythe.app.navigo.core.network.NetworkLogger
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
@@ -27,9 +29,11 @@ import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 @ContributesTo(AppScope::class)
 @BindingContainer
 object DesktopNetworkBindings {
-    @Provides @BaseUrl fun provideBaseUrl(): String = "https://api-nonprod.lscythe.dev/"
+    @Provides @BaseUrl fun provideBaseUrl(): String = AppBuildKonfig.API_BASE_URL
 
     @Provides fun provideNetworkLogger(): NetworkLogger = NetworkLogger {}
+
+    @Provides fun provideNetworkInspector(): NetworkInspector = AxerNetworkInspector()
 }
 
 @DependencyGraph(AppScope::class) interface NavigoDesktopGraph : ViewModelGraph

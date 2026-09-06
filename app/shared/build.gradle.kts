@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
 plugins {
     alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.multiplatform.library.compose)
     alias(libs.plugins.navigo.metro)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.buildkonfig)
 }
 
 kotlin {
@@ -54,5 +57,18 @@ kotlin {
         implementation(libs.kotest.framework.engine)
         implementation(libs.kotest.assertions.core)
         implementation(libs.kotlinx.serialization.json)
+    }
+}
+
+buildkonfig {
+    packageName = "dev.lscythe.app.navigo.config"
+    exposeObjectWithName = "AppBuildKonfig"
+
+    defaultConfigs {
+        buildConfigField(
+            STRING,
+            "API_BASE_URL",
+            providers.gradleProperty("navigoNonProdApiBaseUrl").get(),
+        )
     }
 }
