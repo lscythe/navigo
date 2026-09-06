@@ -15,17 +15,20 @@
  */
 package dev.lscythe.app.navigo.api.auth.dto
 
-import dev.lscythe.app.navigo.api.auth.constant.AttestationAction
-import dev.lscythe.app.navigo.api.auth.constant.AttestationProvider
-import kotlin.time.Instant
 import kotlinx.serialization.Serializable
 
+@Serializable data class HuaweiSysIntegrityEvidenceRequest(val jws: String)
+
 @Serializable
-data class AttestationChallengeResponse(
-    val id: String,
-    val nonce: String,
-    val provider: AttestationProvider,
-    val action: AttestationAction,
-    val protocolVersion: String,
-    val expiresAt: Instant,
+data class AppleAssertionEvidenceRequest(
+    val enrollmentId: String,
+    val clientData: String,
+    val assertion: String,
+)
+
+@Serializable
+data class AndroidAssertionEvidenceRequest(
+    val enrollmentId: String,
+    val clientData: String,
+    val signature: String,
 )

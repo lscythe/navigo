@@ -21,11 +21,28 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SessionRequest(
     val challengeId: String,
-    @EncodeDefault(EncodeDefault.Mode.NEVER) val playIntegrity: PlayIntegrityRequest? = null,
-    @EncodeDefault(EncodeDefault.Mode.NEVER) val development: DevelopmentEvidenceRequest? = null,
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
+    val playIntegrity: PlayIntegrityRequest? = null,
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
+    val huaweiSysIntegrity: HuaweiSysIntegrityEvidenceRequest? = null,
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
+    val appleAppAttest: AppleAssertionEvidenceRequest? = null,
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
+    val androidKeyAttestation: AndroidAssertionEvidenceRequest? = null,
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
+    val development: DevelopmentEvidenceRequest? = null,
 ) {
     init {
-        require((playIntegrity == null) xor (development == null)) {
+        require(
+            listOf(
+                    playIntegrity,
+                    huaweiSysIntegrity,
+                    appleAppAttest,
+                    androidKeyAttestation,
+                    development,
+                )
+                .count { it != null } == 1
+        ) {
             "Exactly one session evidence type is required"
         }
     }

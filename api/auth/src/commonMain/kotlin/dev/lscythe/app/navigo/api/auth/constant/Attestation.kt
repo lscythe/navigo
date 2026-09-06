@@ -15,6 +15,20 @@
  */
 package dev.lscythe.app.navigo.api.auth.constant
 
-object AuthAction {
-    const val CREATE_SESSION = "create-session"
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+enum class AttestationProvider {
+    @SerialName("play-integrity") PlayIntegrity,
+    @SerialName("huawei-sys-integrity") HuaweiSysIntegrity,
+    @SerialName("apple-app-attest") AppleAppAttest,
+    @SerialName("android-key-attestation") AndroidKeyAttestation,
+    @SerialName("development") Development,
+}
+
+@Serializable
+enum class AttestationAction {
+    @SerialName("enroll-installation") EnrollInstallation,
+    @SerialName("create-session") CreateSession,
 }

@@ -33,9 +33,9 @@ data class AndroidEnrollmentEvidenceRequest(
 @Serializable
 data class AttestationEnrollmentRequest(
     val challengeId: String,
-    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
     val appleAppAttest: AppleEnrollmentEvidenceRequest? = null,
-    @EncodeDefault(EncodeDefault.Mode.NEVER)
+    @property:EncodeDefault(EncodeDefault.Mode.NEVER)
     val androidKeyAttestation: AndroidEnrollmentEvidenceRequest? = null,
 ) {
     init {
