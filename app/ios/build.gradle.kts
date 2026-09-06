@@ -73,7 +73,15 @@ kotlin {
 
     sourceSets.iosMain.dependencies {
         implementation(project(":app:shared"))
+        implementation(project(":api:legal"))
+        implementation(project(":core:network"))
+        implementation(project(":core:persistence"))
+        implementation(project(":feature:onboarding:domain"))
         implementation(project(":data:auth"))
+        implementation(project(":data:legal"))
+        implementation(project(":data:settings"))
+        implementation(project(":data:user"))
+        implementation(project(":feature:onboarding:data"))
         implementation(project(":core:analytics-local"))
         implementation(libs.metro.viewmodel)
         implementation(libs.metro.viewmodel.compose)

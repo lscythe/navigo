@@ -13,37 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.di
+package dev.lscythe.app.navigo.ios
 
-import android.app.Application
-import dev.lscythe.app.navigo.BuildConfig
-import dev.lscythe.app.navigo.core.monitoring.MonitoringBackend
 import dev.lscythe.app.navigo.core.network.BaseUrl
 import dev.lscythe.app.navigo.core.network.NetworkLogger
-import dev.lscythe.app.navigo.util.ProfileVerifierLogger
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-object NavigoNetworkBindings {
-    @Provides @BaseUrl fun provideBaseUrl(): String = BuildConfig.API_BASE_URL
+object IosNetworkBindings {
+    @Provides @BaseUrl fun provideBaseUrl(): String = "https://api-nonprod.lscythe.dev/"
 
     @Provides fun provideNetworkLogger(): NetworkLogger = NetworkLogger {}
 }
 
-@DependencyGraph(AppScope::class)
-interface NavigoGraph : MetroAppComponentProviders, ViewModelGraph {
-    val profileVerifierLogger: ProfileVerifierLogger
-    val monitoringBackend: MonitoringBackend
-
-    @DependencyGraph.Factory
-    fun interface Factory {
-        fun create(@Provides application: Application): NavigoGraph
-    }
-}
+@DependencyGraph(AppScope::class) interface NavigoIosGraph : ViewModelGraph

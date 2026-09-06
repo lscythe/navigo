@@ -18,7 +18,6 @@ package dev.lscythe.app.navigo.desktop
 import androidx.compose.runtime.remember
 import androidx.compose.ui.window.singleWindowApplication
 import dev.lscythe.app.navigo.app.NavigoRoot
-import dev.lscythe.app.navigo.app.NavigoViewModelGraph
 import dev.lscythe.app.navigo.core.analytics.local.LocalAnalyticsHelper
 import dev.zacsweers.metro.createGraph
 import org.maplibre.compose.desktop.ProvideMapHost
@@ -26,7 +25,7 @@ import org.maplibre.compose.desktop.rememberAwtComposeMapHost
 
 fun main() {
     setupDevelopmentDiagnostics()
-    val graph = createGraph<NavigoViewModelGraph>()
+    val graph = createGraph<NavigoDesktopGraph>()
     singleWindowApplication(title = "Navigo") {
         ProvideMapHost(rememberAwtComposeMapHost(window)) {
             NavigoRoot(

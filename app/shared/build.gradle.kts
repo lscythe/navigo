@@ -27,6 +27,13 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         api(project(":core:analytics"))
+        implementation(project(":api:legal"))
+        implementation(project(":core:persistence"))
+        implementation(project(":data:legal"))
+        implementation(project(":data:settings"))
+        implementation(project(":data:user"))
+        implementation(project(":feature:onboarding:data"))
+        implementation(project(":feature:onboarding:domain"))
         implementation(project(":core:designsystem"))
         implementation(project(":core:navigation"))
         implementation(project(":core:ui"))

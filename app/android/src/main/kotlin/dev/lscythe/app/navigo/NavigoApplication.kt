@@ -21,7 +21,7 @@ import android.webkit.WebView
 import dev.lscythe.app.navigo.core.monitoring.MonitoringConfig
 import dev.lscythe.app.navigo.core.monitoring.MonitoringEnvironment
 import dev.lscythe.app.navigo.di.NavigoGraph
-import dev.zacsweers.metro.createGraph
+import dev.zacsweers.metro.createGraphFactory
 import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import dev.zacsweers.metrox.android.MetroApplication
 
@@ -30,7 +30,7 @@ class NavigoApplication : Application(), MetroApplication {
 
     override fun onCreate() {
         super.onCreate()
-        appGraph = createGraph<NavigoGraph>()
+        appGraph = createGraphFactory<NavigoGraph.Factory>().create(this)
         appGraph.monitoringBackend.initialize(
             MonitoringConfig(
                 dsn = BuildConfig.SENTRY_DSN,

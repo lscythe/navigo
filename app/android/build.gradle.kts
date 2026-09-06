@@ -135,7 +135,13 @@ baselineProfile {
 
 dependencies {
     implementation(project(":app:shared"))
+    implementation(project(":api:legal"))
     implementation(project(":data:auth"))
+    implementation(project(":data:legal"))
+    implementation(project(":data:settings"))
+    implementation(project(":data:user"))
+    implementation(project(":feature:onboarding:data"))
+    implementation(project(":feature:onboarding:domain"))
     implementation(project(":feature:onboarding:api"))
     implementation(project(":feature:onboarding:impl"))
     implementation(project(":feature:home:api"))

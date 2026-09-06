@@ -13,10 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.app
+package dev.lscythe.app.navigo.desktop
 
+import dev.lscythe.app.navigo.core.network.BaseUrl
+import dev.lscythe.app.navigo.core.network.NetworkLogger
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 
-@DependencyGraph(AppScope::class) interface NavigoViewModelGraph : ViewModelGraph
+@ContributesTo(AppScope::class)
+@BindingContainer
+object DesktopNetworkBindings {
+    @Provides @BaseUrl fun provideBaseUrl(): String = "https://api-nonprod.lscythe.dev/"
+
+    @Provides fun provideNetworkLogger(): NetworkLogger = NetworkLogger {}
+}
+
+@DependencyGraph(AppScope::class) interface NavigoDesktopGraph : ViewModelGraph
