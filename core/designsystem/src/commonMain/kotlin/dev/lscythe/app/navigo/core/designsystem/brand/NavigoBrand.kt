@@ -34,15 +34,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.generated.resources.Res
-import dev.lscythe.app.navigo.core.designsystem.generated.resources.core_designsystem_brand_name
-import dev.lscythe.app.navigo.core.designsystem.generated.resources.core_designsystem_brand_tag
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.LightOnPrimaryColor
 import dev.lscythe.app.navigo.core.designsystem.token.LightPrimaryColor
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.brand_name
+import dev.lscythe.app.navigo.core.resources.generated.resources.brand_tag
 import kotlin.math.min
 import kotlin.math.roundToInt
 import org.jetbrains.compose.resources.stringResource
@@ -90,7 +90,7 @@ fun NavigoBrand(
                 )
                 Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                     Text(
-                        text = stringResource(Res.string.core_designsystem_brand_name),
+                        text = stringResource(Res.string.brand_name),
                         color = resolvedPinColor,
                         style = wordmarkStyle,
                         fontWeight = FontWeight.Black,
@@ -98,7 +98,7 @@ fun NavigoBrand(
                     )
                     if (showTagline) {
                         Text(
-                            text = stringResource(Res.string.core_designsystem_brand_tag),
+                            text = stringResource(Res.string.brand_tag),
                             color = accentColor,
                             style = taglineStyle,
                             maxLines = 1,

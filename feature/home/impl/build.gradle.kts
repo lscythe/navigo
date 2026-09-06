@@ -27,6 +27,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":feature:home:api"))
+            implementation(project(":core:resources"))
             implementation(libs.compose.multiplatform.resources)
             implementation(libs.maplibre.compose)
         }

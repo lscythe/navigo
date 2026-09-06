@@ -29,6 +29,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":feature:onboarding:api"))
             implementation(project(":feature:home:api"))
+            implementation(project(":core:resources"))
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.compose.multiplatform.resources)
         }

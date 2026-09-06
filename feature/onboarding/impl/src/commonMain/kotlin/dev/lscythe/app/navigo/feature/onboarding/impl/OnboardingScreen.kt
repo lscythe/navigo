@@ -71,9 +71,9 @@ import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
-import dev.lscythe.app.navigo.core.ui.generated.resources.Res
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_permissions_back
-import dev.lscythe.app.navigo.core.ui.generated.resources.core_ui_onboarding_skip_button_label
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_back
+import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_skip_button_label
 import dev.lscythe.app.navigo.core.ui.locale.LanguageSelectionBottomSheet
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingIntroduction
 import dev.lscythe.app.navigo.feature.onboarding.impl.content.OnboardingPageCount
@@ -272,7 +272,7 @@ private fun OnboardingHeader(
                         NavigoIcon(
                             imageVector = NavigoIcons.ArrowLeft,
                             contentDescription =
-                                stringResource(Res.string.core_ui_onboarding_permissions_back),
+                                stringResource(Res.string.onboarding_permissions_back),
                         )
                     }
                 } else {
@@ -329,7 +329,7 @@ private fun OnboardingHeader(
                     contentPadding = PaddingValues(horizontal = 4.dp),
                 ) {
                     Text(
-                        text = stringResource(Res.string.core_ui_onboarding_skip_button_label),
+                        text = stringResource(Res.string.onboarding_skip_button_label),
                         color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6f),
                         style = MaterialTheme.typography.labelLarge,
                         fontSize = 13.sp,
