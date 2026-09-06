@@ -86,6 +86,7 @@ kotlin {
         implementation(libs.metro.viewmodel)
         implementation(libs.metro.viewmodel.compose)
         implementation(libs.compose.multiplatform.runtime)
+        implementation(libs.axer)
         implementation(libs.compose.multiplatform.ui)
     }
 }

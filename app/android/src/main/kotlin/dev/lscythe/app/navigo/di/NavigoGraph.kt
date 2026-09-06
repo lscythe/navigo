@@ -19,6 +19,7 @@ import android.app.Application
 import dev.lscythe.app.navigo.BuildConfig
 import dev.lscythe.app.navigo.core.monitoring.MonitoringBackend
 import dev.lscythe.app.navigo.core.network.BaseUrl
+import dev.lscythe.app.navigo.core.network.NetworkInspector
 import dev.lscythe.app.navigo.core.network.NetworkLogger
 import dev.lscythe.app.navigo.util.ProfileVerifierLogger
 import dev.zacsweers.metro.AppScope
@@ -35,6 +36,8 @@ object NavigoNetworkBindings {
     @Provides @BaseUrl fun provideBaseUrl(): String = BuildConfig.API_BASE_URL
 
     @Provides fun provideNetworkLogger(): NetworkLogger = NetworkLogger {}
+
+    @Provides fun provideNetworkInspector(): NetworkInspector = AxerNetworkInspector()
 }
 
 @DependencyGraph(AppScope::class)

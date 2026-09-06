@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.metro.viewmodel)
     implementation(libs.metro.viewmodel.compose)
     implementation(libs.maplibre.compose)
+    implementation(libs.axer)
     runtimeOnly(maplibreRuntime)
 }
 
