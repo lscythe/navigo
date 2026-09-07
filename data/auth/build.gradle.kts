@@ -16,6 +16,7 @@
 plugins {
     alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.metro)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -30,6 +31,7 @@ kotlin {
             implementation(project(":core:persistence"))
             implementation(project(":domain:auth"))
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
         }
         commonTest.dependencies {
             implementation(project(":core:testing"))
