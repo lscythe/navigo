@@ -65,13 +65,14 @@ import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_pri
 import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_read_to_continue
 import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_summary
 import dev.lscythe.app.navigo.core.resources.generated.resources.legal_sheet_terms
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingLegalDocumentsUiState
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LegalDocumentsBottomSheet(
-    documents: dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet,
+    documents: OnboardingLegalDocumentsUiState,
     onAccept: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
@@ -235,24 +236,6 @@ internal fun LegalDocumentsBottomSheet(
         }
     }
 }
-
-private fun dev.lscythe.app.navigo.domain.legal.model.LegalDocument.toUiModel(
-    type: LegalDocumentType
-) =
-    LegalDocumentUiModel(
-        type = type,
-        languageTag =
-            when (language) {
-                dev.lscythe.app.navigo.domain.settings.model.AppLanguage.English -> "en"
-                dev.lscythe.app.navigo.domain.settings.model.AppLanguage.Indonesian -> "id"
-                dev.lscythe.app.navigo.domain.settings.model.AppLanguage.System -> ""
-            },
-        version = version,
-        title = title,
-        readingTimeMinutes = readingTimeMinutes,
-        summaryHtml = summaryHtml,
-        bodyHtml = bodyHtml,
-    )
 
 private val LegalDocumentType.labelResource: StringResource
     get() =

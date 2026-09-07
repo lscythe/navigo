@@ -15,6 +15,8 @@
  */
 package dev.lscythe.app.navigo.feature.onboarding.impl.legal
 
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingLegalDocumentUiState
+
 internal data class LegalDocumentUiModel(
     val type: LegalDocumentType,
     val languageTag: String,
@@ -24,3 +26,14 @@ internal data class LegalDocumentUiModel(
     val summaryHtml: String,
     val bodyHtml: String,
 )
+
+internal fun OnboardingLegalDocumentUiState.toUiModel(type: LegalDocumentType) =
+    LegalDocumentUiModel(
+        type = type,
+        languageTag = languageTag,
+        version = version,
+        title = title,
+        readingTimeMinutes = readingTimeMinutes,
+        summaryHtml = summaryHtml,
+        bodyHtml = bodyHtml,
+    )

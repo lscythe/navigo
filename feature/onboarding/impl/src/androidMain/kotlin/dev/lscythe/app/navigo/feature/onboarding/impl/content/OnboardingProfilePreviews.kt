@@ -22,15 +22,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
 import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingStage
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingUiState
 
 @NavigoThemePreview
 @Composable
 private fun OnboardingProfilePreview() {
     NavigoPreview(contentPadding = PaddingValues(0.dp)) {
         OnboardingProfile(
-            legalDocumentsRead = true,
+            state =
+                OnboardingUiState(
+                    stage = OnboardingStage.Profile,
+                    legalAccepted = true,
+                ),
             onOpenLegalDocuments = {},
-            onContinue = {},
+            onIntent = {},
         )
     }
 }

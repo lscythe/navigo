@@ -31,6 +31,7 @@ kotlin {
             implementation(project(":data:legal"))
             implementation(project(":domain:legal"))
             implementation(project(":domain:settings"))
+            implementation(project(":domain:user"))
             implementation(project(":feature:onboarding:domain"))
             implementation(project(":feature:home:api"))
             implementation(project(":core:resources"))
@@ -39,6 +40,9 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(project(":core:testing-screenshot"))
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }
