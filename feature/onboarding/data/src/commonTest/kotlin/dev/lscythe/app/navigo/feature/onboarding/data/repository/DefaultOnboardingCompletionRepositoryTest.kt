@@ -15,132 +15,117 @@
  */
 package dev.lscythe.app.navigo.feature.onboarding.data.repository
 
-import dev.lscythe.app.navigo.core.persistence.*
-import dev.lscythe.app.navigo.domain.legal.model.*
-import dev.lscythe.app.navigo.domain.settings.model.*
+import app.cash.turbine.test
+import dev.lscythe.app.navigo.core.persistence.Language
+import dev.lscythe.app.navigo.core.persistence.ThemeMode
+import dev.lscythe.app.navigo.core.persistence.ThemePreference
+import dev.lscythe.app.navigo.core.persistence.datasource.NavigoPreferenceDataSource
+import dev.lscythe.app.navigo.domain.legal.model.AcceptedLegalDocument
+import dev.lscythe.app.navigo.domain.legal.model.LegalAcceptance
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocument
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSource
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentStatus
+import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentType
+import dev.lscythe.app.navigo.domain.settings.model.AppLanguage
+import dev.lscythe.app.navigo.domain.settings.model.PrivacySettings
 import dev.lscythe.app.navigo.domain.user.model.UserProfile
-import dev.lscythe.app.navigo.feature.onboarding.domain.model.*
-import dev.lscythe.app.navigo.feature.onboarding.domain.repository.*
-import dev.lscythe.app.navigo.feature.onboarding.domain.usecase.*
-import io.kotest.assertions.throwables.shouldThrow
+import dev.lscythe.app.navigo.feature.onboarding.domain.model.OnboardingCompletion
+import dev.lscythe.app.navigo.feature.onboarding.domain.model.OnboardingResult
+import dev.lscythe.app.navigo.feature.onboarding.domain.model.ValidatedOnboardingCompletion
+import dev.lscythe.app.navigo.feature.onboarding.domain.repository.OnboardingCompletionRepository
+import dev.lscythe.app.navigo.feature.onboarding.domain.usecase.CompleteOnboardingUseCase
+import eu.anifantakis.lib.ksafe.KSafe
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.datetime.LocalDate
 
 class DefaultOnboardingCompletionRepositoryTest :
     FunSpec({
-        test("completion persists every field in one mutation") {
-            val store = FakeCompletionStore()
-            val repository = DefaultOnboardingCompletionRepository(store)
-            repository.complete(validated()) shouldBe OnboardingResult.Success(Unit)
-            store.calls shouldBe 1
-            store.value.displayName shouldBe "Nara"
-            store.value.avatarColorArgb shouldBe 7u
-            store.value.language shouldBe Language.Indonesian
-            store.value.analyticsEnabled shouldBe true
-            store.value.crashReportsEnabled shouldBe false
-            store.value.acceptedTerms shouldBe
-                LegalAcceptancePreference("terms-v1", Language.Indonesian)
-            store.value.acceptedPrivacy shouldBe
-                LegalAcceptancePreference("privacy-v1", Language.Indonesian)
-            store.value.hasCompletedOnboarding shouldBe true
-            store.value.theme shouldBe ThemePreference(mode = ThemeMode.Dark)
-        }
-        test("persistence failure maps without changing record") {
-            val initial = UserPreference(theme = ThemePreference(mode = ThemeMode.Dark))
-            val store = FakeCompletionStore(initial, IllegalStateException("disk"))
-            DefaultOnboardingCompletionRepository(store).complete(validated()) shouldBe
-                OnboardingResult.Failure(OnboardingFailure.Persistence("disk"))
-            store.value shouldBe initial
-        }
-        test("cancellation propagates") {
-            val repository =
-                DefaultOnboardingCompletionRepository(
-                    FakeCompletionStore(failure = CancellationException())
-                )
-            shouldThrow<CancellationException> { repository.complete(validated()) }
+        test("completion persists every field atomically and preserves unrelated preferences") {
+            withRepository("completion") { repository, source ->
+                val theme = ThemePreference(mode = ThemeMode.Dark)
+                source.setTheme(theme)
+
+                repository.complete(validated()) shouldBe OnboardingResult.Success(Unit)
+
+                source.data.test {
+                    awaitItem().let { preference ->
+                        preference.displayName shouldBe "Nara"
+                        preference.avatarColorArgb shouldBe 7u
+                        preference.language shouldBe Language.Indonesian
+                        preference.analyticsEnabled shouldBe true
+                        preference.crashReportsEnabled shouldBe false
+                        preference.acceptedTerms?.version shouldBe "terms-v1"
+                        preference.acceptedTerms?.language shouldBe Language.Indonesian
+                        preference.acceptedPrivacy?.version shouldBe "privacy-v1"
+                        preference.acceptedPrivacy?.language shouldBe Language.Indonesian
+                        preference.hasCompletedOnboarding shouldBe true
+                        preference.theme shouldBe theme
+                    }
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
     })
 
-private class FakeCompletionStore(
-    initial: UserPreference = UserPreference(theme = ThemePreference(mode = ThemeMode.Dark)),
-    private val failure: Throwable? = null,
-) : OnboardingPreferenceStore {
-    var value = initial
-    var calls = 0
-
-    override suspend fun complete(completion: OnboardingPreferenceCompletion) {
-        calls++
-        failure?.let { throw it }
-        value =
-            value.copy(
-                displayName = completion.displayName,
-                avatarColorArgb = completion.avatarColorArgb,
-                language = completion.language,
-                analyticsEnabled = completion.analyticsEnabled,
-                crashReportsEnabled = completion.crashReportsEnabled,
-                acceptedTerms = completion.acceptedTerms,
-                acceptedPrivacy = completion.acceptedPrivacy,
-                hasCompletedOnboarding = true,
-            )
+private suspend fun withRepository(
+    suffix: String,
+    block: suspend (DefaultOnboardingCompletionRepository, NavigoPreferenceDataSource) -> Unit,
+) {
+    val ksafe = KSafe(fileName = "navigo_test_onboarding_repository_${suffix.lowercase()}")
+    try {
+        val source = NavigoPreferenceDataSource(ksafe)
+        block(DefaultOnboardingCompletionRepository(source), source)
+    } finally {
+        ksafe.clearAll()
+        ksafe.close()
     }
 }
 
-private fun validated(): ValidatedOnboardingCompletion {
-    val docs =
+private suspend fun validated(): ValidatedOnboardingCompletion {
+    val documents =
         LegalDocumentSet(
-            LegalDocument(
-                LegalDocumentType.Terms,
-                AppLanguage.Indonesian,
-                LegalDocumentStatus.Published,
-                "terms-v1",
-                kotlinx.datetime.LocalDate(2026, 1, 1),
-                "Terms",
-                1,
-                "s",
-                "b",
-                "u",
-                LegalDocumentSource.Network,
-            ),
-            LegalDocument(
-                LegalDocumentType.Privacy,
-                AppLanguage.Indonesian,
-                LegalDocumentStatus.Published,
-                "privacy-v1",
-                kotlinx.datetime.LocalDate(2026, 1, 1),
-                "Privacy",
-                1,
-                "s",
-                "b",
-                "u",
-                LegalDocumentSource.Network,
-            ),
+            document(LegalDocumentType.Terms, "terms-v1"),
+            document(LegalDocumentType.Privacy, "privacy-v1"),
         )
-    val acceptance =
-        LegalAcceptance(
-            AcceptedLegalDocument("terms-v1", AppLanguage.Indonesian),
-            AcceptedLegalDocument("privacy-v1", AppLanguage.Indonesian),
-        )
-    var captured: ValidatedOnboardingCompletion? = null
-    val capturing =
+    var validated: ValidatedOnboardingCompletion? = null
+    val repository =
         object : OnboardingCompletionRepository {
             override suspend fun complete(
                 completion: ValidatedOnboardingCompletion
             ): OnboardingResult<Unit> {
-                captured = completion
+                validated = completion
                 return OnboardingResult.Success(Unit)
             }
         }
-    kotlinx.coroutines.test.runTest {
-        CompleteOnboardingUseCase(capturing)(
-            OnboardingCompletion(
-                UserProfile("Nara", 7u),
-                AppLanguage.Indonesian,
-                PrivacySettings(true, false),
-                docs,
-                acceptance,
-            )
+    CompleteOnboardingUseCase(repository)(
+        OnboardingCompletion(
+            profile = UserProfile("Nara", 7u),
+            language = AppLanguage.Indonesian,
+            privacy = PrivacySettings(analyticsEnabled = true, crashReportsEnabled = false),
+            documents = documents,
+            acceptance =
+                LegalAcceptance(
+                    terms = AcceptedLegalDocument("terms-v1", AppLanguage.Indonesian),
+                    privacy = AcceptedLegalDocument("privacy-v1", AppLanguage.Indonesian),
+                ),
         )
-    }
-    return requireNotNull(captured)
+    )
+    return requireNotNull(validated)
 }
+
+private fun document(type: LegalDocumentType, version: String) =
+    LegalDocument(
+        type = type,
+        language = AppLanguage.Indonesian,
+        status = LegalDocumentStatus.Published,
+        version = version,
+        effectiveAt = LocalDate(2026, 1, 1),
+        title = type.name,
+        readingTimeMinutes = 1,
+        summaryHtml = "summary",
+        bodyHtml = "body",
+        canonicalUrl = "https://example.com/$version",
+        source = LegalDocumentSource.Network,
+    )

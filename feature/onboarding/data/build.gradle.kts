@@ -30,6 +30,8 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(project(":core:testing"))
+            implementation(libs.ksafe)
+            implementation(libs.turbine)
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.kotlinx.datetime)
         }

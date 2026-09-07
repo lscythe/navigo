@@ -30,28 +30,16 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.coroutines.cancellation.CancellationException
 
-interface OnboardingPreferenceStore {
-    suspend fun complete(completion: OnboardingPreferenceCompletion)
-}
-
-@Inject
-@ContributesBinding(AppScope::class)
-class PersistentOnboardingPreferenceStore(private val source: NavigoPreferenceDataSource) :
-    OnboardingPreferenceStore {
-    override suspend fun complete(completion: OnboardingPreferenceCompletion) =
-        source.completeOnboarding(completion)
-}
-
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultOnboardingCompletionRepository(private val store: OnboardingPreferenceStore) :
+class DefaultOnboardingCompletionRepository(private val source: NavigoPreferenceDataSource) :
     OnboardingCompletionRepository {
     override suspend fun complete(
         completion: ValidatedOnboardingCompletion
     ): OnboardingResult<Unit> =
         try {
-            store.complete(completion.toPreference())
+            source.completeOnboarding(completion.toPreference())
             OnboardingResult.Success(Unit)
         } catch (error: CancellationException) {
             throw error
