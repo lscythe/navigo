@@ -137,6 +137,7 @@ dependencies {
     implementation(project(":app:shared"))
     implementation(project(":api:legal"))
     implementation(project(":data:auth"))
+    implementation(project(":domain:auth"))
     implementation(project(":data:legal"))
     implementation(project(":data:settings"))
     implementation(project(":data:user"))
@@ -199,6 +200,9 @@ dependencies {
     implementation(libs.metro.viewmodel)
     implementation(libs.metro.viewmodel.compose)
 
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(project(":core:testing"))
     debugImplementation(libs.androidx.compose.ui.testManifest)
 }
 
