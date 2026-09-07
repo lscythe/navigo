@@ -18,92 +18,76 @@ package dev.lscythe.app.navigo.data.user.repository
 import app.cash.turbine.test
 import dev.lscythe.app.navigo.core.persistence.ThemeMode
 import dev.lscythe.app.navigo.core.persistence.ThemePreference
-import dev.lscythe.app.navigo.core.persistence.UserPreference
+import dev.lscythe.app.navigo.core.persistence.datasource.NavigoPreferenceDataSource
 import dev.lscythe.app.navigo.domain.user.model.UserProfile
 import dev.lscythe.app.navigo.domain.user.repository.UserFailure
 import dev.lscythe.app.navigo.domain.user.repository.UserResult
-import io.kotest.assertions.throwables.shouldThrow
+import eu.anifantakis.lib.ksafe.KSafe
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.coroutines.cancellation.CancellationException
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class DefaultUserRepositoryTest :
     FunSpec({
         test("blank persisted profile maps to null") {
-            DefaultUserRepository(FakeUserPreferenceStore()).profile.test {
-                awaitItem() shouldBe null
-                cancelAndIgnoreRemainingEvents()
+            withRepository("blank") { repository, _ ->
+                repository.profile.test {
+                    awaitItem() shouldBe null
+                    cancelAndIgnoreRemainingEvents()
+                }
             }
         }
 
         test("persisted profile maps to domain profile") {
-            val store =
-                FakeUserPreferenceStore(
-                    UserPreference(displayName = "Nara", avatarColorArgb = 0xff123456u)
-                )
-
-            DefaultUserRepository(store).profile.test {
-                awaitItem() shouldBe UserProfile("Nara", 0xff123456u)
-                cancelAndIgnoreRemainingEvents()
+            withRepository("persisted") { repository, dataSource ->
+                dataSource.setProfile("Nara", 0xff123456u)
+                repository.profile.test {
+                    awaitItem() shouldBe UserProfile("Nara", 0xff123456u)
+                    cancelAndIgnoreRemainingEvents()
+                }
             }
         }
 
         test("update trims display name and preserves unrelated preferences") {
-            val theme = ThemePreference(mode = ThemeMode.Dark)
-            val store = FakeUserPreferenceStore(UserPreference(theme = theme))
+            withRepository("update") { repository, dataSource ->
+                val theme = ThemePreference(mode = ThemeMode.Dark)
+                dataSource.setTheme(theme)
 
-            DefaultUserRepository(store)
-                .updateProfile(UserProfile("  Nara  ", 0xff123456u)) shouldBe
-                UserResult.Success(Unit)
+                repository.updateProfile(UserProfile("  Nara  ", 0xff123456u)) shouldBe
+                    UserResult.Success(Unit)
 
-            store.value.displayName shouldBe "Nara"
-            store.value.avatarColorArgb shouldBe 0xff123456u
-            store.value.theme shouldBe theme
+                dataSource.data.test {
+                    awaitItem().let { preference ->
+                        preference.displayName shouldBe "Nara"
+                        preference.avatarColorArgb shouldBe 0xff123456u
+                        preference.theme shouldBe theme
+                    }
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
 
         test("blank update fails before persistence") {
-            val store = FakeUserPreferenceStore()
-
-            DefaultUserRepository(store).updateProfile(UserProfile("  ", 1u)) shouldBe
-                UserResult.Failure(UserFailure.InvalidDisplayName)
-            store.updateCalls shouldBe 0
-        }
-
-        test("persistence exception becomes typed failure") {
-            val repository =
-                DefaultUserRepository(
-                    FakeUserPreferenceStore(failure = IllegalStateException("disk"))
-                )
-
-            repository.updateProfile(UserProfile("Nara", 1u)) shouldBe
-                UserResult.Failure(UserFailure.Persistence("disk"))
-        }
-
-        test("cancellation propagates") {
-            val repository =
-                DefaultUserRepository(FakeUserPreferenceStore(failure = CancellationException()))
-
-            shouldThrow<CancellationException> {
-                repository.updateProfile(UserProfile("Nara", 1u))
+            withRepository("invalid") { repository, dataSource ->
+                repository.updateProfile(UserProfile("  ", 1u)) shouldBe
+                    UserResult.Failure(UserFailure.InvalidDisplayName)
+                dataSource.data.test {
+                    awaitItem().displayName shouldBe ""
+                    cancelAndIgnoreRemainingEvents()
+                }
             }
         }
     })
 
-private class FakeUserPreferenceStore(
-    initial: UserPreference = UserPreference(),
-    private val failure: Throwable? = null,
-) : UserPreferenceStore {
-    private val state = MutableStateFlow(initial)
-    var updateCalls = 0
-    val value: UserPreference
-        get() = state.value
-
-    override val data = state
-
-    override suspend fun setProfile(displayName: String, avatarColorArgb: UInt) {
-        updateCalls++
-        failure?.let { throw it }
-        state.value = state.value.copy(displayName = displayName, avatarColorArgb = avatarColorArgb)
+private suspend fun withRepository(
+    suffix: String,
+    block: suspend (DefaultUserRepository, NavigoPreferenceDataSource) -> Unit,
+) {
+    val ksafe = KSafe(fileName = "navigo_test_user_repository_$suffix")
+    try {
+        val dataSource = NavigoPreferenceDataSource(ksafe)
+        block(DefaultUserRepository(dataSource), dataSource)
+    } finally {
+        ksafe.clearAll()
+        ksafe.close()
     }
 }

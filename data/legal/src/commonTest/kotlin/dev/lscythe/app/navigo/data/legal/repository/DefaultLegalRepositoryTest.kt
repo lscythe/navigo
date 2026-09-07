@@ -21,10 +21,12 @@ import dev.lscythe.app.navigo.api.legal.dto.LegalDocumentMetadata
 import dev.lscythe.app.navigo.api.legal.dto.LegalDocumentResult
 import dev.lscythe.app.navigo.core.network.ApiResponse
 import dev.lscythe.app.navigo.core.persistence.LegalDocumentCachePreference
+import dev.lscythe.app.navigo.core.persistence.datasource.LegalDocumentCacheDataSource
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSource
 import dev.lscythe.app.navigo.domain.legal.repository.LegalFailure
 import dev.lscythe.app.navigo.domain.legal.repository.LegalResult
 import dev.lscythe.app.navigo.domain.settings.model.AppLanguage
+import eu.anifantakis.lib.ksafe.KSafe
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlinx.datetime.LocalDate
@@ -32,62 +34,80 @@ import kotlinx.datetime.LocalDate
 class DefaultLegalRepositoryTest :
     FunSpec({
         test("modified responses replace cache and return network documents") {
-            val api = FakeLegalApi(modified("terms", "id"), modified("privacy", "id"))
-            val cache = FakeLegalCache()
-            val result =
-                DefaultLegalRepository(api, cache, FakeBundledSource())
-                    .getDocuments(AppLanguage.Indonesian)
-            val set = (result as LegalResult.Success).value
-            set.terms.source shouldBe LegalDocumentSource.Network
-            set.privacy.source shouldBe LegalDocumentSource.Network
-            cache.values.size shouldBe 2
-            api.termsCalls shouldBe 1
-            api.privacyCalls shouldBe 1
+            withLegalCache("modified") { cache ->
+                val api = FakeLegalApi(modified("terms", "id"), modified("privacy", "id"))
+                val result =
+                    DefaultLegalRepository(api, cache, FakeBundledSource())
+                        .getDocuments(AppLanguage.Indonesian)
+                val set = (result as LegalResult.Success).value
+                set.terms.source shouldBe LegalDocumentSource.Network
+                set.privacy.source shouldBe LegalDocumentSource.Network
+                cache.get("terms", "id")?.type shouldBe "terms"
+                cache.get("privacy", "id")?.type shouldBe "privacy"
+                api.termsCalls shouldBe 1
+                api.privacyCalls shouldBe 1
+            }
         }
 
         test("not modified responses use matching cache") {
-            val cache =
-                FakeLegalCache().apply {
-                    put(record("terms", "en"))
-                    put(record("privacy", "en"))
-                }
-            val metadata = LegalDocumentMetadata("en", "etag", "max-age=60")
-            val api =
-                FakeLegalApi(
-                    ApiResponse.Success(LegalDocumentResult.NotModified(metadata)),
-                    ApiResponse.Success(LegalDocumentResult.NotModified(metadata)),
-                )
-            val set =
-                (DefaultLegalRepository(api, cache, FakeBundledSource())
-                        .getDocuments(AppLanguage.English) as LegalResult.Success)
-                    .value
-            set.terms.source shouldBe LegalDocumentSource.Cache
-            set.privacy.source shouldBe LegalDocumentSource.Cache
+            withLegalCache("not_modified") { cache ->
+                cache.put(record("terms", "en"))
+                cache.put(record("privacy", "en"))
+                val metadata = LegalDocumentMetadata("en", "etag", "max-age=60")
+                val api =
+                    FakeLegalApi(
+                        ApiResponse.Success(LegalDocumentResult.NotModified(metadata)),
+                        ApiResponse.Success(LegalDocumentResult.NotModified(metadata)),
+                    )
+                val set =
+                    (DefaultLegalRepository(api, cache, FakeBundledSource())
+                            .getDocuments(AppLanguage.English) as LegalResult.Success)
+                        .value
+                set.terms.source shouldBe LegalDocumentSource.Cache
+                set.privacy.source shouldBe LegalDocumentSource.Cache
+            }
         }
 
         test("network failure falls back to cache then bundled content") {
-            val cache = FakeLegalCache().apply { put(record("terms", "en")) }
-            val bundled = FakeBundledSource(mapOf(("privacy" to "en") to json("privacy", "en")))
-            val failure = ApiResponse.Error.NetworkError("offline")
-            val set =
-                (DefaultLegalRepository(FakeLegalApi(failure, failure), cache, bundled)
-                        .getDocuments(AppLanguage.English) as LegalResult.Success)
-                    .value
-            set.terms.source shouldBe LegalDocumentSource.Cache
-            set.privacy.source shouldBe LegalDocumentSource.Bundled
+            withLegalCache("fallback") { cache ->
+                cache.put(record("terms", "en"))
+                val bundled = FakeBundledSource(mapOf(("privacy" to "en") to json("privacy", "en")))
+                val failure = ApiResponse.Error.NetworkError("offline")
+                val set =
+                    (DefaultLegalRepository(FakeLegalApi(failure, failure), cache, bundled)
+                            .getDocuments(AppLanguage.English) as LegalResult.Success)
+                        .value
+                set.terms.source shouldBe LegalDocumentSource.Cache
+                set.privacy.source shouldBe LegalDocumentSource.Bundled
+            }
         }
 
         test("missing one document returns failure and never partial success") {
-            val failure = ApiResponse.Error.NetworkError("offline")
-            DefaultLegalRepository(
-                    FakeLegalApi(failure, failure),
-                    FakeLegalCache(),
-                    FakeBundledSource(),
-                )
-                .getDocuments(AppLanguage.English) shouldBe
-                LegalResult.Failure(LegalFailure.Network("offline"))
+            withLegalCache("missing") { cache ->
+                val failure = ApiResponse.Error.NetworkError("offline")
+                DefaultLegalRepository(
+                        FakeLegalApi(failure, failure),
+                        cache,
+                        FakeBundledSource(),
+                    )
+                    .getDocuments(AppLanguage.English) shouldBe
+                    LegalResult.Failure(LegalFailure.Network("offline"))
+            }
         }
     })
+
+private suspend fun withLegalCache(
+    suffix: String,
+    block: suspend (LegalDocumentCacheDataSource) -> Unit,
+) {
+    val ksafe = KSafe(fileName = "navigo_test_legal_repository_$suffix")
+    try {
+        block(LegalDocumentCacheDataSource(ksafe))
+    } finally {
+        ksafe.clearAll()
+        ksafe.close()
+    }
+}
 
 private class FakeLegalApi(
     private val terms: ApiResponse<LegalDocumentResult>,
@@ -104,16 +124,6 @@ private class FakeLegalApi(
     override suspend fun getPrivacyPolicy(etag: String?): ApiResponse<LegalDocumentResult> {
         privacyCalls++
         return privacy
-    }
-}
-
-private class FakeLegalCache : LegalDocumentCache {
-    val values = mutableMapOf<Pair<String, String>, LegalDocumentCachePreference>()
-
-    override suspend fun get(type: String, language: String) = values[type to language]
-
-    override suspend fun put(record: LegalDocumentCachePreference) {
-        values[record.type to record.language] = record
     }
 }
 

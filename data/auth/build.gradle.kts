@@ -34,6 +34,7 @@ kotlin {
         commonTest.dependencies {
             implementation(project(":core:testing"))
             implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.ksafe)
             implementation(libs.turbine)
         }
     }

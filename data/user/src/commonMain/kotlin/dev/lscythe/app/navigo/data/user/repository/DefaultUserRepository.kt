@@ -15,7 +15,6 @@
  */
 package dev.lscythe.app.navigo.data.user.repository
 
-import dev.lscythe.app.navigo.core.persistence.UserPreference
 import dev.lscythe.app.navigo.core.persistence.datasource.NavigoPreferenceDataSource
 import dev.lscythe.app.navigo.domain.user.model.UserProfile
 import dev.lscythe.app.navigo.domain.user.repository.UserFailure
@@ -29,28 +28,12 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-interface UserPreferenceStore {
-    val data: Flow<UserPreference>
-
-    suspend fun setProfile(displayName: String, avatarColorArgb: UInt)
-}
-
-@Inject
-@ContributesBinding(AppScope::class)
-class PersistentUserPreferenceStore(private val dataSource: NavigoPreferenceDataSource) :
-    UserPreferenceStore {
-    override val data = dataSource.data
-
-    override suspend fun setProfile(displayName: String, avatarColorArgb: UInt) =
-        dataSource.setProfile(displayName, avatarColorArgb)
-}
-
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultUserRepository(private val store: UserPreferenceStore) : UserRepository {
+class DefaultUserRepository(private val dataSource: NavigoPreferenceDataSource) : UserRepository {
     override val profile: Flow<UserProfile?> =
-        store.data.map { preference ->
+        dataSource.data.map { preference ->
             preference.displayName.takeIf(String::isNotBlank)?.let {
                 UserProfile(it, preference.avatarColorArgb)
             }
@@ -61,7 +44,7 @@ class DefaultUserRepository(private val store: UserPreferenceStore) : UserReposi
         if (displayName.isEmpty()) return UserResult.Failure(UserFailure.InvalidDisplayName)
 
         return try {
-            store.setProfile(displayName, profile.avatarColorArgb)
+            dataSource.setProfile(displayName, profile.avatarColorArgb)
             UserResult.Success(Unit)
         } catch (error: CancellationException) {
             throw error

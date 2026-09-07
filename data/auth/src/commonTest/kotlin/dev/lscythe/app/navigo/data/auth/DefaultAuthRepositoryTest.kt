@@ -27,16 +27,18 @@ import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
 import dev.lscythe.app.navigo.core.persistence.SessionPreference
+import dev.lscythe.app.navigo.core.persistence.datasource.SessionPreferenceDataSource
 import dev.lscythe.app.navigo.domain.auth.AuthFailure
 import dev.lscythe.app.navigo.domain.auth.AuthResult
 import dev.lscythe.app.navigo.domain.auth.model.AuthAction
 import dev.lscythe.app.navigo.domain.auth.model.AuthProvider
 import dev.lscythe.app.navigo.domain.auth.model.SessionEvidence
+import eu.anifantakis.lib.ksafe.KSafe
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import kotlin.time.Instant
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class DefaultAuthRepositoryTest :
     FunSpec({
@@ -51,104 +53,118 @@ class DefaultAuthRepositoryTest :
             )
 
         test("challenge delegates once and maps response") {
-            val api = FakePublicAuthApi()
-            val repository = DefaultAuthRepository(api, FakeSessionApi(), FakeAuthSessionStore())
-            val result =
-                repository.beginAttestation(
-                    AuthProvider.PlayIntegrity,
-                    AuthAction.CreateSession,
-                    "package",
-                )
-            api.challengeCalls shouldBe 1
-            (result as AuthResult.Success).value.provider shouldBe AuthProvider.PlayIntegrity
+            withSessionDataSource("challenge") { source ->
+                val api = FakePublicAuthApi()
+                val result =
+                    DefaultAuthRepository(api, FakeSessionApi(), source)
+                        .beginAttestation(
+                            AuthProvider.PlayIntegrity,
+                            AuthAction.CreateSession,
+                            "package",
+                        )
+                api.challengeCalls shouldBe 1
+                (result as AuthResult.Success).value.provider shouldBe AuthProvider.PlayIntegrity
+            }
         }
 
         test("createSession persists before success") {
-            val api = FakePublicAuthApi(sessionResponse = ApiResponse.Success(response))
-            val store = FakeAuthSessionStore()
-            val result =
-                DefaultAuthRepository(api, FakeSessionApi(), store)
-                    .createSession("challenge", SessionEvidence.PlayIntegrity("token"))
-            result shouldBe AuthResult.Success(response.toDomain())
-            store.value.id shouldBe "new"
+            withSessionDataSource("create") { source ->
+                val api = FakePublicAuthApi(sessionResponse = ApiResponse.Success(response))
+                val result =
+                    DefaultAuthRepository(api, FakeSessionApi(), source)
+                        .createSession("challenge", SessionEvidence.PlayIntegrity("token"))
+                result shouldBe AuthResult.Success(response.toDomain())
+                source.data.test {
+                    awaitItem().id shouldBe "new"
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
 
         test("session maps empty persistence record to null") {
-            DefaultAuthRepository(FakePublicAuthApi(), FakeSessionApi(), FakeAuthSessionStore())
-                .session
-                .test {
+            withSessionDataSource("empty") { source ->
+                DefaultAuthRepository(FakePublicAuthApi(), FakeSessionApi(), source).session.test {
                     awaitItem() shouldBe null
                     cancelAndIgnoreRemainingEvents()
                 }
+            }
         }
 
         test("refresh clears invalid credentials") {
             val initial = SessionPreference("old", "access", "refresh", 1, 2, "installation")
-            val store = FakeAuthSessionStore(initial)
-            val api = FakePublicAuthApi(refreshResponse = ApiResponse.Error.ClientError(403))
-            val result = DefaultAuthRepository(api, FakeSessionApi(), store).refreshSession()
-            result shouldBe AuthResult.Failure(AuthFailure.Unauthenticated())
-            store.value shouldBe SessionPreference()
-            api.refreshCalls shouldBe 1
+            withSessionDataSource("invalid", initial) { source ->
+                val api = FakePublicAuthApi(refreshResponse = ApiResponse.Error.ClientError(403))
+                DefaultAuthRepository(api, FakeSessionApi(), source).refreshSession() shouldBe
+                    AuthResult.Failure(AuthFailure.Unauthenticated())
+                source.data.test {
+                    awaitItem() shouldBe SessionPreference()
+                    cancelAndIgnoreRemainingEvents()
+                }
+                api.refreshCalls shouldBe 1
+            }
         }
 
         test("refresh preserves credentials on transient failure") {
             val initial = SessionPreference("old", "access", "refresh", 1, 2, "installation")
-            val store = FakeAuthSessionStore(initial)
-            val api = FakePublicAuthApi(refreshResponse = ApiResponse.Error.NetworkError("offline"))
-            DefaultAuthRepository(api, FakeSessionApi(), store).refreshSession() shouldBe
-                AuthResult.Failure(AuthFailure.Network("offline"))
-            store.value shouldBe initial
+            withSessionDataSource("transient", initial) { source ->
+                val api =
+                    FakePublicAuthApi(refreshResponse = ApiResponse.Error.NetworkError("offline"))
+                DefaultAuthRepository(api, FakeSessionApi(), source).refreshSession() shouldBe
+                    AuthResult.Failure(AuthFailure.Network("offline"))
+                source.data.test {
+                    awaitItem() shouldBe initial
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
 
         test("signOut clears credentials after remote failure") {
-            val store =
-                FakeAuthSessionStore(
-                    SessionPreference("old", "access", "refresh", 1, 2, "installation")
-                )
-            val result =
+            val initial = SessionPreference("old", "access", "refresh", 1, 2, "installation")
+            withSessionDataSource("signout_failure", initial) { source ->
                 DefaultAuthRepository(
                         FakePublicAuthApi(),
                         FakeSessionApi(ApiResponse.Error.ServerError(503)),
-                        store,
+                        source,
                     )
-                    .signOut()
-            result shouldBe AuthResult.Failure(AuthFailure.Server())
-            store.value shouldBe SessionPreference()
+                    .signOut() shouldBe AuthResult.Failure(AuthFailure.Server())
+                source.data.test {
+                    awaitItem() shouldBe SessionPreference()
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
 
         test("signOut clears credentials and propagates cancellation") {
-            val store =
-                FakeAuthSessionStore(
-                    SessionPreference("old", "access", "refresh", 1, 2, "installation")
-                )
-            val repository =
-                DefaultAuthRepository(
-                    FakePublicAuthApi(),
-                    FakeSessionApi(failure = CancellationException()),
-                    store,
-                )
-            io.kotest.assertions.throwables.shouldThrow<CancellationException> {
-                repository.signOut()
+            val initial = SessionPreference("old", "access", "refresh", 1, 2, "installation")
+            withSessionDataSource("signout_cancel", initial) { source ->
+                val repository =
+                    DefaultAuthRepository(
+                        FakePublicAuthApi(),
+                        FakeSessionApi(failure = CancellationException()),
+                        source,
+                    )
+                shouldThrow<CancellationException> { repository.signOut() }
+                source.data.test {
+                    awaitItem() shouldBe SessionPreference()
+                    cancelAndIgnoreRemainingEvents()
+                }
             }
-            store.value shouldBe SessionPreference()
         }
     })
 
-private class FakeAuthSessionStore(initial: SessionPreference = SessionPreference()) :
-    AuthSessionStore {
-    private val state = MutableStateFlow(initial)
-    val value
-        get() = state.value
-
-    override val session = state
-
-    override suspend fun save(session: SessionPreference) {
-        state.value = session
-    }
-
-    override suspend fun clear() {
-        state.value = SessionPreference()
+private suspend fun withSessionDataSource(
+    suffix: String,
+    initial: SessionPreference = SessionPreference(),
+    block: suspend (SessionPreferenceDataSource) -> Unit,
+) {
+    val ksafe = KSafe(fileName = "navigo_test_auth_repository_$suffix")
+    try {
+        val source = SessionPreferenceDataSource(ksafe)
+        if (initial != SessionPreference()) source.setSession(initial)
+        block(source)
+    } finally {
+        ksafe.clearAll()
+        ksafe.close()
     }
 }
 

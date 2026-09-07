@@ -42,35 +42,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-interface AuthSessionStore {
-    val session: Flow<SessionPreference>
-
-    suspend fun save(session: SessionPreference)
-
-    suspend fun clear()
-}
-
-@Inject
-@ContributesBinding(AppScope::class)
-class PersistentAuthSessionStore(private val dataSource: SessionPreferenceDataSource) :
-    AuthSessionStore {
-    override val session = dataSource.data
-
-    override suspend fun save(session: SessionPreference) = dataSource.setSession(session)
-
-    override suspend fun clear() = dataSource.clear()
-}
-
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultAuthRepository(
     private val publicAuthApi: PublicAuthApi,
     private val sessionApi: SessionApi,
-    private val sessionStore: AuthSessionStore,
+    private val sessionDataSource: SessionPreferenceDataSource,
 ) : AuthRepository {
     override val session: Flow<AuthSession?> =
-        sessionStore.session.map(SessionPreference::toDomainOrNull)
+        sessionDataSource.data.map(SessionPreference::toDomainOrNull)
 
     override suspend fun beginAttestation(
         provider: AuthProvider,
@@ -99,7 +80,7 @@ class DefaultAuthRepository(
         }
 
     override suspend fun refreshSession(): AuthResult<AuthSession> {
-        val refreshToken = sessionStore.session.first().refreshToken
+        val refreshToken = sessionDataSource.data.first().refreshToken
         if (refreshToken.isEmpty()) return AuthResult.Failure(AuthFailure.Unauthenticated())
         return when (
             val response = publicAuthApi.refreshSession(SessionRefreshRequest(refreshToken))
@@ -107,7 +88,7 @@ class DefaultAuthRepository(
             is ApiResponse.Success -> persist(response.data)
             is ApiResponse.Error.ClientError -> {
                 val failure = response.toAuthFailure()
-                if (failure is AuthFailure.Unauthenticated) sessionStore.clear()
+                if (failure is AuthFailure.Unauthenticated) sessionDataSource.clear()
                 AuthResult.Failure(failure)
             }
             is ApiResponse.Error -> AuthResult.Failure(response.toAuthFailure())
@@ -123,7 +104,7 @@ class DefaultAuthRepository(
                     is ApiResponse.Error -> AuthResult.Failure(response.toAuthFailure())
                 }
         } finally {
-            withContext(NonCancellable) { sessionStore.clear() }
+            withContext(NonCancellable) { sessionDataSource.clear() }
         }
         return result
     }
@@ -132,7 +113,7 @@ class DefaultAuthRepository(
         response: dev.lscythe.app.navigo.api.auth.dto.SessionResponse
     ): AuthResult<AuthSession> =
         try {
-            sessionStore.save(response.toPreference())
+            sessionDataSource.setSession(response.toPreference())
             AuthResult.Success(response.toDomain())
         } catch (error: CancellationException) {
             throw error

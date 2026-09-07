@@ -16,15 +16,12 @@
 package dev.lscythe.app.navigo.data.legal.repository
 
 import dev.lscythe.app.navigo.api.legal.LegalApi
-import dev.lscythe.app.navigo.api.legal.dto.LegalDocumentMetadata
+import dev.lscythe.app.navigo.api.legal.dto.LegalDocument
 import dev.lscythe.app.navigo.api.legal.dto.LegalDocumentResult
 import dev.lscythe.app.navigo.core.network.ApiResponse
-import dev.lscythe.app.navigo.core.persistence.LegalDocumentCachePreference
 import dev.lscythe.app.navigo.core.persistence.datasource.LegalDocumentCacheDataSource
-import dev.lscythe.app.navigo.domain.legal.model.LegalDocument
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSource
-import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentStatus
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentType
 import dev.lscythe.app.navigo.domain.legal.repository.LegalFailure
 import dev.lscythe.app.navigo.domain.legal.repository.LegalRepository
@@ -35,34 +32,14 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlin.coroutines.cancellation.CancellationException
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.json.Json
-
-interface LegalDocumentCache {
-    suspend fun get(type: String, language: String): LegalDocumentCachePreference?
-
-    suspend fun put(record: LegalDocumentCachePreference)
-}
-
-@Inject
-@ContributesBinding(AppScope::class)
-class PersistentLegalDocumentCache(private val source: LegalDocumentCacheDataSource) :
-    LegalDocumentCache {
-    override suspend fun get(type: String, language: String) = source.get(type, language)
-
-    override suspend fun put(record: LegalDocumentCachePreference) = source.put(record)
-}
-
-interface BundledLegalDocumentSource {
-    suspend fun read(type: LegalDocumentType, language: AppLanguage): String?
-}
 
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultLegalRepository(
     private val api: LegalApi,
-    private val cache: LegalDocumentCache,
+    private val cache: LegalDocumentCacheDataSource,
     private val bundled: BundledLegalDocumentSource,
 ) : LegalRepository {
     override suspend fun getDocuments(language: AppLanguage): LegalResult<LegalDocumentSet> {
@@ -128,7 +105,7 @@ class DefaultLegalRepository(
         bundled.read(type, language)?.let { raw ->
             runCatching {
                 json
-                    .decodeFromString<dev.lscythe.app.navigo.api.legal.dto.LegalDocument>(raw)
+                    .decodeFromString<LegalDocument>(raw)
                     .toDomain(type, language, LegalDocumentSource.Bundled)
             }
                 .getOrNull()
@@ -140,7 +117,8 @@ class DefaultLegalRepository(
     }
 
     private sealed interface Loaded {
-        data class Success(val document: LegalDocument) : Loaded
+        data class Success(val document: dev.lscythe.app.navigo.domain.legal.model.LegalDocument) :
+            Loaded
 
         data class Failure(val failure: LegalFailure) : Loaded
     }
@@ -149,115 +127,3 @@ class DefaultLegalRepository(
         val json = Json { ignoreUnknownKeys = false }
     }
 }
-
-val LegalDocumentType.wireValue
-    get() =
-        when (this) {
-            LegalDocumentType.Terms -> "terms"
-            LegalDocumentType.Privacy -> "privacy"
-        }
-val AppLanguage.wireValue
-    get() =
-        when (this) {
-            AppLanguage.English -> "en"
-            AppLanguage.Indonesian -> "id"
-            AppLanguage.System -> "system"
-        }
-
-private fun String.toLanguage() =
-    when (this) {
-        "en" -> AppLanguage.English
-        "id" -> AppLanguage.Indonesian
-        else -> error("Invalid legal language")
-    }
-
-private fun String.toStatus() =
-    when (this) {
-        "draft" -> LegalDocumentStatus.Draft
-        "published" -> LegalDocumentStatus.Published
-        else -> error("Invalid legal status")
-    }
-
-private fun dev.lscythe.app.navigo.api.legal.dto.LegalDocument.toDomain(
-    expectedType: LegalDocumentType,
-    expectedLanguage: AppLanguage,
-    source: LegalDocumentSource,
-): LegalDocument {
-    require(slug == expectedType.wireValue && language.toLanguage() == expectedLanguage)
-    return LegalDocument(
-        expectedType,
-        expectedLanguage,
-        status.toStatus(),
-        version,
-        effectiveAt,
-        title,
-        readingTimeMinutes,
-        summaryHtml,
-        bodyHtml,
-        canonicalUrl,
-        source,
-    )
-}
-
-private fun dev.lscythe.app.navigo.api.legal.dto.LegalDocument.toCache(
-    metadata: LegalDocumentMetadata
-) =
-    LegalDocumentCachePreference(
-        slug,
-        language,
-        status,
-        version,
-        effectiveAt?.toString(),
-        title,
-        readingTimeMinutes,
-        summaryHtml,
-        bodyHtml,
-        canonicalUrl,
-        metadata.etag,
-        metadata.contentLanguage,
-        metadata.cacheControl,
-    )
-
-private fun LegalDocumentCachePreference.toDomain(
-    expectedType: LegalDocumentType,
-    expectedLanguage: AppLanguage,
-    source: LegalDocumentSource,
-): LegalDocument? = runCatching {
-    require(
-        type == expectedType.wireValue &&
-            language.toLanguage() == expectedLanguage &&
-            contentLanguage.toLanguage() == expectedLanguage
-    )
-    LegalDocument(
-        expectedType,
-        expectedLanguage,
-        status.toStatus(),
-        version,
-        effectiveAt?.let(LocalDate::parse),
-        title,
-        readingTimeMinutes,
-        summaryHtml,
-        bodyHtml,
-        canonicalUrl,
-        source,
-    )
-}
-    .getOrNull()
-
-private fun ApiResponse<*>.toFailure(): LegalFailure =
-    when (this) {
-        is ApiResponse.Error.NetworkError -> LegalFailure.Network(message)
-        is ApiResponse.Error.ServerError -> LegalFailure.Server(message)
-        is ApiResponse.Error.SerializationError -> LegalFailure.InvalidContent(message)
-        is ApiResponse.Error ->
-            LegalFailure.Unknown(
-                when (this) {
-                    is ApiResponse.Error.ClientError -> message
-                    is ApiResponse.Error.GraphQLError -> message
-                    is ApiResponse.Error.UnknownError -> message
-                    else -> null
-                }
-            )
-        is ApiResponse.Success ->
-            LegalFailure.CacheInconsistency("Response could not produce valid content")
-    }

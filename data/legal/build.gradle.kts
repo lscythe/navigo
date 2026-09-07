@@ -32,6 +32,9 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
         }
-        commonTest.dependencies { implementation(project(":core:testing")) }
+        commonTest.dependencies {
+            implementation(project(":core:testing"))
+            implementation(libs.ksafe)
+        }
     }
 }
