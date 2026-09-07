@@ -103,6 +103,7 @@ private suspend fun validated(): ValidatedOnboardingCompletion {
         OnboardingCompletion(
             profile = UserProfile("Nara", 7u),
             language = AppLanguage.Indonesian,
+            effectiveLanguage = AppLanguage.Indonesian,
             privacy = PrivacySettings(analyticsEnabled = true, crashReportsEnabled = false),
             documents = documents,
             acceptance =

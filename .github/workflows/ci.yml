@@ -147,13 +147,24 @@ jobs:
       - name: Set up Gradle
         uses: ./.github/actions/gradle-setup
       - name: Generate coverage
-        run: ./gradlew koverXmlReport
+        run: ./gradlew koverXmlReportDesktop
+      - name: Collect coverage reports
+        id: coverage-reports
+        shell: bash
+        run: |
+          files=$(find . -path '*/build/reports/kover/reportDesktop.xml' -type f -size +0c -print | sort | paste -sd, -)
+          if [[ -z "$files" ]]; then
+            echo 'No non-empty Kover XML reports were generated.' >&2
+            exit 1
+          fi
+          printf 'files=%s\n' "$files" >> "$GITHUB_OUTPUT"
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@04b047e8bb82a0c002c8312c1c880fbc6a999d45 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: '**/build/reports/kover/**/*.xml'
+          files: ${{ steps.coverage-reports.outputs.files }}
           fail_ci_if_error: true
+          disable_search: true
 
   dependency-review:
     name: Dependency vulnerability and license check

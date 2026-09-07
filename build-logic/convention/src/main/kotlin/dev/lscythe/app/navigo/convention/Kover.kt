@@ -47,5 +47,13 @@ internal fun Project.configureKover() {
                 }
             }
         }
+        pluginManager.withPlugin("io.github.takahirom.roborazzi") {
+            currentProject {
+                instrumentation {
+                    disabledForTestTasks.add("desktopTest")
+                    disabledForTestTasks.add("testAndroidHostTest")
+                }
+            }
+        }
     }
 }
