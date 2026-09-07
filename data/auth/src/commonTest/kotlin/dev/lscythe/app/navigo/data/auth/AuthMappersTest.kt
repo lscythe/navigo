@@ -20,6 +20,7 @@ import dev.lscythe.app.navigo.api.auth.constant.AttestationProvider
 import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeResponse
 import dev.lscythe.app.navigo.api.auth.dto.SessionResponse
 import dev.lscythe.app.navigo.core.network.ApiResponse
+import dev.lscythe.app.navigo.core.network.ProblemDetail
 import dev.lscythe.app.navigo.core.persistence.SessionPreference
 import dev.lscythe.app.navigo.domain.auth.AuthFailure
 import dev.lscythe.app.navigo.domain.auth.model.AuthAction
@@ -87,10 +88,15 @@ class AuthMappersTest :
                 .toDto("challenge")
                 .androidKeyAttestation
                 ?.signature shouldBe "signature"
-            SessionEvidence.Development("payload", "signature", "key")
-                .toDto("challenge")
-                .development
-                ?.keyId shouldBe "key"
+            val development =
+                SessionEvidence.Development(
+                        payload = "payload",
+                        signature = "signature",
+                        keyId = "key",
+                    )
+                    .toDto("challenge")
+                    .development
+            development?.keyId shouldBe "key"
         }
 
         test("maps transport failures without localized text classification") {
@@ -104,5 +110,24 @@ class AuthMappersTest :
                 AuthFailure.Server("down")
             ApiResponse.Error.SerializationError("bad").toAuthFailure() shouldBe
                 AuthFailure.Serialization("bad")
+        }
+
+        test("maps stable attestation problem types") {
+            val cases =
+                mapOf(
+                    "attestation-provider-unsupported" to AuthFailure.UnsupportedProvider(),
+                    "attestation-evidence-invalid" to AuthFailure.InvalidEvidence(),
+                    "attestation-challenge-replayed" to AuthFailure.ChallengeReplayed(),
+                    "attestation-enrollment-revoked" to AuthFailure.EnrollmentRevoked(),
+                    "attestation-counter-replayed" to AuthFailure.CounterReplayed(),
+                )
+
+            cases.forEach { (suffix, expected) ->
+                ApiResponse.Error.ClientError(
+                        code = 422,
+                        problem = ProblemDetail(type = "https://navigo.id/problems/$suffix"),
+                    )
+                    .toAuthFailure() shouldBe expected
+            }
         }
     })

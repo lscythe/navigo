@@ -73,6 +73,6 @@ sealed interface SessionEvidence {
     data class Development(
         val payload: String,
         val signature: String,
-        val publicKey: String,
+        val keyId: String,
     ) : SessionEvidence
 }

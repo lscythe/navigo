@@ -21,7 +21,15 @@ sealed interface AuthFailure {
 
     data class InvalidEvidence(override val message: String? = null) : AuthFailure
 
+    data class UnsupportedProvider(override val message: String? = null) : AuthFailure
+
     data class ExpiredChallenge(override val message: String? = null) : AuthFailure
+
+    data class ChallengeReplayed(override val message: String? = null) : AuthFailure
+
+    data class EnrollmentRevoked(override val message: String? = null) : AuthFailure
+
+    data class CounterReplayed(override val message: String? = null) : AuthFailure
 
     data class RejectedEvidence(override val message: String? = null) : AuthFailure
 

@@ -107,7 +107,7 @@ internal fun SessionEvidence.toDto(challengeId: String) =
         is SessionEvidence.Development ->
             SessionRequest(
                 challengeId,
-                development = DevelopmentEvidenceRequest(payload, signature, publicKey),
+                development = DevelopmentEvidenceRequest(payload, signature, keyId),
             )
     }
 
@@ -139,13 +139,21 @@ internal fun SessionPreference.toDomainOrNull(): AuthSession? =
 internal fun ApiResponse.Error.toAuthFailure(): AuthFailure =
     when (this) {
         is ApiResponse.Error.ClientError ->
-            when (code) {
-                401,
-                403 -> AuthFailure.Unauthenticated(message)
-                400,
-                409,
-                422 -> AuthFailure.InvalidEvidence(message)
-                else -> AuthFailure.Unknown(message)
+            when (problem?.type?.substringAfterLast('/')) {
+                "attestation-provider-unsupported" -> AuthFailure.UnsupportedProvider(message)
+                "attestation-evidence-invalid" -> AuthFailure.InvalidEvidence(message)
+                "attestation-challenge-replayed" -> AuthFailure.ChallengeReplayed(message)
+                "attestation-enrollment-revoked" -> AuthFailure.EnrollmentRevoked(message)
+                "attestation-counter-replayed" -> AuthFailure.CounterReplayed(message)
+                else ->
+                    when (code) {
+                        401,
+                        403 -> AuthFailure.Unauthenticated(message)
+                        400,
+                        409,
+                        422 -> AuthFailure.InvalidEvidence(message)
+                        else -> AuthFailure.Unknown(message)
+                    }
             }
         is ApiResponse.Error.NetworkError -> AuthFailure.Network(message)
         is ApiResponse.Error.ServerError -> AuthFailure.Server(message)
