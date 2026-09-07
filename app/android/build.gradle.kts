@@ -150,6 +150,7 @@ baselineProfile {
 
 dependencies {
     implementation(project(":app:shared"))
+    implementation(project(":api:auth"))
     implementation(project(":api:legal"))
     implementation(project(":data:auth"))
     implementation(project(":domain:auth"))

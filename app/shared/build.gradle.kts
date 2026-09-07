@@ -31,10 +31,14 @@ kotlin {
     sourceSets.commonMain.dependencies {
         api(project(":core:analytics"))
         implementation(project(":api:legal"))
+        implementation(project(":api:auth"))
+        implementation(project(":data:auth"))
         implementation(project(":core:persistence"))
         implementation(project(":data:legal"))
         implementation(project(":data:settings"))
         implementation(project(":data:user"))
+        implementation(project(":domain:auth"))
+        implementation(project(":domain:settings"))
         implementation(project(":feature:onboarding:data"))
         implementation(project(":feature:onboarding:domain"))
         implementation(project(":core:designsystem"))
@@ -57,6 +61,8 @@ kotlin {
         implementation(libs.kotest.framework.engine)
         implementation(libs.kotest.assertions.core)
         implementation(libs.kotlinx.serialization.json)
+        implementation(libs.kotlinx.coroutines.test)
+        implementation(project(":domain:auth"))
     }
 }
 

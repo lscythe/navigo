@@ -20,10 +20,12 @@ import dev.lscythe.app.navigo.domain.auth.model.AuthChallenge
 import dev.lscythe.app.navigo.domain.auth.model.AuthSession
 import dev.lscythe.app.navigo.domain.auth.model.EnrollmentEvidence
 import dev.lscythe.app.navigo.domain.auth.model.SessionEvidence
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+@Inject
 class BootstrapSessionUseCase(
     private val repository: AuthRepository,
     private val evidenceProvider: AuthEvidenceProvider,

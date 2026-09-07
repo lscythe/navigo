@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.navigo.multiplatform.library)
-    alias(libs.plugins.navigo.metro)
+package dev.lscythe.app.navigo.app
+
+import dev.lscythe.app.navigo.domain.auth.AuthFailure
+
+enum class StartupDestination {
+    Onboarding,
+    Home,
 }
 
-kotlin {
-    android {
-        namespace = "dev.lscythe.app.navigo.domain.auth"
-    }
+sealed interface StartupState {
+    data object Initializing : StartupState
 
-    sourceSets {
-        commonMain.dependencies {
-            implementation(libs.kotlinx.coroutines.core)
-        }
-        commonTest.dependencies {
-            implementation(project(":core:testing"))
-        }
-    }
+    data class Ready(val destination: StartupDestination) : StartupState
+
+    data class AuthRequired(
+        val destination: StartupDestination,
+        val failure: AuthFailure,
+    ) : StartupState
 }

@@ -56,7 +56,7 @@ class DefaultAuthRepositoryTest :
             withSessionDataSource("challenge") { source ->
                 val api = FakePublicAuthApi()
                 val result =
-                    DefaultAuthRepository(api, FakeSessionApi(), source)
+                    DefaultAuthRepository(api, { FakeSessionApi() }, source)
                         .beginAttestation(
                             AuthProvider.PlayIntegrity,
                             AuthAction.CreateSession,
@@ -71,7 +71,7 @@ class DefaultAuthRepositoryTest :
             withSessionDataSource("create") { source ->
                 val api = FakePublicAuthApi(sessionResponse = ApiResponse.Success(response))
                 val result =
-                    DefaultAuthRepository(api, FakeSessionApi(), source)
+                    DefaultAuthRepository(api, { FakeSessionApi() }, source)
                         .createSession("challenge", SessionEvidence.PlayIntegrity("token"))
                 result shouldBe AuthResult.Success(response.toDomain())
                 source.data.test {
@@ -83,10 +83,12 @@ class DefaultAuthRepositoryTest :
 
         test("session maps empty persistence record to null") {
             withSessionDataSource("empty") { source ->
-                DefaultAuthRepository(FakePublicAuthApi(), FakeSessionApi(), source).session.test {
-                    awaitItem() shouldBe null
-                    cancelAndIgnoreRemainingEvents()
-                }
+                DefaultAuthRepository(FakePublicAuthApi(), { FakeSessionApi() }, source)
+                    .session
+                    .test {
+                        awaitItem() shouldBe null
+                        cancelAndIgnoreRemainingEvents()
+                    }
             }
         }
 
@@ -94,7 +96,7 @@ class DefaultAuthRepositoryTest :
             val initial = SessionPreference("old", "access", "refresh", 1, 2, "installation")
             withSessionDataSource("invalid", initial) { source ->
                 val api = FakePublicAuthApi(refreshResponse = ApiResponse.Error.ClientError(403))
-                DefaultAuthRepository(api, FakeSessionApi(), source).refreshSession() shouldBe
+                DefaultAuthRepository(api, { FakeSessionApi() }, source).refreshSession() shouldBe
                     AuthResult.Failure(AuthFailure.Unauthenticated())
                 source.data.test {
                     awaitItem() shouldBe SessionPreference()
@@ -109,7 +111,7 @@ class DefaultAuthRepositoryTest :
             withSessionDataSource("transient", initial) { source ->
                 val api =
                     FakePublicAuthApi(refreshResponse = ApiResponse.Error.NetworkError("offline"))
-                DefaultAuthRepository(api, FakeSessionApi(), source).refreshSession() shouldBe
+                DefaultAuthRepository(api, { FakeSessionApi() }, source).refreshSession() shouldBe
                     AuthResult.Failure(AuthFailure.Network("offline"))
                 source.data.test {
                     awaitItem() shouldBe initial
@@ -123,7 +125,7 @@ class DefaultAuthRepositoryTest :
             withSessionDataSource("signout_failure", initial) { source ->
                 DefaultAuthRepository(
                         FakePublicAuthApi(),
-                        FakeSessionApi(ApiResponse.Error.ServerError(503)),
+                        { FakeSessionApi(ApiResponse.Error.ServerError(503)) },
                         source,
                     )
                     .signOut() shouldBe AuthResult.Failure(AuthFailure.Server())
@@ -140,7 +142,7 @@ class DefaultAuthRepositoryTest :
                 val repository =
                     DefaultAuthRepository(
                         FakePublicAuthApi(),
-                        FakeSessionApi(failure = CancellationException()),
+                        { FakeSessionApi(failure = CancellationException()) },
                         source,
                     )
                 shouldThrow<CancellationException> { repository.signOut() }

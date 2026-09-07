@@ -47,7 +47,7 @@ import kotlinx.coroutines.withContext
 @ContributesBinding(AppScope::class)
 class DefaultAuthRepository(
     private val publicAuthApi: PublicAuthApi,
-    private val sessionApi: SessionApi,
+    private val sessionApiProvider: () -> SessionApi,
     private val sessionDataSource: SessionPreferenceDataSource,
 ) : AuthRepository {
     override val session: Flow<AuthSession?> =
@@ -99,7 +99,7 @@ class DefaultAuthRepository(
         var result: AuthResult<Unit> = AuthResult.Success(Unit)
         try {
             result =
-                when (val response = sessionApi.deleteCurrentSession()) {
+                when (val response = sessionApiProvider().deleteCurrentSession()) {
                     is ApiResponse.Success -> AuthResult.Success(Unit)
                     is ApiResponse.Error -> AuthResult.Failure(response.toAuthFailure())
                 }
