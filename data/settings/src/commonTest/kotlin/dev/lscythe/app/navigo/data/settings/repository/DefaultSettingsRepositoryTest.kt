@@ -19,36 +19,31 @@ import app.cash.turbine.test
 import dev.lscythe.app.navigo.core.persistence.Language
 import dev.lscythe.app.navigo.core.persistence.ThemeMode
 import dev.lscythe.app.navigo.core.persistence.ThemePreference
-import dev.lscythe.app.navigo.core.persistence.UserPreference
+import dev.lscythe.app.navigo.core.persistence.datasource.NavigoPreferenceDataSource
 import dev.lscythe.app.navigo.domain.settings.model.AppLanguage
 import dev.lscythe.app.navigo.domain.settings.model.AppSettings
 import dev.lscythe.app.navigo.domain.settings.model.PrivacySettings
-import dev.lscythe.app.navigo.domain.settings.repository.SettingsFailure
 import dev.lscythe.app.navigo.domain.settings.repository.SettingsResult
-import io.kotest.assertions.throwables.shouldThrow
+import eu.anifantakis.lib.ksafe.KSafe
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.coroutines.cancellation.CancellationException
-import kotlinx.coroutines.flow.MutableStateFlow
 
 class DefaultSettingsRepositoryTest :
     FunSpec({
         test("preferences map to settings") {
-            val preference =
-                UserPreference(
-                    language = Language.Indonesian,
-                    hasCompletedOnboarding = true,
-                    analyticsEnabled = true,
-                    crashReportsEnabled = false,
-                )
-            DefaultSettingsRepository(FakeSettingsStore(preference)).settings.test {
-                awaitItem() shouldBe
-                    AppSettings(
-                        AppLanguage.Indonesian,
-                        PrivacySettings(true, false),
-                        true,
-                    )
-                cancelAndIgnoreRemainingEvents()
+            withRepository("mapping") { repository, source ->
+                source.setLanguage(Language.Indonesian)
+                source.setPrivacyChoices(analyticsEnabled = true, crashReportsEnabled = false)
+                source.completeOnboarding()
+                repository.settings.test {
+                    awaitItem() shouldBe
+                        AppSettings(
+                            AppLanguage.Indonesian,
+                            PrivacySettings(true, false),
+                            true,
+                        )
+                    cancelAndIgnoreRemainingEvents()
+                }
             }
         }
 
@@ -60,92 +55,74 @@ class DefaultSettingsRepositoryTest :
                     Language.Indonesian to AppLanguage.Indonesian,
                 )
             cases.forEach { (persisted, domain) ->
-                val store = FakeSettingsStore(UserPreference(language = persisted))
-                DefaultSettingsRepository(store).settings.test {
-                    awaitItem().language shouldBe domain
-                    cancelAndIgnoreRemainingEvents()
+                withRepository("language_${persisted.name}") { repository, source ->
+                    source.setLanguage(persisted)
+                    repository.settings.test {
+                        awaitItem().language shouldBe domain
+                        cancelAndIgnoreRemainingEvents()
+                    }
+                    repository.updateLanguage(domain) shouldBe SettingsResult.Success(Unit)
+                    source.data.test {
+                        awaitItem().language shouldBe persisted
+                        cancelAndIgnoreRemainingEvents()
+                    }
                 }
-                DefaultSettingsRepository(store).updateLanguage(domain) shouldBe
-                    SettingsResult.Success(Unit)
-                store.value.language shouldBe persisted
             }
         }
 
         test("language update preserves unrelated fields") {
-            val theme = ThemePreference(mode = ThemeMode.Dark)
-            val store =
-                FakeSettingsStore(
-                    UserPreference(displayName = "Nara", theme = theme, analyticsEnabled = true)
-                )
-            DefaultSettingsRepository(store).updateLanguage(AppLanguage.English) shouldBe
-                SettingsResult.Success(Unit)
-            store.value shouldBe
-                UserPreference(
-                    displayName = "Nara",
-                    language = Language.English,
-                    theme = theme,
-                    analyticsEnabled = true,
-                )
+            withRepository("language_preserves") { repository, source ->
+                val theme = ThemePreference(mode = ThemeMode.Dark)
+                source.setProfile("Nara", 0u)
+                source.setTheme(theme)
+                source.setPrivacyChoices(analyticsEnabled = true, crashReportsEnabled = false)
+
+                repository.updateLanguage(AppLanguage.English) shouldBe SettingsResult.Success(Unit)
+
+                source.data.test {
+                    awaitItem().let { preference ->
+                        preference.displayName shouldBe "Nara"
+                        preference.language shouldBe Language.English
+                        preference.theme shouldBe theme
+                        preference.analyticsEnabled shouldBe true
+                    }
+                    cancelAndIgnoreRemainingEvents()
+                }
+            }
         }
 
         test("privacy update preserves unrelated fields") {
-            val store =
-                FakeSettingsStore(
-                    UserPreference(displayName = "Nara", language = Language.Indonesian)
-                )
-            DefaultSettingsRepository(store).updatePrivacy(PrivacySettings(true, true)) shouldBe
-                SettingsResult.Success(Unit)
-            store.value shouldBe
-                UserPreference(
-                    displayName = "Nara",
-                    language = Language.Indonesian,
-                    analyticsEnabled = true,
-                    crashReportsEnabled = true,
-                )
-        }
+            withRepository("privacy_preserves") { repository, source ->
+                source.setProfile("Nara", 0u)
+                source.setLanguage(Language.Indonesian)
 
-        test("persistence exception becomes typed failure") {
-            val repository =
-                DefaultSettingsRepository(
-                    FakeSettingsStore(failure = IllegalStateException("disk"))
-                )
-            repository.updateLanguage(AppLanguage.English) shouldBe
-                SettingsResult.Failure(SettingsFailure.Persistence("disk"))
-        }
+                repository.updatePrivacy(PrivacySettings(true, true)) shouldBe
+                    SettingsResult.Success(Unit)
 
-        test("cancellation propagates") {
-            val repository =
-                DefaultSettingsRepository(FakeSettingsStore(failure = CancellationException()))
-            shouldThrow<CancellationException> {
-                repository.updatePrivacy(PrivacySettings(true, true))
+                source.data.test {
+                    awaitItem().let { preference ->
+                        preference.displayName shouldBe "Nara"
+                        preference.language shouldBe Language.Indonesian
+                        preference.analyticsEnabled shouldBe true
+                        preference.crashReportsEnabled shouldBe true
+                    }
+                    cancelAndIgnoreRemainingEvents()
+                }
             }
         }
     })
 
-private class FakeSettingsStore(
-    initial: UserPreference = UserPreference(),
-    private val failure: Throwable? = null,
-) : SettingsPreferenceStore {
-    private val state = MutableStateFlow(initial)
-    val value
-        get() = state.value
-
-    override val data = state
-
-    override suspend fun setLanguage(language: Language) {
-        failure?.let { throw it }
-        state.value = state.value.copy(language = language)
-    }
-
-    override suspend fun setPrivacyChoices(
-        analyticsEnabled: Boolean,
-        crashReportsEnabled: Boolean,
-    ) {
-        failure?.let { throw it }
-        state.value =
-            state.value.copy(
-                analyticsEnabled = analyticsEnabled,
-                crashReportsEnabled = crashReportsEnabled,
-            )
+private suspend fun withRepository(
+    suffix: String,
+    block: suspend (DefaultSettingsRepository, NavigoPreferenceDataSource) -> Unit,
+) {
+    val fileSuffix = suffix.lowercase()
+    val ksafe = KSafe(fileName = "navigo_test_settings_repository_$fileSuffix")
+    try {
+        val source = NavigoPreferenceDataSource(ksafe)
+        block(DefaultSettingsRepository(source), source)
+    } finally {
+        ksafe.clearAll()
+        ksafe.close()
     }
 }

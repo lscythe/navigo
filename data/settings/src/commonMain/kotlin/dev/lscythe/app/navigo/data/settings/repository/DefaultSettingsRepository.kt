@@ -32,40 +32,19 @@ import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-interface SettingsPreferenceStore {
-    val data: Flow<UserPreference>
-
-    suspend fun setLanguage(language: Language)
-
-    suspend fun setPrivacyChoices(analyticsEnabled: Boolean, crashReportsEnabled: Boolean)
-}
-
-@Inject
-@ContributesBinding(AppScope::class)
-class PersistentSettingsPreferenceStore(private val dataSource: NavigoPreferenceDataSource) :
-    SettingsPreferenceStore {
-    override val data = dataSource.data
-
-    override suspend fun setLanguage(language: Language) = dataSource.setLanguage(language)
-
-    override suspend fun setPrivacyChoices(
-        analyticsEnabled: Boolean,
-        crashReportsEnabled: Boolean,
-    ) = dataSource.setPrivacyChoices(analyticsEnabled, crashReportsEnabled)
-}
-
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-class DefaultSettingsRepository(private val store: SettingsPreferenceStore) : SettingsRepository {
-    override val settings: Flow<AppSettings> = store.data.map(UserPreference::toDomain)
+class DefaultSettingsRepository(private val dataSource: NavigoPreferenceDataSource) :
+    SettingsRepository {
+    override val settings: Flow<AppSettings> = dataSource.data.map(UserPreference::toDomain)
 
     override suspend fun updateLanguage(language: AppLanguage): SettingsResult<Unit> = persist {
-        store.setLanguage(language.toPersistence())
+        dataSource.setLanguage(language.toPersistence())
     }
 
     override suspend fun updatePrivacy(privacy: PrivacySettings): SettingsResult<Unit> = persist {
-        store.setPrivacyChoices(privacy.analyticsEnabled, privacy.crashReportsEnabled)
+        dataSource.setPrivacyChoices(privacy.analyticsEnabled, privacy.crashReportsEnabled)
     }
 
     private suspend inline fun persist(operation: () -> Unit): SettingsResult<Unit> =
