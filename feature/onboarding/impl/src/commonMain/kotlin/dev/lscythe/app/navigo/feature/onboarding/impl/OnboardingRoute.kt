@@ -16,10 +16,12 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.lscythe.app.navigo.core.resources.LocalAppLocale
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
@@ -36,9 +38,11 @@ internal fun OnboardingRoute(
             }
         }
     }
-    OnboardingScreen(
-        state = state,
-        onIntent = viewModel::onIntent,
-        modifier = modifier,
-    )
+    CompositionLocalProvider(LocalAppLocale provides state.language.languageTag) {
+        OnboardingScreen(
+            state = state,
+            onIntent = viewModel::onIntent,
+            modifier = modifier,
+        )
+    }
 }

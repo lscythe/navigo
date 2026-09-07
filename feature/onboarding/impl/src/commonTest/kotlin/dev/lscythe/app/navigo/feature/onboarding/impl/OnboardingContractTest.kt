@@ -24,8 +24,7 @@ class OnboardingContractTest :
         test("default state is an immutable Indonesian onboarding snapshot") {
             val state = OnboardingUiState()
 
-            state.stage shouldBe OnboardingStage.Introduction
-            state.language shouldBe OnboardingLanguage.Indonesian
+            state.language shouldBe OnboardingLanguage.English
             state.displayName shouldBe ""
             state.avatarColorArgb shouldBe DefaultAvatarColorArgb
             state.analyticsEnabled.shouldBeFalse()

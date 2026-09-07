@@ -143,6 +143,9 @@ class OnboardingViewModelTest :
                     runTest(dispatcher) {
                         val completion = FakeCompletionRepository()
                         val viewModel = viewModel(completion)
+                        viewModel.onIntent(
+                            OnboardingIntent.LanguageSelected(OnboardingLanguage.Indonesian)
+                        )
                         viewModel.onIntent(OnboardingIntent.NameChanged("Nara"))
                         viewModel.onIntent(OnboardingIntent.AvatarColorSelected(7u))
                         viewModel.onIntent(OnboardingIntent.LegalDocumentsRequested)

@@ -34,6 +34,13 @@ internal enum class OnboardingLanguage {
     Indonesian,
 }
 
+internal val OnboardingLanguage.languageTag: String
+    get() =
+        when (this) {
+            OnboardingLanguage.English -> "en"
+            OnboardingLanguage.Indonesian -> "id"
+        }
+
 @Immutable
 internal data class OnboardingLegalDocumentUiState(
     val languageTag: String,
@@ -115,7 +122,7 @@ internal sealed interface OnboardingEffect {
 @Immutable
 internal data class OnboardingUiState(
     val stage: OnboardingStage = OnboardingStage.Introduction,
-    val language: OnboardingLanguage = OnboardingLanguage.Indonesian,
+    val language: OnboardingLanguage = OnboardingLanguage.English,
     val displayName: String = "",
     val avatarColorArgb: UInt = DefaultAvatarColorArgb,
     val analyticsEnabled: Boolean = false,
