@@ -27,6 +27,10 @@ import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 @Composable
 private fun OnboardingScreenPreview() {
     NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingScreen(state = OnboardingUiState(), onIntent = {})
+        OnboardingScreen(
+            state = OnboardingUiState(),
+            onIntent = {},
+            systemLanguage = OnboardingLanguage.English,
+        )
     }
 }

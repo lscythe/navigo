@@ -90,6 +90,7 @@ internal fun OnboardingScreen(
     state: OnboardingUiState,
     onIntent: (OnboardingIntent) -> Unit,
     modifier: Modifier = Modifier,
+    systemLanguage: OnboardingLanguage,
 ) {
     val pagerState = rememberPagerState(pageCount = { PageCount })
     var showLanguageSelector by remember { mutableStateOf(false) }
@@ -142,7 +143,7 @@ internal fun OnboardingScreen(
             showBack = state.stage != OnboardingStage.Introduction,
             showLanguage = state.stage != OnboardingStage.Profile,
             showSkip = state.stage != OnboardingStage.Profile,
-            languageId = state.language.toSupportedLanguage().displayCode,
+            languageId = state.effectiveLanguage.toSupportedLanguage()!!.displayCode,
             onBack = { onIntent(OnboardingIntent.BackClicked) },
             onChangeLanguage = {
                 pendingLanguage = state.language.toSupportedLanguage()
@@ -208,10 +209,13 @@ internal fun OnboardingScreen(
             selectedLanguage = pendingLanguage,
             sheetState = sheetState,
             onLanguageSelected = { language ->
-                if (language != null) {
-                    pendingLanguage = language
-                    onIntent(OnboardingIntent.LanguageSelected(language.toOnboardingLanguage()))
-                }
+                pendingLanguage = language
+                onIntent(
+                    OnboardingIntent.LanguageSelected(
+                        language = language.toOnboardingLanguage(),
+                        effectiveLanguage = language?.toOnboardingLanguage() ?: systemLanguage,
+                    )
+                )
             },
             onApply = dismissLanguageSelector,
             onDismissRequest = dismissLanguageSelector,

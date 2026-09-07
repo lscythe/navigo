@@ -71,7 +71,8 @@ class OnboardingViewModel(
                             }
                     )
                 }
-            is OnboardingIntent.LanguageSelected -> selectLanguage(intent.language)
+            is OnboardingIntent.LanguageSelected ->
+                selectLanguage(intent.language, intent.effectiveLanguage)
             is OnboardingIntent.NameChanged -> update { copy(displayName = intent.value) }
             is OnboardingIntent.AvatarColorSelected ->
                 update { copy(avatarColorArgb = intent.argb) }
@@ -89,11 +90,16 @@ class OnboardingViewModel(
         }
     }
 
-    private fun selectLanguage(language: OnboardingLanguage) {
+    private fun selectLanguage(
+        language: OnboardingLanguage,
+        effectiveLanguage: OnboardingLanguage,
+    ) {
+        require(effectiveLanguage != OnboardingLanguage.System)
         loadedDocuments = null
         update {
             copy(
                 language = language,
+                effectiveLanguage = effectiveLanguage,
                 legalDocuments = null,
                 legalAccepted = false,
                 legalLoading = false,
@@ -103,14 +109,14 @@ class OnboardingViewModel(
     }
 
     private fun loadLegalDocuments() {
-        val requestLanguage = mutableState.value.language
+        val requestLanguage = mutableState.value.effectiveLanguage
         if (mutableState.value.legalLoading) return
         update { copy(legalLoading = true, legalFailureMessage = null) }
         viewModelScope.launch {
             try {
                 when (val result = loadOnboardingLegalDocuments(requestLanguage.toDomain())) {
                     is OnboardingResult.Success -> {
-                        if (mutableState.value.language != requestLanguage) return@launch
+                        if (mutableState.value.effectiveLanguage != requestLanguage) return@launch
                         loadedDocuments = result.value
                         update {
                             copy(
@@ -121,7 +127,7 @@ class OnboardingViewModel(
                         }
                     }
                     is OnboardingResult.Failure -> {
-                        if (mutableState.value.language != requestLanguage) return@launch
+                        if (mutableState.value.effectiveLanguage != requestLanguage) return@launch
                         update {
                             copy(
                                 legalLoading = false,
@@ -149,7 +155,9 @@ class OnboardingViewModel(
             try {
                 val displayName =
                     if (asGuest) {
-                        when (snapshot.language) {
+                        when (snapshot.effectiveLanguage) {
+                            OnboardingLanguage.System ->
+                                error("Effective language must be resolved")
                             OnboardingLanguage.English -> "Guest"
                             OnboardingLanguage.Indonesian -> "Tamu"
                         }
@@ -165,6 +173,7 @@ class OnboardingViewModel(
                             OnboardingCompletion(
                                 profile = profile,
                                 language = snapshot.language.toDomain(),
+                                effectiveLanguage = snapshot.effectiveLanguage.toDomain(),
                                 privacy =
                                     PrivacySettings(
                                         snapshot.analyticsEnabled,
@@ -200,6 +209,7 @@ class OnboardingViewModel(
 
 private fun OnboardingLanguage.toDomain() =
     when (this) {
+        OnboardingLanguage.System -> AppLanguage.System
         OnboardingLanguage.English -> AppLanguage.English
         OnboardingLanguage.Indonesian -> AppLanguage.Indonesian
     }

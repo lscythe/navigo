@@ -46,12 +46,29 @@ class OnboardingUseCasesTest :
                 OnboardingCompletion(
                     UserProfile("  Nara  ", 1u),
                     AppLanguage.English,
+                    AppLanguage.English,
                     PrivacySettings(true, false),
                     docs,
                     acceptance(docs),
                 )
             CompleteOnboardingUseCase(repository)(input) shouldBe OnboardingResult.Success(Unit)
             repository.value?.profile?.displayName shouldBe "Nara"
+        }
+        test("completion persists system preference using effective legal language") {
+            val repository = FakeCompletionRepository()
+            val docs = documents(AppLanguage.Indonesian)
+            val input =
+                OnboardingCompletion(
+                    UserProfile("Nara", 1u),
+                    AppLanguage.System,
+                    AppLanguage.Indonesian,
+                    PrivacySettings(true, false),
+                    docs,
+                    acceptance(docs),
+                )
+
+            CompleteOnboardingUseCase(repository)(input) shouldBe OnboardingResult.Success(Unit)
+            repository.value?.language shouldBe AppLanguage.System
         }
         test("completion rejects mismatched acceptance before repository call") {
             val repository = FakeCompletionRepository()
@@ -61,6 +78,7 @@ class OnboardingUseCasesTest :
             CompleteOnboardingUseCase(repository)(
                 OnboardingCompletion(
                     UserProfile("Nara", 1u),
+                    AppLanguage.English,
                     AppLanguage.English,
                     PrivacySettings(true, false),
                     docs,

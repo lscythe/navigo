@@ -30,6 +30,7 @@ internal enum class OnboardingStage {
 }
 
 internal enum class OnboardingLanguage {
+    System,
     English,
     Indonesian,
 }
@@ -37,6 +38,7 @@ internal enum class OnboardingLanguage {
 internal val OnboardingLanguage.languageTag: String
     get() =
         when (this) {
+            OnboardingLanguage.System -> error("System language must be resolved")
             OnboardingLanguage.English -> "en"
             OnboardingLanguage.Indonesian -> "id"
         }
@@ -75,12 +77,14 @@ private fun LegalDocument.toUiModel() =
 
 internal fun OnboardingLanguage.toSupportedLanguage() =
     when (this) {
+        OnboardingLanguage.System -> null
         OnboardingLanguage.English -> SupportedLanguage.English
         OnboardingLanguage.Indonesian -> SupportedLanguage.Indonesian
     }
 
-internal fun SupportedLanguage.toOnboardingLanguage() =
+internal fun SupportedLanguage?.toOnboardingLanguage() =
     when (this) {
+        null -> OnboardingLanguage.System
         SupportedLanguage.English -> OnboardingLanguage.English
         SupportedLanguage.Indonesian -> OnboardingLanguage.Indonesian
     }
@@ -94,7 +98,10 @@ internal sealed interface OnboardingIntent {
 
     data object SkipClicked : OnboardingIntent
 
-    data class LanguageSelected(val language: OnboardingLanguage) : OnboardingIntent
+    data class LanguageSelected(
+        val language: OnboardingLanguage,
+        val effectiveLanguage: OnboardingLanguage = language,
+    ) : OnboardingIntent
 
     data class NameChanged(val value: String) : OnboardingIntent
 
@@ -123,6 +130,7 @@ internal sealed interface OnboardingEffect {
 internal data class OnboardingUiState(
     val stage: OnboardingStage = OnboardingStage.Introduction,
     val language: OnboardingLanguage = OnboardingLanguage.English,
+    val effectiveLanguage: OnboardingLanguage = OnboardingLanguage.English,
     val displayName: String = "",
     val avatarColorArgb: UInt = DefaultAvatarColorArgb,
     val analyticsEnabled: Boolean = false,

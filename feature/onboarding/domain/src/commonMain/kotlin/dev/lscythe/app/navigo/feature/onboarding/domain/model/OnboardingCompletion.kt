@@ -24,6 +24,7 @@ import dev.lscythe.app.navigo.domain.user.model.UserProfile
 data class OnboardingCompletion(
     val profile: UserProfile,
     val language: AppLanguage,
+    val effectiveLanguage: AppLanguage,
     val privacy: PrivacySettings,
     val documents: LegalDocumentSet,
     val acceptance: LegalAcceptance,

@@ -81,6 +81,38 @@ class OnboardingViewModelTest :
                 }
             }
 
+            When("system language is selected on an Indonesian system") {
+                Then("it keeps system preference and resolves Indonesian content") {
+                    val viewModel = viewModel()
+
+                    viewModel.onIntent(
+                        OnboardingIntent.LanguageSelected(
+                            language = OnboardingLanguage.System,
+                            effectiveLanguage = OnboardingLanguage.Indonesian,
+                        )
+                    )
+
+                    viewModel.state.value.language shouldBe OnboardingLanguage.System
+                    viewModel.state.value.effectiveLanguage shouldBe OnboardingLanguage.Indonesian
+                }
+            }
+
+            When("system language is unsupported") {
+                Then("it falls back to English content") {
+                    val viewModel = viewModel()
+
+                    viewModel.onIntent(
+                        OnboardingIntent.LanguageSelected(
+                            language = OnboardingLanguage.System,
+                            effectiveLanguage = OnboardingLanguage.English,
+                        )
+                    )
+
+                    viewModel.state.value.language shouldBe OnboardingLanguage.System
+                    viewModel.state.value.effectiveLanguage shouldBe OnboardingLanguage.English
+                }
+            }
+
             When("language changes after legal acceptance") {
                 Then("it invalidates loaded documents and acceptance") {
                     runTest(dispatcher) {

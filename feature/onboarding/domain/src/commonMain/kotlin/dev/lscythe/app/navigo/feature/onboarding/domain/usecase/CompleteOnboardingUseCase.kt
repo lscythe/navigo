@@ -28,12 +28,12 @@ class CompleteOnboardingUseCase(private val repository: OnboardingCompletionRepo
     suspend operator fun invoke(completion: OnboardingCompletion): OnboardingResult<Unit> {
         val displayName = completion.profile.displayName.trim()
         if (displayName.isEmpty()) return OnboardingResult.Failure(OnboardingFailure.InvalidProfile)
-        if (completion.language == AppLanguage.System)
+        if (completion.effectiveLanguage == AppLanguage.System)
             return OnboardingResult.Failure(OnboardingFailure.UnresolvedLanguage)
         val documents = completion.documents
         if (
-            documents.terms.language != completion.language ||
-                documents.privacy.language != completion.language
+            documents.terms.language != completion.effectiveLanguage ||
+                documents.privacy.language != completion.effectiveLanguage
         )
             return OnboardingResult.Failure(OnboardingFailure.LegalLanguageMismatch)
         val acceptance = completion.acceptance

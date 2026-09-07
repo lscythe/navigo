@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.lscythe.app.navigo.core.resources.LocalAppLocale
@@ -38,11 +39,22 @@ internal fun OnboardingRoute(
             }
         }
     }
-    CompositionLocalProvider(LocalAppLocale provides state.language.languageTag) {
-        OnboardingScreen(
-            state = state,
-            onIntent = viewModel::onIntent,
-            modifier = modifier,
-        )
+    val systemLanguage = LocalAppLocale.current.toEffectiveOnboardingLanguage()
+    key(state.effectiveLanguage) {
+        CompositionLocalProvider(LocalAppLocale provides state.effectiveLanguage.languageTag) {
+            OnboardingScreen(
+                state = state,
+                onIntent = viewModel::onIntent,
+                systemLanguage = systemLanguage,
+                modifier = modifier,
+            )
+        }
     }
 }
+
+private fun String.toEffectiveOnboardingLanguage() =
+    if (startsWith("id", ignoreCase = true)) {
+        OnboardingLanguage.Indonesian
+    } else {
+        OnboardingLanguage.English
+    }

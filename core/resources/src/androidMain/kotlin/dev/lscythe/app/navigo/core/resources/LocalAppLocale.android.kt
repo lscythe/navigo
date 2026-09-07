@@ -33,6 +33,7 @@ actual object LocalAppLocale {
         val currentConfiguration = LocalConfiguration.current
         if (systemLocale == null) systemLocale = currentConfiguration.locales[0]
         val locale = languageTag?.let(Locale::forLanguageTag) ?: checkNotNull(systemLocale)
+        Locale.setDefault(locale)
         val configuration = Configuration(currentConfiguration).apply { setLocale(locale) }
         LocalContext.current.resources.updateConfiguration(
             configuration,
