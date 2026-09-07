@@ -103,6 +103,32 @@ class MainViewModelTest :
                 calls shouldBe 2
             }
         }
+
+        test("retry reloads onboarding completion before selecting Home") {
+            runTest {
+                var completed = false
+                var attempts = 0
+                val viewModel =
+                    StartupCoordinator(
+                        scope = backgroundScope,
+                        loadCompletion = { completed },
+                        bootstrap = {
+                            attempts++
+                            if (attempts == 1) AuthResult.Failure(AuthFailure.Network())
+                            else AuthResult.Success(session())
+                        },
+                    )
+                runCurrent()
+                viewModel.state.value shouldBe
+                    StartupState.AuthRequired(StartupDestination.Onboarding, AuthFailure.Network())
+
+                completed = true
+                viewModel.retryAuthentication()
+                runCurrent()
+
+                viewModel.state.value shouldBe StartupState.Ready(StartupDestination.Home)
+            }
+        }
     })
 
 private fun session() =

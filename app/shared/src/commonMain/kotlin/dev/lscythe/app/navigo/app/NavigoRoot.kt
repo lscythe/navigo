@@ -67,7 +67,13 @@ fun NavigoRoot(
                 }
             is StartupState.AuthRequired ->
                 if (state.destination == StartupDestination.Onboarding) {
-                    NavigoNavigation(analyticsHelper, viewModelFactory, OnboardingNavKey, modifier)
+                    NavigoNavigation(
+                        analyticsHelper,
+                        viewModelFactory,
+                        mainViewModel,
+                        OnboardingNavKey,
+                        modifier,
+                    )
                 } else {
                     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                         Button(onClick = mainViewModel::retryAuthentication) { Text("Retry") }
@@ -77,6 +83,7 @@ fun NavigoRoot(
                 NavigoNavigation(
                     analyticsHelper,
                     viewModelFactory,
+                    mainViewModel,
                     if (state.destination == StartupDestination.Home) HomeNavKey
                     else OnboardingNavKey,
                     modifier,
@@ -89,13 +96,14 @@ fun NavigoRoot(
 private fun NavigoNavigation(
     analyticsHelper: AnalyticsHelper,
     viewModelFactory: MetroViewModelFactory,
+    mainViewModel: MainViewModel,
     initialRoute: NavKey,
     modifier: Modifier,
 ) {
     val serializersModule = remember { navigoSerializersModule() }
     val appState = rememberNavigoAppState(initialRoute, serializersModule)
     val entryProvider = entryProvider {
-        onboardingEntry(appState.navigator)
+        onboardingEntry(mainViewModel::retryAuthentication)
         homeEntry(appState.navigator)
     }
 

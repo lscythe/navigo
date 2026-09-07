@@ -17,13 +17,11 @@ package dev.lscythe.app.navigo.feature.onboarding.impl.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import dev.lscythe.app.navigo.core.navigation.Navigator
-import dev.lscythe.app.navigo.feature.home.api.navigateToHome
 import dev.lscythe.app.navigo.feature.onboarding.api.OnboardingNavKey
 import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingRoute
 
-fun EntryProviderScope<NavKey>.onboardingEntry(navigator: Navigator) {
+fun EntryProviderScope<NavKey>.onboardingEntry(onCompletion: () -> Unit) {
     entry<OnboardingNavKey> {
-        OnboardingRoute(navigateHome = navigator::navigateToHome)
+        OnboardingRoute(navigateHome = onCompletion)
     }
 }
