@@ -73,6 +73,8 @@ kotlin {
 
     sourceSets.iosMain.dependencies {
         implementation(project(":app:shared"))
+        implementation(project(":api:auth"))
+        implementation(project(":domain:auth"))
         implementation(project(":api:legal"))
         implementation(project(":core:network"))
         implementation(project(":core:persistence"))

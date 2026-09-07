@@ -17,6 +17,7 @@ package dev.lscythe.app.navigo.di
 
 import android.app.Application
 import dev.lscythe.app.navigo.BuildConfig
+import dev.lscythe.app.navigo.app.MainViewModel
 import dev.lscythe.app.navigo.core.monitoring.MonitoringBackend
 import dev.lscythe.app.navigo.core.network.BaseUrl
 import dev.lscythe.app.navigo.core.network.NetworkInspector
@@ -44,6 +45,7 @@ object NavigoNetworkBindings {
 interface NavigoGraph : MetroAppComponentProviders, ViewModelGraph {
     val profileVerifierLogger: ProfileVerifierLogger
     val monitoringBackend: MonitoringBackend
+    val mainViewModel: MainViewModel
 
     @DependencyGraph.Factory
     fun interface Factory {

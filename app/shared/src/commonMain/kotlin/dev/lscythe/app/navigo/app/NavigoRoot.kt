@@ -15,9 +15,17 @@
  */
 package dev.lscythe.app.navigo.app
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -47,10 +55,45 @@ internal fun navigoSerializersModule() = SerializersModule {
 fun NavigoRoot(
     analyticsHelper: AnalyticsHelper,
     viewModelFactory: MetroViewModelFactory,
+    mainViewModel: MainViewModel,
     modifier: Modifier = Modifier,
 ) {
+    val startupState by mainViewModel.state.collectAsState()
+    NavigoTheme {
+        when (val state = startupState) {
+            StartupState.Initializing ->
+                Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            is StartupState.AuthRequired ->
+                if (state.destination == StartupDestination.Onboarding) {
+                    NavigoNavigation(analyticsHelper, viewModelFactory, OnboardingNavKey, modifier)
+                } else {
+                    Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Button(onClick = mainViewModel::retryAuthentication) { Text("Retry") }
+                    }
+                }
+            is StartupState.Ready ->
+                NavigoNavigation(
+                    analyticsHelper,
+                    viewModelFactory,
+                    if (state.destination == StartupDestination.Home) HomeNavKey
+                    else OnboardingNavKey,
+                    modifier,
+                )
+        }
+    }
+}
+
+@Composable
+private fun NavigoNavigation(
+    analyticsHelper: AnalyticsHelper,
+    viewModelFactory: MetroViewModelFactory,
+    initialRoute: NavKey,
+    modifier: Modifier,
+) {
     val serializersModule = remember { navigoSerializersModule() }
-    val appState = rememberNavigoAppState(OnboardingNavKey, serializersModule)
+    val appState = rememberNavigoAppState(initialRoute, serializersModule)
     val entryProvider = entryProvider {
         onboardingEntry(appState.navigator)
         homeEntry(appState.navigator)
@@ -60,12 +103,10 @@ fun NavigoRoot(
         LocalAnalyticsHelper provides analyticsHelper,
         LocalMetroViewModelFactory provides viewModelFactory,
     ) {
-        NavigoTheme {
-            NavigoApp(
-                appState = appState,
-                entryProvider = entryProvider,
-                modifier = modifier,
-            )
-        }
+        NavigoApp(
+            appState = appState,
+            entryProvider = entryProvider,
+            modifier = modifier,
+        )
     }
 }

@@ -15,6 +15,7 @@
  */
 package dev.lscythe.app.navigo.desktop
 
+import dev.lscythe.app.navigo.app.MainViewModel
 import dev.lscythe.app.navigo.config.AppBuildKonfig
 import dev.lscythe.app.navigo.core.network.BaseUrl
 import dev.lscythe.app.navigo.core.network.NetworkInspector
@@ -36,4 +37,7 @@ object DesktopNetworkBindings {
     @Provides fun provideNetworkInspector(): NetworkInspector = AxerNetworkInspector()
 }
 
-@DependencyGraph(AppScope::class) interface NavigoDesktopGraph : ViewModelGraph
+@DependencyGraph(AppScope::class)
+interface NavigoDesktopGraph : ViewModelGraph {
+    val mainViewModel: MainViewModel
+}

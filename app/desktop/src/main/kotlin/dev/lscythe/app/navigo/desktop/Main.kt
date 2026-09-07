@@ -31,6 +31,7 @@ fun main() {
             NavigoRoot(
                 analyticsHelper = remember { LocalAnalyticsHelper() },
                 viewModelFactory = graph.metroViewModelFactory,
+                mainViewModel = graph.mainViewModel,
             )
         }
     }
