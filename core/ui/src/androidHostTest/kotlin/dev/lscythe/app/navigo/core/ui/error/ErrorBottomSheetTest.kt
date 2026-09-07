@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
@@ -62,6 +63,8 @@ class ErrorBottomSheetTest {
 
         composeTestRule.onNodeWithText("Connection lost").assertIsDisplayed()
         composeTestRule.onNodeWithText("Check your connection and try again.").assertIsDisplayed()
+        composeTestRule.onNodeWithTag("error-illustration").assertExists()
+        composeTestRule.onNodeWithTag("error-primary-retry").assertExists()
         composeTestRule.onNodeWithText("Retry").performClick()
         composeTestRule.onNodeWithText("Cancel").performClick()
 
@@ -87,6 +90,7 @@ class ErrorBottomSheetTest {
             }
         }
 
+        composeTestRule.onNodeWithTag("error-primary-continue").assertExists()
         composeTestRule.onNodeWithText("Continue").performClick()
 
         assertEquals(1, primaryActions)

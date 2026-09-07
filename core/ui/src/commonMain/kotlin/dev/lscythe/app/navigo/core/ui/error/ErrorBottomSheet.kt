@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
@@ -92,16 +93,25 @@ fun NavigoErrorBottomSheet(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier.fillMaxWidth().heightIn(min = 160.dp, max = 200.dp),
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .heightIn(min = 160.dp, max = 200.dp)
+                        .testTag("error-illustration"),
                 contentAlignment = Alignment.Center,
                 content = illustration,
             )
             NavigoButton(
                 onClick = onPrimaryAction,
                 modifier =
-                    Modifier.fillMaxWidth().heightIn(min = 54.dp).semantics {
-                        stateDescription = primaryAction.name
-                    },
+                    Modifier.fillMaxWidth()
+                        .heightIn(min = 54.dp)
+                        .testTag(
+                            when (primaryAction) {
+                                ErrorPrimaryAction.Retry -> "error-primary-retry"
+                                ErrorPrimaryAction.Continue -> "error-primary-continue"
+                            }
+                        )
+                        .semantics { stateDescription = primaryAction.name },
             ) {
                 Text(primaryActionLabel)
             }
