@@ -62,6 +62,21 @@ android {
                 "API_BASE_URL",
                 "\"${providers.gradleProperty("navigoNonProdApiBaseUrl").get()}\"",
             )
+            buildConfigField(
+                "String",
+                "DEVELOPMENT_KEY_ID",
+                "\"${providers.gradleProperty("navigoDevelopmentKeyId").orElse("development").get()}\"",
+            )
+            buildConfigField(
+                "String",
+                "DEVELOPMENT_PRIVATE_KEY_SEED",
+                "\"${providers.gradleProperty("navigoDevelopmentPrivateKeySeed").orElse("").get()}\"",
+            )
+            buildConfigField(
+                "String",
+                "DEVELOPMENT_SIGNER_DIGEST",
+                "\"${providers.gradleProperty("navigoDevelopmentSignerDigest").orElse("").get()}\"",
+            )
         }
         getByName("beta") {
             buildConfigField(
