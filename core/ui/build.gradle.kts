@@ -33,6 +33,12 @@ kotlin {
             api(libs.kotlinx.datetime)
             api(libs.compose.multiplatform.resources)
         }
+        androidHostTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+            implementation(libs.androidx.compose.ui.testManifest)
+            implementation(libs.robolectric)
+            implementation(libs.junit.vintage.engine)
+        }
         androidMain.dependencies {
             implementation(libs.androidx.core.ktx)
             api(libs.androidx.metrics)
