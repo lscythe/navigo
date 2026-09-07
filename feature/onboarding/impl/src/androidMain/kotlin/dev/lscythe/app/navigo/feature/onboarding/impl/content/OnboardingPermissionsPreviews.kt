@@ -13,8 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.core.designsystem.preview
+package dev.lscythe.app.navigo.feature.onboarding.impl.content
 
-actual annotation class NavigoThemePreview
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
+import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 
-actual annotation class NavigoMaterialKolorThemePreview
+@NavigoThemePreview
+@Composable
+private fun OnboardingPermissionsPreview() {
+    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
+        OnboardingPermissions(onContinue = {})
+    }
+}

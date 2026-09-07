@@ -22,7 +22,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,8 +64,6 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoChoiceC
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoUnderlinedTextField
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.action.Paint
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.language_english
@@ -414,17 +411,5 @@ private fun ConsentRow(
             )
         }
         NavigoSwitch(checked = checked, onCheckedChange = onCheckedChange)
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingProfilePreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingProfile(
-            legalDocumentsRead = true,
-            onOpenLegalDocuments = {},
-            onContinue = {},
-        )
     }
 }

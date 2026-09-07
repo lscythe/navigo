@@ -24,8 +24,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialShapes
@@ -46,11 +44,6 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
-import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
  * Displays determinate progress along a six-sided cookie outline.
@@ -178,41 +171,5 @@ private fun DeterminateCircularIndicator(
             measure.getSegment(0f, measure.length * progress, segment)
             drawPath(segment, color, style = pathStroke)
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoCircularProgressIndicatorPreview() {
-    NavigoPreview {
-        Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
-            NavigoCircularProgressIndicator(progress = 0.25f)
-            NavigoCircularProgressIndicator(progress = 0.65f)
-            NavigoCircularProgressIndicator(progress = 1f)
-        }
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoCircularProgressIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        NavigoCircularProgressIndicator(progress = 0.65f)
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoCircularLoadingIndicatorPreview() {
-    NavigoPreview {
-        NavigoCircularLoadingIndicator()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoCircularLoadingIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        NavigoCircularLoadingIndicator()
     }
 }

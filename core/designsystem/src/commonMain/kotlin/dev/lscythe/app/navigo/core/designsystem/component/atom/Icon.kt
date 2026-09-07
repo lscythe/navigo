@@ -30,10 +30,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Circle
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -86,24 +82,8 @@ fun NavigoIcon(
     )
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoIconPreview() {
-    NavigoPreview {
-        IconPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoIconMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        IconPreviewContent()
-    }
-}
-
-@Composable
-private fun IconPreviewContent() {
+internal fun IconPreviewContent() {
     Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoIcon(imageVector = NavigoIcons.Circle, contentDescription = "Circle")
         NavigoIcon(

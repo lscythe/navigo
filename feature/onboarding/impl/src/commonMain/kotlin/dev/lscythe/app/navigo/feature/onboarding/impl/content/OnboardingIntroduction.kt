@@ -18,7 +18,6 @@ package dev.lscythe.app.navigo.feature.onboarding.impl.content
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,8 +39,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoPagerIndicator
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_next_button_label
@@ -134,19 +130,5 @@ internal fun OnboardingIntroduction(
                 )
             }
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingIntroductionPreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingIntroduction(
-            pagerState = rememberPagerState(pageCount = { OnboardingPageCount }),
-            pageProgress = 0.35f,
-            pagerEnabled = true,
-            onNextPage = {},
-            onContinue = {},
-        )
     }
 }

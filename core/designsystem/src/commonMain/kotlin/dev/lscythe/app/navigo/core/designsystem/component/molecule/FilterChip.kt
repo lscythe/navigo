@@ -39,10 +39,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoDot
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -129,24 +125,8 @@ fun NavigoFilterChip(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoFilterChipPreview() {
-    NavigoPreview {
-        FilterChipPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoFilterChipMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        FilterChipPreviewContent()
-    }
-}
-
-@Composable
-private fun FilterChipPreviewContent() {
+internal fun FilterChipPreviewContent() {
     var selected by remember { mutableStateOf(true) }
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),

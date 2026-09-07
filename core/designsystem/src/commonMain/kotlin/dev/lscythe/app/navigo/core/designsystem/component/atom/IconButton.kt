@@ -29,10 +29,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /** Displays an uncontained icon button. */
@@ -115,20 +111,8 @@ fun NavigoOutlinedIconButton(
     )
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoIconButtonPreview() {
-    NavigoPreview { IconButtonPreviewContent() }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoIconButtonMaterialKolorPreview() {
-    NavigoMaterialKolorPreview { IconButtonPreviewContent() }
-}
-
-@Composable
-private fun IconButtonPreviewContent() {
+internal fun IconButtonPreviewContent() {
     Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
         NavigoIconButton(onClick = {}) { BackIcon() }
         NavigoFilledIconButton(onClick = {}) { BackIcon() }

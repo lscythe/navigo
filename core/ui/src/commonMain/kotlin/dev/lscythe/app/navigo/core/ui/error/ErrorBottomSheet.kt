@@ -38,10 +38,6 @@ import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoTextButton
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBottomSheet
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /** Identifies the contextual meaning of an error sheet's primary action. */
@@ -125,20 +121,8 @@ fun NavigoErrorBottomSheet(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoErrorBottomSheetPreview() = NavigoPreview {
-    ErrorBottomSheetPreviewContent(ErrorPrimaryAction.Retry)
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoErrorBottomSheetMaterialKolorPreview() = NavigoMaterialKolorPreview {
-    ErrorBottomSheetPreviewContent(ErrorPrimaryAction.Continue)
-}
-
-@Composable
-private fun ErrorBottomSheetPreviewContent(primaryAction: ErrorPrimaryAction) {
+internal fun ErrorBottomSheetPreviewContent(primaryAction: ErrorPrimaryAction) {
     NavigoErrorBottomSheet(
         title =
             if (primaryAction == ErrorPrimaryAction.Retry) "Connection lost"

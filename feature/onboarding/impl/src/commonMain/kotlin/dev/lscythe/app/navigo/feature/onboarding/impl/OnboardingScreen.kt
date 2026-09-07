@@ -68,8 +68,6 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoTextButton
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.locale.Language
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_back
@@ -353,18 +351,5 @@ private fun OnboardingHeader(
                 }
             }
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingScreenPreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingScreen(
-            legalDocuments = null,
-            onLoadLegalDocuments = {},
-            onClearLegalDocuments = {},
-            onContinue = {},
-        )
     }
 }
