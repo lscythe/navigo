@@ -147,7 +147,7 @@ jobs:
       - name: Set up Gradle
         uses: ./.github/actions/gradle-setup
       - name: Generate coverage
-        run: ./gradlew koverXmlReportDesktop
+        run: ./gradlew koverXmlReportDesktop -PnavigoCoverage --console=plain --no-daemon
       - name: Collect coverage reports
         id: coverage-reports
         shell: bash

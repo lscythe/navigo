@@ -18,7 +18,9 @@ package dev.lscythe.app.navigo.convention
 import com.android.build.api.dsl.CommonExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.withType
 
 private val coverageExclusions =
     listOf(
@@ -39,6 +41,11 @@ internal fun Project.configureKoverAndroid(commonExtension: CommonExtension) {
 
 internal fun Project.configureKover() {
     pluginManager.apply("org.jetbrains.kotlinx.kover")
+    if (providers.gradleProperty("navigoCoverage").isPresent) {
+        tasks.withType<Test>().configureEach {
+            exclude("**/*ScreenshotTest*")
+        }
+    }
     extensions.configure<KoverProjectExtension> {
         reports {
             filters {
@@ -47,10 +54,19 @@ internal fun Project.configureKover() {
                 }
             }
         }
-        pluginManager.withPlugin("io.github.takahirom.roborazzi") {
+        if (path == ":core:designsystem" || path == ":core:testing-screenshot") {
             currentProject {
                 instrumentation {
                     disabledForTestTasks.add("desktopTest")
+                }
+            }
+        }
+        pluginManager.withPlugin("io.github.takahirom.roborazzi") {
+            currentProject {
+                instrumentation {
+                    if (path != ":feature:onboarding:impl") {
+                        disabledForTestTasks.add("desktopTest")
+                    }
                     disabledForTestTasks.add("testAndroidHostTest")
                 }
             }
