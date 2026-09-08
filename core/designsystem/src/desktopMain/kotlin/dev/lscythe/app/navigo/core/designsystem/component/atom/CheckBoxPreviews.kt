@@ -22,16 +22,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun NavigoCheckboxPreview() {
-    NavigoPreview {
+    DesktopPreview {
         var checked by remember { mutableStateOf(false) }
 
         Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
@@ -57,10 +56,10 @@ private fun NavigoCheckboxPreview() {
     }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun NavigoCheckboxMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         NavigoCheckbox(checked = true, onCheckedChange = null)
     }
 }

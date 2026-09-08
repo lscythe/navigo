@@ -16,17 +16,14 @@
 package dev.lscythe.app.navigo.core.designsystem.component.atom
 
 import androidx.compose.runtime.Composable
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 
-@NavigoThemePreview
-@Composable
-private fun NavigoButtonPreview() = NavigoPreview { ButtonPreviewContent() }
+@Preview @Composable private fun NavigoButtonPreview() = DesktopPreview { ButtonPreviewContent() }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
-private fun NavigoButtonMaterialKolorPreview() = NavigoMaterialKolorPreview {
+private fun NavigoButtonMaterialKolorPreview() = DesktopMaterialKolorPreview {
     ButtonPreviewContent()
 }

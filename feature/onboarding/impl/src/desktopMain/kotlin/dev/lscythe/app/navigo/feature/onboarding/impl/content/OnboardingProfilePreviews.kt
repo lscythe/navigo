@@ -19,16 +19,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingStage
 import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingUiState
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun OnboardingProfilePreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
+    DesktopPreview(contentPadding = PaddingValues(0.dp)) {
         OnboardingProfile(
             state =
                 OnboardingUiState(

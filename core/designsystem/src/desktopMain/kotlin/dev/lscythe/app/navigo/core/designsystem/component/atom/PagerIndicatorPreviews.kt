@@ -23,12 +23,11 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun NavigoPagerIndicatorPreview() {
     val transition = rememberInfiniteTransition(label = "pager preview")
@@ -44,7 +43,7 @@ private fun NavigoPagerIndicatorPreview() {
             label = "page progress",
         )
 
-    NavigoPreview {
+    DesktopPreview {
         NavigoPagerIndicator(
             pageCount = 4,
             currentPage = 0,
@@ -53,10 +52,10 @@ private fun NavigoPagerIndicatorPreview() {
     }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun NavigoPagerIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         NavigoPagerIndicator(
             pageCount = 4,
             currentPage = 1,

@@ -26,17 +26,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import kotlinx.collections.immutable.persistentListOf
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun NavigoLinearProgressIndicatorPreview() {
-    NavigoPreview {
+    DesktopPreview {
         Column(verticalArrangement = spacedBy(NavigoSpacing.container)) {
             NavigoSegmentedLinearProgressIndicator(
                 segments =
@@ -71,10 +70,10 @@ private fun NavigoLinearProgressIndicatorPreview() {
     }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun NavigoLinearProgressIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         Column(verticalArrangement = spacedBy(NavigoSpacing.container)) {
             NavigoSegmentedLinearProgressIndicator(
                 segments =
@@ -89,18 +88,18 @@ private fun NavigoLinearProgressIndicatorMaterialKolorPreview() {
     }
 }
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun NavigoLinearLoadingIndicatorPreview() {
-    NavigoPreview {
+    DesktopPreview {
         NavigoLinearLoadingIndicator()
     }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun NavigoLinearLoadingIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         NavigoLinearLoadingIndicator()
     }
 }

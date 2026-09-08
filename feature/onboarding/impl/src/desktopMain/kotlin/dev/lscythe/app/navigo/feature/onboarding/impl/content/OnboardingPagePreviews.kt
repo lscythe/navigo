@@ -16,45 +16,45 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl.content
 
 import androidx.compose.runtime.Composable
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun OnboardingFeedPagePreview() {
-    NavigoPreview {
+    DesktopPreview {
         OnboardingFeedPage()
     }
 }
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun OnboardingGpsPagePreview() {
-    NavigoPreview {
+    DesktopPreview {
         OnboardingGpsPage()
     }
 }
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun OnboardingAlarmPagePreview() {
-    NavigoPreview {
+    DesktopPreview {
         OnboardingAlarmPage()
     }
 }
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun OnboardingPageCheckListPreview() {
-    NavigoPreview {
+    DesktopPreview {
         OnboardingPageCheckList("First Item")
     }
 }
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun OnboardingGpsPageRouteItemPreview() {
-    NavigoPreview {
+    DesktopPreview {
         OnboardingGpsPageRouteItem(
             route =
                 GpsRoute(

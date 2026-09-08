@@ -25,18 +25,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
-@NavigoThemePreview
+@Preview
 @Composable
 private fun LanguageSelectionBottomSheetPreview() {
     var showSheet by remember { mutableStateOf(false) }
 
-    NavigoPreview {
+    DesktopPreview {
         Scaffold { padding ->
             NavigoButton(onClick = { showSheet = true }, modifier = Modifier.padding(padding)) {
                 Text("Open language selector")

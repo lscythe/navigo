@@ -16,19 +16,18 @@
 package dev.lscythe.app.navigo.feature.home.impl.content
 
 import androidx.compose.runtime.Composable
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun HomeTopBarPreview() {
-    NavigoPreview { HomeTopBarPreviewContent() }
+    DesktopPreview { HomeTopBarPreviewContent() }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun HomeTopBarMaterialKolorPreview() {
-    NavigoMaterialKolorPreview { HomeTopBarPreviewContent() }
+    DesktopMaterialKolorPreview { HomeTopBarPreviewContent() }
 }

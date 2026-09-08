@@ -19,16 +19,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun NavigoCircularProgressIndicatorPreview() {
-    NavigoPreview {
+    DesktopPreview {
         Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
             NavigoCircularProgressIndicator(progress = 0.25f)
             NavigoCircularProgressIndicator(progress = 0.65f)
@@ -37,26 +36,26 @@ private fun NavigoCircularProgressIndicatorPreview() {
     }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun NavigoCircularProgressIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         NavigoCircularProgressIndicator(progress = 0.65f)
     }
 }
 
-@NavigoThemePreview
+@Preview
 @Composable
 private fun NavigoCircularLoadingIndicatorPreview() {
-    NavigoPreview {
+    DesktopPreview {
         NavigoCircularLoadingIndicator()
     }
 }
 
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun NavigoCircularLoadingIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         NavigoCircularLoadingIndicator()
     }
 }

@@ -22,17 +22,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
-@NavigoThemePreview
+@Preview
 @Composable
 private fun ColorSelectionBottomSheetPreview() {
     var color by remember { mutableStateOf(Color(0xFF5C8A3E)) }
-    NavigoPreview {
+    DesktopPreview {
         ColorSelectionBottomSheet(
             title = "Pick a colour",
             description = "Choose any colour.",
@@ -44,11 +43,11 @@ private fun ColorSelectionBottomSheetPreview() {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@NavigoMaterialKolorThemePreview
+@Preview
 @Composable
 private fun ColorSelectionBottomSheetMaterialKolorPreview() {
     var color by remember { mutableStateOf(Color(0xFF5C8A3E)) }
-    NavigoMaterialKolorPreview {
+    DesktopMaterialKolorPreview {
         ColorSelectionBottomSheet(
             title = "Pick a colour",
             description = "Choose any colour.",
