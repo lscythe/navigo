@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.ui
+package dev.lscythe.app.navigo.core.ui
 
 import androidx.compose.ui.Modifier
 
-internal actual fun Modifier.navigoTestSemantics(): Modifier = this
+actual fun Modifier.navigoTestSemantics(): Modifier = this

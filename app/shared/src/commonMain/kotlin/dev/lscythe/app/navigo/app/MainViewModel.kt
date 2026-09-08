@@ -26,6 +26,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 
-private const val STARTUP_TIMEOUT_MILLIS = 10_000L
+private val STARTUP_TIMEOUT = 10.seconds
 
 @Inject
 @ViewModelKey
@@ -86,7 +87,7 @@ internal class StartupCoordinator(
         mutableState.value = StartupState.Initializing
         attemptJob = scope.launch {
             val hasCompletedOnboarding = loadCompletion()
-            val result = withTimeoutOrNull(STARTUP_TIMEOUT_MILLIS) { bootstrap() }
+            val result = withTimeoutOrNull(STARTUP_TIMEOUT) { bootstrap() }
             if (currentAttempt != attempt) return@launch
             val destination =
                 if (hasCompletedOnboarding) StartupDestination.Home

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.ui
+package dev.lscythe.app.navigo.core.ui
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 
-internal actual fun Modifier.navigoTestSemantics(): Modifier = semantics {
+actual fun Modifier.navigoTestSemantics(): Modifier = semantics {
     testTagsAsResourceId = true
 }
