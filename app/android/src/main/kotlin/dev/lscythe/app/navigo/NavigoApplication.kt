@@ -43,6 +43,7 @@ class NavigoApplication : Application(), MetroApplication {
         appGraph.profileVerifierLogger()
 
         if (BuildConfig.DEBUG) {
+            configureAxerDiagnostics()
             setupStrictModePolicy()
             setupWebViewDebuggingPolicy()
         }

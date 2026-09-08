@@ -24,7 +24,7 @@ import org.maplibre.compose.desktop.ProvideMapHost
 import org.maplibre.compose.desktop.rememberAwtComposeMapHost
 
 fun main() {
-    setupDevelopmentDiagnostics()
+    configureAxerDiagnostics()
     val graph = createGraph<NavigoDesktopGraph>()
     singleWindowApplication(title = "Navigo") {
         ProvideMapHost(rememberAwtComposeMapHost(window)) {

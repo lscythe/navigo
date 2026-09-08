@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":domain:auth"))
     implementation(project(":api:legal"))
     implementation(project(":core:network"))
+    implementation(project(":core:monitoring"))
     implementation(project(":core:persistence"))
     implementation(project(":feature:onboarding:domain"))
     implementation(project(":data:auth"))

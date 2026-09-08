@@ -23,6 +23,7 @@ import dev.zacsweers.metro.createGraph
 import platform.UIKit.UIViewController
 
 fun MainViewController(): UIViewController {
+    configureAxerDiagnostics()
     val graph = createGraph<NavigoIosGraph>()
     return ComposeUIViewController {
         NavigoRoot(

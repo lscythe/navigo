@@ -43,6 +43,7 @@ kotlin {
         implementation(project(":feature:onboarding:domain"))
         implementation(project(":core:designsystem"))
         implementation(project(":core:navigation"))
+        implementation(project(":core:monitoring"))
         implementation(project(":core:ui"))
         implementation(project(":feature:home:api"))
         implementation(project(":feature:home:impl"))
