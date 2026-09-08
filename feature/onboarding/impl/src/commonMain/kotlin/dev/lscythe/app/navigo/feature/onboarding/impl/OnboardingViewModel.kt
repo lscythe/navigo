@@ -59,7 +59,10 @@ class OnboardingViewModel(
             OnboardingIntent.IntroductionContinued ->
                 update { copy(stage = OnboardingStage.Permissions) }
             OnboardingIntent.PermissionChoiceSelected,
-            OnboardingIntent.SkipClicked -> update { copy(stage = OnboardingStage.Profile) }
+            OnboardingIntent.SkipClicked -> {
+                update { copy(stage = OnboardingStage.Profile) }
+                loadLegalDocuments()
+            }
             OnboardingIntent.BackClicked ->
                 update {
                     copy(
@@ -106,11 +109,12 @@ class OnboardingViewModel(
                 legalFailureMessage = null,
             )
         }
+        if (mutableState.value.stage == OnboardingStage.Profile) loadLegalDocuments()
     }
 
     private fun loadLegalDocuments() {
         val requestLanguage = mutableState.value.effectiveLanguage
-        if (mutableState.value.legalLoading) return
+        if (mutableState.value.legalLoading || loadedDocuments != null) return
         update { copy(legalLoading = true, legalFailureMessage = null) }
         viewModelScope.launch {
             try {

@@ -69,6 +69,42 @@ class OnboardingViewModelTest :
                 }
             }
 
+            When("profile stage is entered") {
+                Then("it prefetches legal documents") {
+                    runTest(dispatcher) {
+                        val legal = FakeLegalRepository()
+                        val viewModel = viewModel(legal = legal)
+
+                        viewModel.onIntent(OnboardingIntent.IntroductionContinued)
+                        viewModel.onIntent(OnboardingIntent.PermissionChoiceSelected)
+                        advanceUntilIdle()
+
+                        legal.requests shouldBe listOf(AppLanguage.English)
+                        viewModel.state.value.legalDocuments?.terms?.version shouldBe "terms-v1"
+                    }
+                }
+            }
+
+            When("language changes on profile stage") {
+                Then("it immediately prefetches the selected language") {
+                    runTest(dispatcher) {
+                        val legal = FakeLegalRepository()
+                        val viewModel = viewModel(legal = legal)
+                        viewModel.onIntent(OnboardingIntent.IntroductionContinued)
+                        viewModel.onIntent(OnboardingIntent.PermissionChoiceSelected)
+                        advanceUntilIdle()
+
+                        viewModel.onIntent(
+                            OnboardingIntent.LanguageSelected(OnboardingLanguage.Indonesian)
+                        )
+                        advanceUntilIdle()
+
+                        legal.requests shouldBe listOf(AppLanguage.English, AppLanguage.Indonesian)
+                        viewModel.state.value.legalDocuments?.terms?.languageTag shouldBe "id"
+                    }
+                }
+            }
+
             When("a new language is selected") {
                 Then("it changes language immediately") {
                     val viewModel = viewModel()
@@ -216,9 +252,9 @@ class OnboardingViewModelTest :
     })
 
 private fun viewModel(
-    completion: FakeCompletionRepository = FakeCompletionRepository()
+    completion: FakeCompletionRepository = FakeCompletionRepository(),
+    legal: FakeLegalRepository = FakeLegalRepository(),
 ): OnboardingViewModel {
-    val legal = FakeLegalRepository()
     return OnboardingViewModel(
         LoadOnboardingLegalDocumentsUseCase(legal),
         CompleteOnboardingUseCase(completion),
@@ -226,8 +262,12 @@ private fun viewModel(
 }
 
 private class FakeLegalRepository : LegalRepository {
-    override suspend fun getDocuments(language: AppLanguage): LegalResult<LegalDocumentSet> =
-        LegalResult.Success(documents(language))
+    val requests = mutableListOf<AppLanguage>()
+
+    override suspend fun getDocuments(language: AppLanguage): LegalResult<LegalDocumentSet> {
+        requests += language
+        return LegalResult.Success(documents(language))
+    }
 }
 
 private class FakeCompletionRepository(private val fail: Boolean = false) :
