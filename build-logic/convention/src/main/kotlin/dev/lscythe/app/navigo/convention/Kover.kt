@@ -28,6 +28,15 @@ private val coverageExclusions =
         "*.R$*",
         "*.BuildConfig",
         "*.Manifest*",
+        "*.component.*",
+        "*.content.*",
+        "*.*ScreenKt",
+        "*.*RouteKt",
+        "*.*BottomSheetKt",
+        "*.*Preview*",
+        "*.*Previews*",
+        "*.*MetroFactory*",
+        "*.*MetroContribution*",
     )
 
 internal fun Project.configureKoverAndroid(commonExtension: CommonExtension) {
