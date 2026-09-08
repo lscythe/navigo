@@ -39,6 +39,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.androidx.compose.material3)
         }
+        desktopMain.dependencies {
+            implementation(libs.compose.multiplatform.ui.tooling.preview)
+        }
         commonTest.dependencies {
             implementation(kotlin("test"))
             implementation(project(":core:testing-screenshot"))

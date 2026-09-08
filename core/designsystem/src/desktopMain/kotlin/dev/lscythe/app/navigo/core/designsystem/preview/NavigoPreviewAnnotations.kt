@@ -15,21 +15,12 @@
  */
 package dev.lscythe.app.navigo.core.designsystem.preview
 
-import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
 
-@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Light", showBackground = true)
+@Preview(name = "Dark", showBackground = true)
 annotation class NavigoThemePreview
 
-@Preview(
-    name = "Material Kolor Light",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    showBackground = true,
-)
-@Preview(
-    name = "Material Kolor Dark",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true,
-)
+@Preview(name = "Material Kolor Light", showBackground = true)
+@Preview(name = "Material Kolor Dark", showBackground = true)
 annotation class NavigoMaterialKolorThemePreview

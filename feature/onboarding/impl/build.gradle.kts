@@ -38,6 +38,9 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.compose.multiplatform.resources)
         }
+        desktopMain.dependencies {
+            implementation(libs.compose.multiplatform.ui.tooling.preview)
+        }
         commonTest.dependencies {
             implementation(project(":core:testing-screenshot"))
             implementation(libs.kotlinx.coroutines.test)

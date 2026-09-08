@@ -1,7 +1,7 @@
 [versions]
 appVersionCode = "1"
 appVersionName = "1.0.0"
-androidGradlePlugin = "9.4.0"
+androidGradlePlugin = "9.1.0"
 axer = "1.2.12"
 buildKonfig = "0.22.0"
 androidTools = "32.4.0"
@@ -83,6 +83,7 @@ compose-multiplatform-material3 = { module = "org.jetbrains.compose.material3:ma
 compose-multiplatform-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
 compose-multiplatform-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+compose-multiplatform-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 compose-multiplatform-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
 compose-multiplatform-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "composeMultiplatformAdaptive" }
 compose-multiplatform-material3-adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "composeMultiplatformAdaptive" }
