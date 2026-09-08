@@ -21,6 +21,7 @@ import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.serialization.ContentConvertException
+import kotlin.coroutines.cancellation.CancellationException
 
 suspend inline fun <reified T> safeRequest(
     noinline block: suspend () -> HttpResponse
@@ -28,6 +29,8 @@ suspend inline fun <reified T> safeRequest(
     try {
         val response = block()
         ApiResponse.Success(response.body())
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: ClientRequestException) {
         val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
         ApiResponse.Error.ClientError(
@@ -58,6 +61,8 @@ suspend fun <T> safeResponseRequest(
 ): ApiResponse<T> =
     try {
         ApiResponse.Success(transform(block()))
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: ClientRequestException) {
         val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
         ApiResponse.Error.ClientError(
@@ -86,6 +91,8 @@ suspend fun safeNoContentRequest(block: suspend () -> HttpResponse): ApiResponse
     try {
         block()
         ApiResponse.Success(Unit)
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: ClientRequestException) {
         val problem = runCatching { e.response.body<ProblemDetail>() }.getOrNull()
         ApiResponse.Error.ClientError(

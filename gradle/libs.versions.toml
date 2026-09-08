@@ -2,6 +2,8 @@
 appVersionCode = "1"
 appVersionName = "1.0.0"
 androidGradlePlugin = "9.4.0"
+axer = "1.2.12"
+buildKonfig = "0.22.0"
 androidTools = "32.4.0"
 androidxActivity = "1.13.0"
 androidxAppCompat = "1.8.0"
@@ -61,6 +63,8 @@ sentryKmp = "0.27.0"
 turbine = "1.2.1"
 
 [libraries]
+axer = { module = "io.github.orioneee:axer", version.ref = "axer" }
+axer-noop = { module = "io.github.orioneee:axer-no-op", version.ref = "axer" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidxAppCompat" }
 androidx-benchmark-macro = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidxMacroBenchmark" }
@@ -79,6 +83,7 @@ compose-multiplatform-material3 = { module = "org.jetbrains.compose.material3:ma
 compose-multiplatform-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
 compose-multiplatform-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+compose-multiplatform-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 compose-multiplatform-ui-test = { module = "org.jetbrains.compose.ui:ui-test", version.ref = "composeMultiplatform" }
 compose-multiplatform-material3-adaptive = { module = "org.jetbrains.compose.material3.adaptive:adaptive", version.ref = "composeMultiplatformAdaptive" }
 compose-multiplatform-material3-adaptive-navigation3 = { module = "org.jetbrains.compose.material3.adaptive:adaptive-navigation3", version.ref = "composeMultiplatformAdaptive" }
@@ -191,6 +196,7 @@ android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidxMacroBenchmark" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

@@ -26,7 +26,5 @@ object MonitoringBindings {
     @Provides
     fun provideCrashReporter(backend: MonitoringBackend): CrashReporter = backend.crashReporter
 
-    @Provides fun provideAppLogger(backend: MonitoringBackend): AppLogger = backend.appLogger
-
     @Provides fun provideTracer(backend: MonitoringBackend): Tracer = backend.tracer
 }

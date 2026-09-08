@@ -36,10 +36,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -120,24 +116,8 @@ fun NavigoBadge(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoDotPreview() {
-    NavigoPreview {
-        DotPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoDotMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        DotPreviewContent()
-    }
-}
-
-@Composable
-private fun DotPreviewContent() {
+internal fun DotPreviewContent() {
     Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoDot(color = MaterialTheme.colorScheme.primary)
         NavigoDot(color = MaterialTheme.colorScheme.secondary)
@@ -150,24 +130,8 @@ private fun DotPreviewContent() {
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoBadgePreview() {
-    NavigoPreview {
-        BadgePreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoBadgeMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        BadgePreviewContent()
-    }
-}
-
-@Composable
-private fun BadgePreviewContent() {
+internal fun BadgePreviewContent() {
     Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
         Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
             NavigoBadge(text = "3")

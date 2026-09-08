@@ -22,7 +22,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,13 +30,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,8 +65,6 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoChoiceC
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoUnderlinedTextField
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.action.Paint
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.language_english
@@ -91,6 +92,11 @@ import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_prof
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_profile_terms_title
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_profile_title
 import dev.lscythe.app.navigo.core.ui.color.ColorSelectionBottomSheet
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingIntent
+import dev.lscythe.app.navigo.feature.onboarding.impl.OnboardingUiState
+import dev.lscythe.app.navigo.feature.onboarding.impl.toOnboardingLanguage
+import dev.lscythe.app.navigo.feature.onboarding.impl.toSupportedLanguage
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 private val AvatarColors =
@@ -105,20 +111,28 @@ private val AvatarColors =
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OnboardingProfile(
-    legalDocumentsRead: Boolean,
+    state: OnboardingUiState,
     onOpenLegalDocuments: () -> Unit,
-    onContinue: () -> Unit,
+    onIntent: (OnboardingIntent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val avatarShape = MaterialTheme.shapes.large
-    var name by remember { mutableStateOf("") }
-    var avatarColor by remember { mutableStateOf(AvatarColors.first()) }
+    val avatarColor = Color(state.avatarColorArgb.toLong())
     var customColor by remember { mutableStateOf(Color(0xFF5C8A3E)) }
-    var customColorSelected by remember { mutableStateOf(false) }
     var showColorPicker by remember { mutableStateOf(false) }
-    var language by remember { mutableStateOf(SupportedLanguage.Indonesian) }
-    var analyticsEnabled by remember { mutableStateOf(false) }
-    var crashReportsEnabled by remember { mutableStateOf(false) }
+    val sheetState =
+        rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
+    val scope = rememberCoroutineScope()
+    val dismissColorPickerDialog = {
+        scope.launch {
+            sheetState.hide()
+            if (!sheetState.isVisible) showColorPicker = false
+        }
+        Unit
+    }
 
     Column(
         modifier = modifier.fillMaxSize().padding(horizontal = NavigoSpacing.screen),
@@ -137,16 +151,20 @@ internal fun OnboardingProfile(
                 horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.screen),
             ) {
                 NavigoAvatar(
-                    text = name.toInitials(),
+                    text = state.displayName.toInitials(),
                     size = 72.dp,
                     containerColor = avatarColor,
                     shape = avatarShape,
                     contentColor =
-                        if (avatarColor == AvatarColors[2]) Color(0xFF17473C) else Color.White,
+                        if (state.avatarColorArgb == AvatarColors[2].value.toUInt()) {
+                            Color(0xFF17473C)
+                        } else {
+                            Color.White
+                        },
                 )
                 NavigoUnderlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = state.displayName,
+                    onValueChange = { onIntent(OnboardingIntent.NameChanged(it)) },
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.onboarding_profile_name_label).uppercase(),
                     hint = stringResource(Res.string.onboarding_profile_name_placeholder),
@@ -160,7 +178,7 @@ internal fun OnboardingProfile(
                                 Modifier.size(48.dp)
                                     .clip(avatarShape)
                                     .then(
-                                        if (color == avatarColor) {
+                                        if (color.value.toUInt() == state.avatarColorArgb) {
                                             Modifier.border(
                                                 3.dp,
                                                 MaterialTheme.colorScheme.onBackground,
@@ -169,10 +187,16 @@ internal fun OnboardingProfile(
                                         } else Modifier
                                     )
                                     .clickable {
-                                        customColorSelected = false
-                                        avatarColor = color
+                                        onIntent(
+                                            OnboardingIntent.AvatarColorSelected(
+                                                color.value.toUInt()
+                                            )
+                                        )
                                     }
-                                    .padding(if (color == avatarColor) 5.dp else 0.dp),
+                                    .padding(
+                                        if (color.value.toUInt() == state.avatarColorArgb) 5.dp
+                                        else 0.dp
+                                    ),
                             contentAlignment = Alignment.Center,
                         ) {
                             Box(
@@ -187,7 +211,11 @@ internal fun OnboardingProfile(
                             Modifier.size(48.dp)
                                 .clip(avatarShape)
                                 .then(
-                                    if (customColorSelected) {
+                                    if (
+                                        AvatarColors.none {
+                                            it.value.toUInt() == state.avatarColorArgb
+                                        }
+                                    ) {
                                         Modifier.border(
                                             3.dp,
                                             MaterialTheme.colorScheme.onBackground,
@@ -196,9 +224,18 @@ internal fun OnboardingProfile(
                                     } else Modifier
                                 )
                                 .clickable {
+                                    scope.launch { sheetState.show() }
                                     showColorPicker = true
                                 }
-                                .padding(if (customColorSelected) 5.dp else 0.dp),
+                                .padding(
+                                    if (
+                                        AvatarColors.none {
+                                            it.value.toUInt() == state.avatarColorArgb
+                                        }
+                                    )
+                                        5.dp
+                                    else 0.dp
+                                ),
                         contentAlignment = Alignment.Center,
                     ) {
                         Canvas(Modifier.fillMaxSize().clip(MaterialTheme.shapes.medium)) {
@@ -229,12 +266,17 @@ internal fun OnboardingProfile(
                 Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
                     SupportedLanguage.entries.forEach { option ->
                         NavigoChoiceChip(
-                            selected = language == option,
-                            onClick = { language = option },
+                            selected = state.language.toSupportedLanguage() == option,
+                            onClick = {
+                                onIntent(
+                                    OnboardingIntent.LanguageSelected(option.toOnboardingLanguage())
+                                )
+                            },
                             label =
                                 when (option) {
                                     SupportedLanguage.English ->
                                         stringResource(Res.string.language_english)
+
                                     SupportedLanguage.Indonesian ->
                                         stringResource(Res.string.language_indonesian)
                                 },
@@ -247,15 +289,17 @@ internal fun OnboardingProfile(
                     title = stringResource(Res.string.onboarding_profile_analytics_title),
                     description =
                         stringResource(Res.string.onboarding_profile_analytics_description),
-                    checked = analyticsEnabled,
-                    onCheckedChange = { analyticsEnabled = it },
+                    checked = state.analyticsEnabled,
+                    onCheckedChange = {
+                        onIntent(OnboardingIntent.AnalyticsConsentChanged(it))
+                    },
                 )
                 ConsentRow(
                     title = stringResource(Res.string.onboarding_profile_crash_reports_title),
                     description =
                         stringResource(Res.string.onboarding_profile_crash_reports_description),
-                    checked = crashReportsEnabled,
-                    onCheckedChange = { crashReportsEnabled = it },
+                    checked = state.crashReportsEnabled,
+                    onCheckedChange = { onIntent(OnboardingIntent.CrashConsentChanged(it)) },
                 )
             }
             ProfileSection(
@@ -266,11 +310,18 @@ internal fun OnboardingProfile(
                     modifier = Modifier.clickable(onClick = onOpenLegalDocuments),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    NavigoCheckbox(
-                        checked = legalDocumentsRead,
-                        onCheckedChange = null,
-                        enabled = legalDocumentsRead,
-                    )
+                    if (state.legalLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(12.dp).size(24.dp),
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        NavigoCheckbox(
+                            checked = state.legalAccepted,
+                            onCheckedChange = null,
+                            enabled = state.legalAccepted,
+                        )
+                    }
                     Text(
                         text =
                             buildAnnotatedString {
@@ -309,15 +360,15 @@ internal fun OnboardingProfile(
         }
         Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
             NavigoButton(
-                onClick = onContinue,
-                enabled = legalDocumentsRead,
+                onClick = { onIntent(OnboardingIntent.OpenMapClicked) },
+                enabled = state.legalAccepted && !state.completionLoading,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp),
             ) {
                 Text(stringResource(Res.string.onboarding_profile_open_map))
             }
             NavigoTextButton(
-                onClick = onContinue,
-                enabled = legalDocumentsRead,
+                onClick = { onIntent(OnboardingIntent.RideAsGuestClicked) },
+                enabled = state.legalAccepted && !state.completionLoading,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(stringResource(Res.string.onboarding_profile_ride_guest))
@@ -329,13 +380,14 @@ internal fun OnboardingProfile(
             title = stringResource(Res.string.onboarding_profile_color_picker_title),
             description = stringResource(Res.string.onboarding_profile_color_picker_description),
             selectedColor = customColor,
+            sheetState = sheetState,
             onApply = { selectedColor ->
                 customColor = selectedColor
-                avatarColor = selectedColor
-                customColorSelected = true
+                onIntent(OnboardingIntent.AvatarColorSelected(selectedColor.value.toUInt()))
                 showColorPicker = false
+                dismissColorPickerDialog()
             },
-            onDismissRequest = { showColorPicker = false },
+            onDismissRequest = dismissColorPickerDialog,
         )
     }
 }
@@ -393,17 +445,5 @@ private fun ConsentRow(
             )
         }
         NavigoSwitch(checked = checked, onCheckedChange = onCheckedChange)
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingProfilePreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingProfile(
-            legalDocumentsRead = true,
-            onOpenLegalDocuments = {},
-            onContinue = {},
-        )
     }
 }

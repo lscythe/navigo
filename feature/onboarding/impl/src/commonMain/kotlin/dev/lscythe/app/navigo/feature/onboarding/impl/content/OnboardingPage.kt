@@ -39,8 +39,6 @@ import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.action.Check
 import dev.lscythe.app.navigo.core.designsystem.icon.status.ExclamationCircle
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Signal
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.app_name
@@ -142,14 +140,6 @@ internal fun OnboardingFeedPage(modifier: Modifier = Modifier) {
     }
 }
 
-@NavigoThemePreview
-@Composable
-private fun OnboardingFeedPagePreview() {
-    NavigoPreview {
-        OnboardingFeedPage()
-    }
-}
-
 @Composable
 internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
     Column(
@@ -178,19 +168,11 @@ internal fun OnboardingGpsPage(modifier: Modifier = Modifier) {
             text = stringResource(Res.string.onboarding_gps_disclosure_note),
             icon = NavigoIcons.ExclamationCircle,
             iconTint = MaterialTheme.colorScheme.primary,
-            containerColor = MaterialTheme.colorScheme.secondary.copy(0.2f),
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onBackground,
             alignment = Alignment.Top,
             textStyle = MaterialTheme.typography.bodyMedium,
         )
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingGpsPagePreview() {
-    NavigoPreview {
-        OnboardingGpsPage()
     }
 }
 
@@ -230,16 +212,8 @@ internal fun OnboardingAlarmPage(modifier: Modifier = Modifier) {
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun OnboardingAlarmPagePreview() {
-    NavigoPreview {
-        OnboardingAlarmPage()
-    }
-}
-
-@Composable
-private fun OnboardingPageCheckList(
+internal fun OnboardingPageCheckList(
     item: String,
     modifier: Modifier = Modifier,
 ) {
@@ -262,15 +236,7 @@ private fun OnboardingPageCheckList(
     }
 }
 
-@NavigoThemePreview
-@Composable
-private fun OnboardingPageCheckListPreview() {
-    NavigoPreview {
-        OnboardingPageCheckList("First Item")
-    }
-}
-
-private data class GpsRoute(
+internal data class GpsRoute(
     val number: String,
     val eta: String,
     val status: String,
@@ -281,13 +247,13 @@ private data class GpsRoute(
 )
 
 @Composable
-private fun OnboardingGpsPageRouteItem(
+internal fun OnboardingGpsPageRouteItem(
     route: GpsRoute,
     modifier: Modifier = Modifier,
     enabled: Boolean = false,
 ) {
     val color =
-        if (enabled) MaterialTheme.colorScheme.primary
+        if (enabled) MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
         else MaterialTheme.colorScheme.surfaceContainerHigh
 
     val avatarTextColor =
@@ -353,22 +319,3 @@ private val Int.signalIcon
             this == 2 -> NavigoIcons.Signal.Medium
             else -> NavigoIcons.Signal.Strong
         }
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingGpsPageRouteItemPreview() {
-    NavigoPreview {
-        OnboardingGpsPageRouteItem(
-            route =
-                GpsRoute(
-                    number = "14",
-                    eta = "4 min",
-                    status = "seats free",
-                    source = "Official GPS + 6 riders",
-                    updatedAt = "3 min ago",
-                    quality = 2,
-                    enabled = true,
-                )
-        )
-    }
-}

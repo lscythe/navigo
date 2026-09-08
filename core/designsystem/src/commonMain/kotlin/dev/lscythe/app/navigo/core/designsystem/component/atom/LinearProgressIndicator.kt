@@ -23,8 +23,6 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.CircleShape
@@ -44,11 +42,6 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
-import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -147,62 +140,6 @@ fun NavigoSegmentedLinearProgressIndicator(
     }
 }
 
-@NavigoThemePreview
-@Composable
-private fun NavigoLinearProgressIndicatorPreview() {
-    NavigoPreview {
-        Column(verticalArrangement = spacedBy(NavigoSpacing.container)) {
-            NavigoSegmentedLinearProgressIndicator(
-                segments =
-                    persistentListOf(
-                        NavigoProgressSegment(0.55f, MaterialTheme.colorScheme.primary),
-                        NavigoProgressSegment(0.08f, MaterialTheme.colorScheme.onPrimary),
-                        NavigoProgressSegment(0.12f, MaterialTheme.colorScheme.secondary),
-                    )
-            )
-
-            val transition = rememberInfiniteTransition(label = "storage preview")
-            val offlineFraction by
-                transition.animateFloat(
-                    initialValue = 0.02f,
-                    targetValue = 0.2f,
-                    animationSpec =
-                        infiniteRepeatable(
-                            animation = tween(2_000, easing = LinearEasing),
-                            repeatMode = RepeatMode.Reverse,
-                        ),
-                    label = "offline storage",
-                )
-            NavigoSegmentedLinearProgressIndicator(
-                segments =
-                    persistentListOf(
-                        NavigoProgressSegment(0.55f, MaterialTheme.colorScheme.primary),
-                        NavigoProgressSegment(0.08f, MaterialTheme.colorScheme.onPrimary),
-                        NavigoProgressSegment(offlineFraction, MaterialTheme.colorScheme.secondary),
-                    )
-            )
-        }
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoLinearProgressIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        Column(verticalArrangement = spacedBy(NavigoSpacing.container)) {
-            NavigoSegmentedLinearProgressIndicator(
-                segments =
-                    persistentListOf(
-                        NavigoProgressSegment(0.55f, MaterialTheme.colorScheme.primary),
-                        NavigoProgressSegment(0.08f, MaterialTheme.colorScheme.onPrimary),
-                        NavigoProgressSegment(0.12f, MaterialTheme.colorScheme.secondary),
-                    )
-            )
-            NavigoLinearProgressIndicator(progress = 0.65f)
-        }
-    }
-}
-
 /**
  * Displays determinate linear progress.
  *
@@ -279,21 +216,5 @@ fun NavigoLinearLoadingIndicator(
                 cornerRadius = CornerRadius(radius),
             )
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoLinearLoadingIndicatorPreview() {
-    NavigoPreview {
-        NavigoLinearLoadingIndicator()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoLinearLoadingIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        NavigoLinearLoadingIndicator()
     }
 }

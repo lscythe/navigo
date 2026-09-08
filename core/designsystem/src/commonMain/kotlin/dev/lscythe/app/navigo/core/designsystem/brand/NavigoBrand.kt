@@ -34,10 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.LightOnPrimaryColor
 import dev.lscythe.app.navigo.core.designsystem.token.LightPrimaryColor
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
@@ -129,16 +125,4 @@ fun NavigoBrand(
             }
         }
     }
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoBrandPreview() {
-    NavigoPreview { NavigoBrand() }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoBrandMaterialKolorPreview() {
-    NavigoMaterialKolorPreview { NavigoBrand() }
 }

@@ -16,12 +16,45 @@
 package dev.lscythe.app.navigo.feature.onboarding.impl
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.lscythe.app.navigo.core.resources.LocalAppLocale
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 
 @Composable
 internal fun OnboardingRoute(
     navigateHome: () -> Unit,
+    viewModel: OnboardingViewModel = metroViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    OnboardingScreen(onContinue = navigateHome, modifier = modifier)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(viewModel) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                OnboardingEffect.NavigateHome -> navigateHome()
+            }
+        }
+    }
+    val systemLanguage = LocalAppLocale.current.toEffectiveOnboardingLanguage()
+    key(state.effectiveLanguage) {
+        CompositionLocalProvider(LocalAppLocale provides state.effectiveLanguage.languageTag) {
+            OnboardingScreen(
+                state = state,
+                onIntent = viewModel::onIntent,
+                systemLanguage = systemLanguage,
+                modifier = modifier,
+            )
+        }
+    }
 }
+
+private fun String.toEffectiveOnboardingLanguage() =
+    if (startsWith("id", ignoreCase = true)) {
+        OnboardingLanguage.Indonesian
+    } else {
+        OnboardingLanguage.English
+    }

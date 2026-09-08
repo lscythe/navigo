@@ -49,6 +49,7 @@ object NetworkBindings {
         baseUrl: String,
         languageProvider: LanguageProvider,
         networkLogger: NetworkLogger,
+        networkInspector: NetworkInspector,
     ) {
         expectSuccess = true
         defaultRequest {
@@ -79,6 +80,7 @@ object NetworkBindings {
                 }
             level = LogLevel.INFO
         }
+        networkInspector.install(this)
     }
 
     internal fun createPublicHttpClient(
@@ -86,9 +88,10 @@ object NetworkBindings {
         baseUrl: String,
         languageProvider: LanguageProvider,
         networkLogger: NetworkLogger,
+        networkInspector: NetworkInspector = NetworkInspector {},
     ): HttpClient =
         HttpClient(engine) {
-            configurePublicClient(baseUrl, languageProvider, networkLogger)
+            configurePublicClient(baseUrl, languageProvider, networkLogger, networkInspector)
         }
 
     @Provides
@@ -102,9 +105,10 @@ object NetworkBindings {
         @BaseUrl baseUrl: String,
         languageProvider: LanguageProvider,
         networkLogger: NetworkLogger,
+        networkInspector: NetworkInspector,
     ): HttpClient =
         HttpClient(createPlatformHttpClientEngine()) {
-            configurePublicClient(baseUrl, languageProvider, networkLogger)
+            configurePublicClient(baseUrl, languageProvider, networkLogger, networkInspector)
         }
 
     @Provides

@@ -59,7 +59,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
 import dev.lscythe.app.navigo.core.designsystem.brand.NavigoBrand
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIconButton
@@ -68,8 +67,6 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoTextButton
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.locale.Language
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_back
@@ -87,28 +84,23 @@ private const val PageCount = OnboardingPageCount
 private const val PageDurationMillis = 5_000
 private const val PageTransitionDurationMillis = 650
 
-private enum class OnboardingStage {
-    Introduction,
-    Permissions,
-    Profile,
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OnboardingScreen(
-    onContinue: () -> Unit,
+    state: OnboardingUiState,
+    onIntent: (OnboardingIntent) -> Unit,
     modifier: Modifier = Modifier,
+    systemLanguage: OnboardingLanguage,
 ) {
     val pagerState = rememberPagerState(pageCount = { PageCount })
-    var stage by remember { mutableStateOf(OnboardingStage.Introduction) }
     var showLanguageSelector by remember { mutableStateOf(false) }
     var showLegalDocuments by remember { mutableStateOf(false) }
-    var legalDocumentsRead by remember { mutableStateOf(false) }
-    var selectedLanguage by remember {
-        mutableStateOf<SupportedLanguage?>(SupportedLanguage.Indonesian)
-    }
-    var pendingLanguage by remember { mutableStateOf(selectedLanguage) }
-    val sheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden)
+    var pendingLanguage by remember { mutableStateOf(state.language.toSupportedLanguage()) }
+    val sheetState =
+        rememberBottomSheetState(
+            initialValue = SheetValue.Hidden,
+            enabledValues = setOf(SheetValue.Hidden, SheetValue.Expanded),
+        )
     val scope = rememberCoroutineScope()
     val dismissLanguageSelector = {
         scope.launch {
@@ -119,8 +111,9 @@ internal fun OnboardingScreen(
     }
 
     var pageProgress by remember { mutableFloatStateOf(0f) }
-    LaunchedEffect(pagerState.settledPage, showLanguageSelector, stage) {
-        if (showLanguageSelector || stage != OnboardingStage.Introduction) return@LaunchedEffect
+    LaunchedEffect(pagerState.settledPage, showLanguageSelector, state.stage) {
+        if (showLanguageSelector || state.stage != OnboardingStage.Introduction)
+            return@LaunchedEffect
         val progress = Animatable(0f)
         pageProgress = 0f
         progress.animateTo(
@@ -147,29 +140,22 @@ internal fun OnboardingScreen(
         verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
     ) {
         OnboardingHeader(
-            showBack = stage != OnboardingStage.Introduction,
-            showLanguage = stage != OnboardingStage.Profile,
-            showSkip = stage != OnboardingStage.Profile,
-            languageId = selectedLanguage?.displayCode.orEmpty(),
-            onBack = {
-                stage =
-                    when (stage) {
-                        OnboardingStage.Introduction -> OnboardingStage.Introduction
-                        OnboardingStage.Permissions -> OnboardingStage.Introduction
-                        OnboardingStage.Profile -> OnboardingStage.Permissions
-                    }
-            },
+            showBack = state.stage != OnboardingStage.Introduction,
+            showLanguage = state.stage != OnboardingStage.Profile,
+            showSkip = state.stage != OnboardingStage.Profile,
+            languageId = state.effectiveLanguage.toSupportedLanguage()!!.displayCode,
+            onBack = { onIntent(OnboardingIntent.BackClicked) },
             onChangeLanguage = {
-                pendingLanguage = selectedLanguage
+                pendingLanguage = state.language.toSupportedLanguage()
                 showLanguageSelector = true
             },
-            onSkip = { stage = OnboardingStage.Profile },
+            onSkip = { onIntent(OnboardingIntent.SkipClicked) },
             modifier =
                 Modifier.padding(horizontal = NavigoSpacing.screen)
                     .padding(bottom = NavigoSpacing.container),
         )
         AnimatedContent(
-            targetState = stage,
+            targetState = state.stage,
             transitionSpec = {
                 val forward = targetState.ordinal > initialState.ordinal
                 val direction = if (forward) 1 else -1
@@ -199,17 +185,21 @@ internal fun OnboardingScreen(
                                 )
                             }
                         },
-                        onContinue = { stage = OnboardingStage.Permissions },
+                        onContinue = { onIntent(OnboardingIntent.IntroductionContinued) },
                     )
 
                 OnboardingStage.Permissions ->
-                    OnboardingPermissions(onContinue = { stage = OnboardingStage.Profile })
+                    OnboardingPermissions(
+                        onContinue = {
+                            onIntent(OnboardingIntent.PermissionChoiceSelected)
+                        }
+                    )
 
                 OnboardingStage.Profile ->
                     OnboardingProfile(
-                        legalDocumentsRead = legalDocumentsRead,
+                        state = state,
                         onOpenLegalDocuments = { showLegalDocuments = true },
-                        onContinue = onContinue,
+                        onIntent = onIntent,
                     )
             }
         }
@@ -218,23 +208,33 @@ internal fun OnboardingScreen(
         LanguageSelectionBottomSheet(
             selectedLanguage = pendingLanguage,
             sheetState = sheetState,
-            onLanguageSelected = { pendingLanguage = it },
-            onApply = {
-                selectedLanguage = pendingLanguage
-                dismissLanguageSelector()
+            onLanguageSelected = { language ->
+                pendingLanguage = language
+                onIntent(
+                    OnboardingIntent.LanguageSelected(
+                        language = language.toOnboardingLanguage(),
+                        effectiveLanguage = language?.toOnboardingLanguage() ?: systemLanguage,
+                    )
+                )
             },
+            onApply = dismissLanguageSelector,
             onDismissRequest = dismissLanguageSelector,
         )
     }
     if (showLegalDocuments) {
-        LegalDocumentsBottomSheet(
-            language = selectedLanguage,
-            onAccept = {
-                legalDocumentsRead = true
-                showLegalDocuments = false
-            },
-            onDismissRequest = { showLegalDocuments = false },
-        )
+        LaunchedEffect(showLegalDocuments, state.language) {
+            onIntent(OnboardingIntent.LegalDocumentsRequested)
+        }
+        state.legalDocuments?.let { documents ->
+            LegalDocumentsBottomSheet(
+                documents = documents,
+                onAccept = {
+                    onIntent(OnboardingIntent.LegalDocumentsAccepted)
+                    showLegalDocuments = false
+                },
+                onDismissRequest = { showLegalDocuments = false },
+            )
+        }
     }
 }
 
@@ -337,13 +337,5 @@ private fun OnboardingHeader(
                 }
             }
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingScreenPreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingScreen(onContinue = {})
     }
 }

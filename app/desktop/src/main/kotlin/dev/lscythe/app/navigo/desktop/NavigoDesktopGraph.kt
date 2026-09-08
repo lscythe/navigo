@@ -1,0 +1,53 @@
+/*
+ * Copyright 2026 Lscythe
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package dev.lscythe.app.navigo.desktop
+
+import dev.lscythe.app.navigo.app.AttestationPackageName
+import dev.lscythe.app.navigo.app.MainViewModel
+import dev.lscythe.app.navigo.config.AppBuildKonfig
+import dev.lscythe.app.navigo.core.monitoring.AppLogger
+import dev.lscythe.app.navigo.core.monitoring.MonitoringBackend
+import dev.lscythe.app.navigo.core.network.BaseUrl
+import dev.lscythe.app.navigo.core.network.NetworkInspector
+import dev.lscythe.app.navigo.core.network.NetworkLogger
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metrox.viewmodel.ViewModelGraph
+
+@ContributesTo(AppScope::class)
+@BindingContainer
+object DesktopNetworkBindings {
+    @Provides @BaseUrl fun provideBaseUrl(): String = AppBuildKonfig.API_BASE_URL
+
+    @Provides
+    @AttestationPackageName
+    fun provideAttestationPackageName(): String = "dev.lscythe.app.navigo"
+
+    @Provides
+    fun provideAppLogger(backend: MonitoringBackend): AppLogger = axerAppLogger(backend.appLogger)
+
+    @Provides fun provideNetworkLogger(): NetworkLogger = NetworkLogger {}
+
+    @Provides fun provideNetworkInspector(): NetworkInspector = AxerNetworkInspector()
+}
+
+@DependencyGraph(AppScope::class)
+interface NavigoDesktopGraph : ViewModelGraph {
+    val mainViewModel: MainViewModel
+}

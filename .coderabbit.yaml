@@ -19,6 +19,9 @@ reviews:
   auto_apply_labels: false
   suggested_reviewers: true
   auto_assign_reviewers: false
+  auto_review:
+    base_branches:
+      - develop
   path_filters:
     - '!**/build/**'
     - '!**/generated/**'

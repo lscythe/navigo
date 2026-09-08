@@ -16,10 +16,12 @@
 package dev.lscythe.app.navigo
 
 import android.app.Application
+import android.os.StrictMode
+import android.webkit.WebView
 import dev.lscythe.app.navigo.core.monitoring.MonitoringConfig
 import dev.lscythe.app.navigo.core.monitoring.MonitoringEnvironment
 import dev.lscythe.app.navigo.di.NavigoGraph
-import dev.zacsweers.metro.createGraph
+import dev.zacsweers.metro.createGraphFactory
 import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import dev.zacsweers.metrox.android.MetroApplication
 
@@ -28,7 +30,7 @@ class NavigoApplication : Application(), MetroApplication {
 
     override fun onCreate() {
         super.onCreate()
-        appGraph = createGraph<NavigoGraph>()
+        appGraph = createGraphFactory<NavigoGraph.Factory>().create(this)
         appGraph.monitoringBackend.initialize(
             MonitoringConfig(
                 dsn = BuildConfig.SENTRY_DSN,
@@ -39,8 +41,40 @@ class NavigoApplication : Application(), MetroApplication {
             )
         )
         appGraph.profileVerifierLogger()
+
+        if (BuildConfig.DEBUG) {
+            configureAxerDiagnostics()
+            setupStrictModePolicy()
+            setupWebViewDebuggingPolicy()
+        }
     }
 
     override val appComponentProviders: MetroAppComponentProviders
         get() = appGraph
+
+    private fun setupStrictModePolicy() {
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build()
+        )
+
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .detectActivityLeaks()
+                .detectLeakedRegistrationObjects()
+                .detectCleartextNetwork()
+                .penaltyLog()
+                .build()
+        )
+    }
+
+    private fun setupWebViewDebuggingPolicy() {
+        WebView.setWebContentsDebuggingEnabled(true)
+    }
 }

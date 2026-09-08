@@ -17,7 +17,6 @@ package dev.lscythe.app.navigo.feature.onboarding.impl.content
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,8 +35,6 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoTextButton
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.map.MapPin
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.onboarding_permissions_allow_now
@@ -115,13 +112,5 @@ private fun PermissionRow(
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f),
             )
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun OnboardingPermissionsPreview() {
-    NavigoPreview(contentPadding = PaddingValues(0.dp)) {
-        OnboardingPermissions(onContinue = {})
     }
 }

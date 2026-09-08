@@ -62,6 +62,21 @@ android {
                 "API_BASE_URL",
                 "\"${providers.gradleProperty("navigoNonProdApiBaseUrl").get()}\"",
             )
+            buildConfigField(
+                "String",
+                "DEVELOPMENT_KEY_ID",
+                "\"${providers.gradleProperty("navigoDevelopmentKeyId").orElse("development").get()}\"",
+            )
+            buildConfigField(
+                "String",
+                "DEVELOPMENT_PRIVATE_KEY_SEED",
+                "\"${providers.gradleProperty("navigoDevelopmentPrivateKeySeed").orElse("").get()}\"",
+            )
+            buildConfigField(
+                "String",
+                "DEVELOPMENT_SIGNER_DIGEST",
+                "\"${providers.gradleProperty("navigoDevelopmentSignerDigest").orElse("").get()}\"",
+            )
         }
         getByName("beta") {
             buildConfigField(
@@ -136,6 +151,14 @@ baselineProfile {
 dependencies {
     implementation(project(":app:shared"))
     implementation(project(":api:auth"))
+    implementation(project(":api:legal"))
+    implementation(project(":data:auth"))
+    implementation(project(":domain:auth"))
+    implementation(project(":data:legal"))
+    implementation(project(":data:settings"))
+    implementation(project(":data:user"))
+    implementation(project(":feature:onboarding:data"))
+    implementation(project(":feature:onboarding:domain"))
     implementation(project(":feature:onboarding:api"))
     implementation(project(":feature:onboarding:impl"))
     implementation(project(":feature:home:api"))
@@ -174,6 +197,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModel.navigation3)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)
+    debugImplementation(libs.axer)
+    releaseImplementation(libs.axer.noop)
     when (monitoringProvider.get()) {
         "Kermit" -> implementation(project(":core:monitoring-kermit"))
         "Sentry" -> implementation(project(":core:monitoring-sentry"))
@@ -185,6 +210,10 @@ dependencies {
     implementation(libs.metro.viewmodel)
     implementation(libs.metro.viewmodel.compose)
 
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.ksafe)
+    testImplementation(project(":core:testing"))
     debugImplementation(libs.androidx.compose.ui.testManifest)
 }
 

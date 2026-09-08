@@ -37,10 +37,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -105,24 +101,8 @@ fun NavigoAvatar(
     )
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoAvatarPreview() {
-    NavigoPreview {
-        AvatarPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoAvatarMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        AvatarPreviewContent()
-    }
-}
-
-@Composable
-private fun AvatarPreviewContent() {
+internal fun AvatarPreviewContent() {
     Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
         NavigoAvatar(text = "AK", shape = MaterialTheme.shapes.extraLarge)
         NavigoAvatar(text = "27B")

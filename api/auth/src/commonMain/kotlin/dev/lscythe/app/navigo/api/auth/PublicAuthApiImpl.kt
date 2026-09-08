@@ -37,7 +37,7 @@ import io.ktor.client.request.setBody
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-internal class PublicAuthApiImpl(@PublicClient private val httpClient: HttpClient) : PublicAuthApi {
+class PublicAuthApiImpl(@PublicClient private val httpClient: HttpClient) : PublicAuthApi {
     override suspend fun createAttestationChallenge(
         request: AttestationChallengeRequest
     ): ApiResponse<AttestationChallengeResponse> = safeRequest {

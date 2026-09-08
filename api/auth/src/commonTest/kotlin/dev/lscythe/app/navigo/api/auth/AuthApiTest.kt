@@ -15,13 +15,17 @@
  */
 package dev.lscythe.app.navigo.api.auth
 
-import dev.lscythe.app.navigo.api.auth.constant.AuthAction
+import dev.lscythe.app.navigo.api.auth.constant.AttestationAction
+import dev.lscythe.app.navigo.api.auth.constant.AttestationProvider
+import dev.lscythe.app.navigo.api.auth.dto.AndroidAssertionEvidenceRequest
 import dev.lscythe.app.navigo.api.auth.dto.AndroidEnrollmentEvidenceRequest
+import dev.lscythe.app.navigo.api.auth.dto.AppleAssertionEvidenceRequest
 import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeRequest
 import dev.lscythe.app.navigo.api.auth.dto.AttestationChallengeResponse
 import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentRequest
 import dev.lscythe.app.navigo.api.auth.dto.AttestationEnrollmentResponse
 import dev.lscythe.app.navigo.api.auth.dto.DevelopmentEvidenceRequest
+import dev.lscythe.app.navigo.api.auth.dto.HuaweiSysIntegrityEvidenceRequest
 import dev.lscythe.app.navigo.api.auth.dto.PlayIntegrityRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRefreshRequest
 import dev.lscythe.app.navigo.api.auth.dto.SessionRequest
@@ -45,6 +49,7 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlin.time.Instant
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
 
 class AuthApiTest :
     FunSpec({
@@ -55,9 +60,9 @@ class AuthApiTest :
                 val body = request.body as TextContent
                 body.contentType shouldBe ContentType.Application.Json
                 Json.parseToJsonElement(body.text) shouldBe
-                    Json.parseToJsonElement(readResource("auth/integrity-challenge-request.json"))
+                    Json.parseToJsonElement(readResource("auth/attestation-challenge-request.json"))
                 respond(
-                    content = readResource("auth/integrity-challenge-response.json"),
+                    content = readResource("auth/attestation-challenge-response.json"),
                     status = HttpStatusCode.Created,
                     headers = io.ktor.http.headersOf(HttpHeaders.ContentType, "application/json"),
                 )
@@ -72,8 +77,8 @@ class AuthApiTest :
             val result =
                 api.createAttestationChallenge(
                     AttestationChallengeRequest(
-                        provider = "play-integrity",
-                        action = AuthAction.CREATE_SESSION,
+                        provider = AttestationProvider.PlayIntegrity,
+                        action = AttestationAction.CreateSession,
                         packageName = "dev.lscythe.app.navigo.staging",
                     )
                 )
@@ -83,8 +88,8 @@ class AuthApiTest :
                     AttestationChallengeResponse(
                         id = "challenge-id",
                         nonce = "base64url-nonce",
-                        provider = "play-integrity",
-                        action = "create-session",
+                        provider = AttestationProvider.PlayIntegrity,
+                        action = AttestationAction.CreateSession,
                         protocolVersion = "v2",
                         expiresAt = Instant.parse("2026-08-28T05:02:00Z"),
                     )
@@ -198,6 +203,63 @@ class AuthApiTest :
                                 keyId = "development-key",
                             ),
                     )
+                )
+        }
+
+        test("serializes every provider-specific session evidence object") {
+            val requests = mutableListOf<kotlinx.serialization.json.JsonElement>()
+            val engine = MockEngine { request ->
+                requests += Json.parseToJsonElement((request.body as TextContent).text)
+                respond(
+                    content = readResource("auth/session-response.json"),
+                    status = HttpStatusCode.Created,
+                    headers = io.ktor.http.headersOf(HttpHeaders.ContentType, "application/json"),
+                )
+            }
+            val client =
+                HttpClient(engine) {
+                    defaultRequest { contentType(ContentType.Application.Json) }
+                    install(ContentNegotiation) { json() }
+                }
+            val api = PublicAuthApiImpl(client)
+
+            api.createSession(
+                SessionRequest(
+                    challengeId = "challenge-id",
+                    huaweiSysIntegrity = HuaweiSysIntegrityEvidenceRequest("provider-jws"),
+                )
+            )
+            api.createSession(
+                SessionRequest(
+                    challengeId = "challenge-id",
+                    appleAppAttest =
+                        AppleAssertionEvidenceRequest(
+                            enrollmentId = "enrollment-id",
+                            clientData = "base64url-client-data",
+                            assertion = "base64url-assertion",
+                        ),
+                )
+            )
+            api.createSession(
+                SessionRequest(
+                    challengeId = "challenge-id",
+                    androidKeyAttestation =
+                        AndroidAssertionEvidenceRequest(
+                            enrollmentId = "enrollment-id",
+                            clientData = "base64url-client-data",
+                            signature = "base64url-signature",
+                        ),
+                )
+            )
+
+            val expected =
+                Json.parseToJsonElement(readResource("auth/provider-session-requests.json"))
+                    .jsonObject
+            requests shouldBe
+                listOf(
+                    expected.getValue("huawei"),
+                    expected.getValue("apple"),
+                    expected.getValue("android"),
                 )
         }
 

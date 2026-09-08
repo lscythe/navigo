@@ -28,13 +28,24 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(project(":feature:onboarding:api"))
+            implementation(project(":data:legal"))
+            implementation(project(":domain:legal"))
+            implementation(project(":domain:settings"))
+            implementation(project(":domain:user"))
+            implementation(project(":feature:onboarding:domain"))
             implementation(project(":feature:home:api"))
             implementation(project(":core:resources"))
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.compose.multiplatform.resources)
         }
+        desktopMain.dependencies {
+            implementation(libs.compose.multiplatform.ui.tooling.preview)
+        }
         commonTest.dependencies {
             implementation(project(":core:testing-screenshot"))
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

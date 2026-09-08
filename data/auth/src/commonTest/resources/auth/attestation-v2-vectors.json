@@ -1,0 +1,41 @@
+{
+  "development": {
+    "challenge": {
+      "ID": "challenge-development-001",
+      "Nonce": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+      "RequestHash": "",
+      "Provider": "development",
+      "Action": "create-session",
+      "ExpiresAt": "2026-09-08T12:02:00Z",
+      "PackageName": "dev.lscythe.app.navigo.staging",
+      "SignerDigest": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "expiresAt": "2026-09-08T12:01:00Z",
+    "keyId": "development-vector-key",
+    "privateKeySeed": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8",
+    "publicKey": "A6EHv_POEL4dcN0Y50vAmWfk1jCbpQ1fHdyGZBJVMbg",
+    "payload": "{\"challenge\":{\"ID\":\"challenge-development-001\",\"Nonce\":\"AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8\",\"RequestHash\":\"\",\"PackageName\":\"dev.lscythe.app.navigo.staging\",\"SignerDigest\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\",\"Provider\":\"development\",\"Action\":\"create-session\",\"ExpiresAt\":\"2026-09-08T12:02:00Z\"},\"expires_at\":\"2026-09-08T12:01:00Z\"}",
+    "payloadBase64Url": "eyJjaGFsbGVuZ2UiOnsiSUQiOiJjaGFsbGVuZ2UtZGV2ZWxvcG1lbnQtMDAxIiwiTm9uY2UiOiJBQUVDQXdRRkJnY0lDUW9MREEwT0R4QVJFaE1VRlJZWEdCa2FHeHdkSGg4IiwiUmVxdWVzdEhhc2giOiIiLCJQYWNrYWdlTmFtZSI6ImRldi5sc2N5dGhlLmFwcC5uYXZpZ28uc3RhZ2luZyIsIlNpZ25lckRpZ2VzdCI6IkFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUEiLCJQcm92aWRlciI6ImRldmVsb3BtZW50IiwiQWN0aW9uIjoiY3JlYXRlLXNlc3Npb24iLCJFeHBpcmVzQXQiOiIyMDI2LTA5LTA4VDEyOjAyOjAwWiJ9LCJleHBpcmVzX2F0IjoiMjAyNi0wOS0wOFQxMjowMTowMFoifQ",
+    "signature": "q0SWWJbwmH2V5SvEpWbkuRcdZgHFSvJypu4AGEvfUHkSpjTAalRHQ52SaxHT1GyNGA-XvqmbtC7cNp2ZJbYkAQ"
+  },
+  "androidKeyAssertion": {
+    "challenge": {
+      "ID": "challenge-android-001",
+      "Nonce": "ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8",
+      "RequestHash": "",
+      "Provider": "android-key-attestation",
+      "Action": "create-session",
+      "ExpiresAt": "2026-09-08T13:02:00.123Z",
+      "PackageName": "dev.lscythe.app.navigo.beta",
+      "SignerDigest": "ERERERERERERERERERERERERERERERERERERERERERE"
+    },
+    "enrollmentId": "enrollment-android-001",
+    "privateScalar": "Hx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8",
+    "publicKeySpki": "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEa_hdX-hFmLEMphmewJzNfTXc1xlf3R3Hc3oMZwBu8lG5UvJe7B3u0fyhkYOJkEZjV9MUrft-l2C42a_I85qVrQ",
+    "publicKeyId": "0ckM_-RivJIIbnjhgbQKfzuDQ1zh2VrC34zmukFJrbo",
+    "canonical": "{\"protocolVersion\":\"v2\",\"provider\":\"android-key-attestation\",\"action\":\"create-session\",\"challengeId\":\"challenge-android-001\",\"nonce\":\"ICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj8\",\"enrollmentId\":\"enrollment-android-001\",\"expiresAt\":\"2026-09-08T13:02:00.123Z\"}",
+    "clientData": "eyJwcm90b2NvbFZlcnNpb24iOiJ2MiIsInByb3ZpZGVyIjoiYW5kcm9pZC1rZXktYXR0ZXN0YXRpb24iLCJhY3Rpb24iOiJjcmVhdGUtc2Vzc2lvbiIsImNoYWxsZW5nZUlkIjoiY2hhbGxlbmdlLWFuZHJvaWQtMDAxIiwibm9uY2UiOiJJQ0VpSXlRbEppY29LU29yTEMwdUx6QXhNak0wTlRZM09EazZPenc5UGo4IiwiZW5yb2xsbWVudElkIjoiZW5yb2xsbWVudC1hbmRyb2lkLTAwMSIsImV4cGlyZXNBdCI6IjIwMjYtMDktMDhUMTM6MDI6MDAuMTIzWiJ9",
+    "digest": "27e4f3cb9e9f1700413b7bd4479ebccdf874f5a7cdfb31166febbaafb424aecd",
+    "signature": "MEUCICtoyHe8TipYDg-7gPbFYlqPBNpDJ8J0KesGn6ldwLThAiEAyRWppy5gehj8riDFHCKSDtiaURnjftQ3edU9rHQx76c"
+  }
+}

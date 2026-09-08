@@ -15,6 +15,8 @@
  */
 package dev.lscythe.app.navigo.api.auth.dto
 
+import dev.lscythe.app.navigo.api.auth.constant.AttestationAction
+import dev.lscythe.app.navigo.api.auth.constant.AttestationProvider
 import kotlin.time.Instant
 import kotlinx.serialization.Serializable
 
@@ -22,8 +24,8 @@ import kotlinx.serialization.Serializable
 data class AttestationChallengeResponse(
     val id: String,
     val nonce: String,
-    val provider: String,
-    val action: String,
+    val provider: AttestationProvider,
+    val action: AttestationAction,
     val protocolVersion: String,
     val expiresAt: Instant,
 )

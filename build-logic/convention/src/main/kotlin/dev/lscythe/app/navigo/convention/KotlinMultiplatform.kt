@@ -30,7 +30,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
     commonExtension.apply {
-        compileSdk = COMPILE_SDK
+        compileSdk {
+            version = release(COMPILE_SDK) { minorApiLevel = MINOR_API_LEVEL }
+        }
 
         defaultConfig.apply {
             minSdk = MIN_SDK
@@ -75,11 +77,15 @@ internal fun Project.configureMultiplatformLibrary() {
         iosSimulatorArm64()
 
         extensions.configure<KotlinMultiplatformAndroidLibraryExtension> {
-            compileSdk = COMPILE_SDK
-            minSdk = MIN_SDK
-            withHostTest {
-                isIncludeAndroidResources = true
+            compileSdk {
+                version = release(COMPILE_SDK) { minorApiLevel = MINOR_API_LEVEL }
             }
+            minSdk = MIN_SDK
+
+            withHostTestBuilder {}
+                .configure {
+                    isIncludeAndroidResources = true
+                }
         }
     }
 
@@ -105,16 +111,19 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
                     allWarningsAsErrors = warningsAsErrors
                     freeCompilerArgs.add("-Xexpect-actual-classes")
                 }
+
             is KotlinAndroidProjectExtension ->
                 compilerOptions.apply {
                     jvmTarget = JVM_TARGET
                     allWarningsAsErrors = warningsAsErrors
                 }
+
             is KotlinJvmProjectExtension ->
                 compilerOptions.apply {
                     jvmTarget = JVM_TARGET
                     allWarningsAsErrors = warningsAsErrors
                 }
+
             else -> error("Unsupported project extension $this ${T::class}")
         }
     }

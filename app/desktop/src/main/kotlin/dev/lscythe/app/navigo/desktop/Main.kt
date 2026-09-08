@@ -19,12 +19,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.window.singleWindowApplication
 import dev.lscythe.app.navigo.app.NavigoRoot
 import dev.lscythe.app.navigo.core.analytics.local.LocalAnalyticsHelper
+import dev.zacsweers.metro.createGraph
 import org.maplibre.compose.desktop.ProvideMapHost
 import org.maplibre.compose.desktop.rememberAwtComposeMapHost
 
-fun main() =
+fun main() {
+    configureAxerDiagnostics()
+    val graph = createGraph<NavigoDesktopGraph>()
     singleWindowApplication(title = "Navigo") {
         ProvideMapHost(rememberAwtComposeMapHost(window)) {
-            NavigoRoot(analyticsHelper = remember { LocalAnalyticsHelper() })
+            NavigoRoot(
+                analyticsHelper = remember { LocalAnalyticsHelper() },
+                viewModelFactory = graph.metroViewModelFactory,
+                mainViewModel = graph.mainViewModel,
+            )
         }
     }
+}

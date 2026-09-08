@@ -15,11 +15,13 @@
  */
 package dev.lscythe.app.navigo.api.auth.dto
 
+import dev.lscythe.app.navigo.api.auth.constant.AttestationAction
+import dev.lscythe.app.navigo.api.auth.constant.AttestationProvider
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AttestationChallengeRequest(
-    val provider: String,
-    val action: String,
+    val provider: AttestationProvider,
+    val action: AttestationAction,
     val packageName: String,
 )
