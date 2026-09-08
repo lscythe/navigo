@@ -30,7 +30,7 @@ object AuthProviderBindings {
     @Provides
     fun provideAuthEvidenceProvider(): AuthEvidenceProvider =
         DevelopmentEvidenceProvider(
-            packageName = BuildConfig.APPLICATION_ID,
+            packageName = BuildConfig.APPLICATION_ID.removeSuffix(".debug"),
             signerDigest = BuildConfig.DEVELOPMENT_SIGNER_DIGEST,
             keyId = BuildConfig.DEVELOPMENT_KEY_ID,
             privateKeySeed = BuildConfig.DEVELOPMENT_PRIVATE_KEY_SEED,

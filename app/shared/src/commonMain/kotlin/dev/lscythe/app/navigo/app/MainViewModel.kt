@@ -44,12 +44,13 @@ private val STARTUP_TIMEOUT = 10.seconds
 class MainViewModel(
     settingsRepository: SettingsRepository,
     bootstrapSession: BootstrapSessionUseCase,
+    @AttestationPackageName attestationPackageName: String,
 ) : ViewModel() {
     private val coordinator =
         StartupCoordinator(
             scope = viewModelScope,
             loadCompletion = { settingsRepository.settings.first().hasCompletedOnboarding },
-            bootstrap = { bootstrapSession(packageName = "dev.lscythe.app.navigo") },
+            bootstrap = { bootstrapSession(packageName = attestationPackageName) },
         )
 
     val state: StateFlow<StartupState> = coordinator.state

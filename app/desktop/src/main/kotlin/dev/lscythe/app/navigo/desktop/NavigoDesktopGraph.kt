@@ -15,8 +15,11 @@
  */
 package dev.lscythe.app.navigo.desktop
 
+import dev.lscythe.app.navigo.app.AttestationPackageName
 import dev.lscythe.app.navigo.app.MainViewModel
 import dev.lscythe.app.navigo.config.AppBuildKonfig
+import dev.lscythe.app.navigo.core.monitoring.AppLogger
+import dev.lscythe.app.navigo.core.monitoring.MonitoringBackend
 import dev.lscythe.app.navigo.core.network.BaseUrl
 import dev.lscythe.app.navigo.core.network.NetworkInspector
 import dev.lscythe.app.navigo.core.network.NetworkLogger
@@ -31,6 +34,13 @@ import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 @BindingContainer
 object DesktopNetworkBindings {
     @Provides @BaseUrl fun provideBaseUrl(): String = AppBuildKonfig.API_BASE_URL
+
+    @Provides
+    @AttestationPackageName
+    fun provideAttestationPackageName(): String = "dev.lscythe.app.navigo"
+
+    @Provides
+    fun provideAppLogger(backend: MonitoringBackend): AppLogger = axerAppLogger(backend.appLogger)
 
     @Provides fun provideNetworkLogger(): NetworkLogger = NetworkLogger {}
 
