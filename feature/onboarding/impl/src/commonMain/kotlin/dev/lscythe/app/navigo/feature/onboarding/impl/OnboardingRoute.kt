@@ -22,6 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.lscythe.app.navigo.core.permissions.AppPermission
+import dev.lscythe.app.navigo.core.permissions.rememberPermissionRequester
 import dev.lscythe.app.navigo.core.resources.LocalAppLocale
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 
@@ -32,10 +34,16 @@ internal fun OnboardingRoute(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val permissionRequester = rememberPermissionRequester()
     LaunchedEffect(viewModel) {
         viewModel.effects.collect { effect ->
             when (effect) {
                 OnboardingEffect.NavigateHome -> navigateHome()
+                OnboardingEffect.RequestPermissions -> {
+                    permissionRequester.request(AppPermission.Location)
+                    permissionRequester.request(AppPermission.Notifications)
+                    viewModel.onIntent(OnboardingIntent.PermissionsCompleted)
+                }
             }
         }
     }

@@ -94,6 +94,8 @@ internal sealed interface OnboardingIntent {
 
     data object PermissionChoiceSelected : OnboardingIntent
 
+    data object PermissionsCompleted : OnboardingIntent
+
     data object BackClicked : OnboardingIntent
 
     data object SkipClicked : OnboardingIntent
@@ -124,6 +126,8 @@ internal sealed interface OnboardingIntent {
 
 internal sealed interface OnboardingEffect {
     data object NavigateHome : OnboardingEffect
+
+    data object RequestPermissions : OnboardingEffect
 }
 
 @Immutable
@@ -140,5 +144,6 @@ internal data class OnboardingUiState(
     val legalLoading: Boolean = false,
     val legalFailureMessage: String? = null,
     val completionLoading: Boolean = false,
+    val permissionRequestInProgress: Boolean = false,
     val completionFailureMessage: String? = null,
 )
