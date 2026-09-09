@@ -17,6 +17,8 @@ package dev.lscythe.app.navigo.feature.onboarding.impl
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.lscythe.app.navigo.core.common.platform.AppPlatform
+import dev.lscythe.app.navigo.core.common.platform.requiresPermissionOnboarding
 import dev.lscythe.app.navigo.domain.legal.model.AcceptedLegalDocument
 import dev.lscythe.app.navigo.domain.legal.model.LegalAcceptance
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet
@@ -47,6 +49,7 @@ import kotlinx.coroutines.launch
 class OnboardingViewModel(
     private val loadOnboardingLegalDocuments: LoadOnboardingLegalDocumentsUseCase,
     private val completeOnboarding: CompleteOnboardingUseCase,
+    private val appPlatform: AppPlatform,
 ) : ViewModel() {
     private val mutableState = MutableStateFlow(OnboardingUiState())
     internal val state: StateFlow<OnboardingUiState> = mutableState.asStateFlow()
@@ -57,12 +60,19 @@ class OnboardingViewModel(
     internal fun onIntent(intent: OnboardingIntent) {
         when (intent) {
             OnboardingIntent.IntroductionContinued ->
-                update { copy(stage = OnboardingStage.Permissions) }
-            OnboardingIntent.PermissionChoiceSelected,
-            OnboardingIntent.SkipClicked -> {
-                update { copy(stage = OnboardingStage.Profile) }
-                loadLegalDocuments()
+                enterStage(
+                    if (appPlatform.requiresPermissionOnboarding) {
+                        OnboardingStage.Permissions
+                    } else {
+                        OnboardingStage.Profile
+                    }
+                )
+            OnboardingIntent.PermissionChoiceSelected -> requestPermissions()
+            OnboardingIntent.PermissionsCompleted -> {
+                if (mutableState.value.permissionRequestInProgress)
+                    enterStage(OnboardingStage.Profile)
             }
+            OnboardingIntent.SkipClicked -> enterStage(OnboardingStage.Profile)
             OnboardingIntent.BackClicked ->
                 update {
                     copy(
@@ -70,7 +80,12 @@ class OnboardingViewModel(
                             when (stage) {
                                 OnboardingStage.Introduction -> OnboardingStage.Introduction
                                 OnboardingStage.Permissions -> OnboardingStage.Introduction
-                                OnboardingStage.Profile -> OnboardingStage.Permissions
+                                OnboardingStage.Profile ->
+                                    if (appPlatform.requiresPermissionOnboarding) {
+                                        OnboardingStage.Permissions
+                                    } else {
+                                        OnboardingStage.Introduction
+                                    }
                             }
                     )
                 }
@@ -91,6 +106,17 @@ class OnboardingViewModel(
             OnboardingIntent.FailureDismissed ->
                 update { copy(legalFailureMessage = null, completionFailureMessage = null) }
         }
+    }
+
+    private fun requestPermissions() {
+        if (mutableState.value.permissionRequestInProgress) return
+        update { copy(permissionRequestInProgress = true) }
+        viewModelScope.launch { effectChannel.send(OnboardingEffect.RequestPermissions) }
+    }
+
+    private fun enterStage(stage: OnboardingStage) {
+        update { copy(stage = stage, permissionRequestInProgress = false) }
+        if (stage == OnboardingStage.Profile) loadLegalDocuments()
     }
 
     private fun selectLanguage(

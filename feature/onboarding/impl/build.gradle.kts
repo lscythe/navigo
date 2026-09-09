@@ -35,6 +35,8 @@ kotlin {
             implementation(project(":feature:onboarding:domain"))
             implementation(project(":feature:home:api"))
             implementation(project(":core:resources"))
+            implementation(project(":core:common"))
+            implementation(project(":core:permissions"))
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.compose.multiplatform.resources)
         }
