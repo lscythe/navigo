@@ -23,10 +23,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
@@ -35,6 +37,7 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoRadioButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoSwitch
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoChoiceChip
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoFilterChip
+import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoTopAppBar
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoTheme
 import kotlin.test.assertEquals
 import org.junit.Rule
@@ -62,6 +65,26 @@ class ComponentBehaviorTest {
         composeTestRule.onNodeWithText("Disabled").assertIsNotEnabled().performClick()
 
         assertEquals(1, clicks)
+    }
+
+    @Test
+    fun topAppBarDisplaysTextAndDelegatesBackClick() {
+        var backClicks = 0
+        composeTestRule.setContent {
+            NavigoTheme(disableDynamicTheming = true) {
+                NavigoTopAppBar(
+                    title = "Your reports",
+                    subtitle = "23 sent · 2 waiting on riders",
+                    onNavigateBack = { backClicks++ },
+                )
+            }
+        }
+
+        composeTestRule.onNodeWithText("Your reports").assertIsDisplayed()
+        composeTestRule.onNodeWithText("23 sent · 2 waiting on riders").assertIsDisplayed()
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+
+        assertEquals(1, backClicks)
     }
 
     @Test

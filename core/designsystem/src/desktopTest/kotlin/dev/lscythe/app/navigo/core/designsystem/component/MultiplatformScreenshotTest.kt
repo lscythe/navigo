@@ -43,6 +43,7 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoFilterC
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoSearchBar
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoStatusChip
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoTextField
+import dev.lscythe.app.navigo.core.designsystem.component.molecule.TopAppBarPreviewContent
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Circle
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
@@ -92,6 +93,7 @@ private fun ControlsGallery() {
 
 @Composable
 private fun ContentGallery() {
+    TopAppBarPreviewContent()
     NavigoBrand()
     Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
         NavigoAvatar("AK")
