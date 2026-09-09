@@ -16,8 +16,49 @@ permissions:
   security-events: write
 
 jobs:
+  bot-policy:
+    name: Bot PR policy
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      weblate_translation_only: ${{ steps.classify.outputs.weblate_translation_only }}
+    steps:
+      - name: Check out trusted base repository
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - name: Classify translation-only Weblate PR
+        id: classify
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            echo 'weblate_translation_only=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          files="$RUNNER_TEMP/files"
+          gh api --paginate "/repos/$REPOSITORY/pulls/$NUMBER/files?per_page=100" --jq '.[].filename' > "$files"
+          python3 - "$AUTHOR" "$files" >> "$GITHUB_OUTPUT" <<'PY'
+          import re, sys
+          author, filename = sys.argv[1], sys.argv[2]
+          pattern = re.compile(r"^(?:core|feature|app)/[^/]+(?:/[^/]+)*/src/[^/]+/composeResources/values(?:-[A-Za-z0-9-]+)?/strings\.xml$")
+          with open(filename, encoding="utf-8") as input_file:
+              paths = [line.rstrip("\n") for line in input_file if line.strip()]
+          allowed = lambda path: path == "id.tbx" or (not any(ord(char) < 32 for char in path) and ".." not in path.split("/") and pattern.fullmatch(path) is not None)
+          print(f"weblate_translation_only={str(author == 'app/hosted-weblate' and bool(paths) and all(allowed(path) for path in paths)).lower()}")
+          PY
+
   analyze:
     name: Analyze
+    needs: bot-policy
+    if: needs.bot-policy.outputs.weblate_translation_only != 'true'
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
