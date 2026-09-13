@@ -27,6 +27,7 @@ import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.NavDisplay
 import dev.lscythe.app.navigo.core.navigation.toEntries
+import dev.lscythe.app.navigo.core.ui.navigoTestSemantics
 
 @Composable
 fun NavigoApp(

@@ -56,10 +56,6 @@ import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBottomSheet
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoUnderlinedTextField
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.color_picker_apply
@@ -91,13 +87,7 @@ fun ColorSelectionBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     description: String? = null,
-    sheetState: SheetState =
-        rememberBottomSheetState(
-            initialValue = SheetValue.Expanded,
-            confirmValueChange = { targetValue ->
-                targetValue == SheetValue.Expanded
-            },
-        ),
+    sheetState: SheetState = rememberBottomSheetState(initialValue = SheetValue.Hidden),
 ) {
     val initialHsv = remember(selectedColor) { selectedColor.toHsv() }
     var hue by remember(selectedColor) { mutableFloatStateOf(initialHsv[0]) }
@@ -121,6 +111,7 @@ fun ColorSelectionBottomSheet(
         modifier = modifier,
         sheetState = sheetState,
         sheetGesturesEnabled = false,
+        dragHandle = null,
     ) {
         Column(
             modifier =
@@ -317,36 +308,4 @@ internal fun String.parseHexColor(): Color? {
     val normalized = trim().removePrefix("#")
     if (normalized.length != 6 || normalized.any { it.digitToIntOrNull(16) == null }) return null
     return Color(0xFF000000 or normalized.toLong(16))
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@NavigoThemePreview
-@Composable
-private fun ColorSelectionBottomSheetPreview() {
-    var color by remember { mutableStateOf(Color(0xFF5C8A3E)) }
-    NavigoPreview {
-        ColorSelectionBottomSheet(
-            title = "Pick a colour",
-            description = "Choose any colour.",
-            selectedColor = color,
-            onApply = { color = it },
-            onDismissRequest = {},
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun ColorSelectionBottomSheetMaterialKolorPreview() {
-    var color by remember { mutableStateOf(Color(0xFF5C8A3E)) }
-    NavigoMaterialKolorPreview {
-        ColorSelectionBottomSheet(
-            title = "Pick a colour",
-            description = "Choose any colour.",
-            selectedColor = color,
-            onApply = { color = it },
-            onDismissRequest = {},
-        )
-    }
 }

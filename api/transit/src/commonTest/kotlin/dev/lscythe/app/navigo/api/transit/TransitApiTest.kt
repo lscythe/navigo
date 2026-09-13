@@ -18,6 +18,10 @@ package dev.lscythe.app.navigo.api.transit
 import dev.lscythe.app.navigo.api.transit.dto.FacilityResponse
 import dev.lscythe.app.navigo.api.transit.dto.FreshnessResponse
 import dev.lscythe.app.navigo.api.transit.dto.LocationResponse
+import dev.lscythe.app.navigo.api.transit.dto.MapDataResponse
+import dev.lscythe.app.navigo.api.transit.dto.MapRouteResponse
+import dev.lscythe.app.navigo.api.transit.dto.MapStopResponse
+import dev.lscythe.app.navigo.api.transit.dto.MapVariantResponse
 import dev.lscythe.app.navigo.api.transit.dto.RouteDetailResponse
 import dev.lscythe.app.navigo.api.transit.dto.RouteResponse
 import dev.lscythe.app.navigo.api.transit.dto.RoutesResponse
@@ -278,7 +282,12 @@ class TransitApiTest :
             val engine = MockEngine { request ->
                 requests += request.method to request.url.toString()
                 respond(
-                    content = "{}",
+                    content =
+                        if (request.url.encodedPath == "/v1/map-data") {
+                            readResource("transit/map-data-response.json")
+                        } else {
+                            "{}"
+                        },
                     status =
                         if (request.method == HttpMethod.Post) HttpStatusCode.Created
                         else HttpStatusCode.OK,
@@ -303,6 +312,7 @@ class TransitApiTest :
                 )
             )
             api.getSearchResults("Monas", LocationResponse(-6.175, 106.827), SearchCategory.ALL, 20)
+            val mapDataResult = api.getMapData()
 
             requests[0] shouldBe (HttpMethod.Get to "http://localhost/v1/stops/stop%2Fid")
             requests[1].second shouldBe
@@ -311,5 +321,43 @@ class TransitApiTest :
             requests[2].second shouldBe "http://localhost/v1/trip-plans"
             requests[3].second shouldBe
                 "http://localhost/v1/search-results?q=Monas&near=-6.175%2C106.827&category=all&limit=20"
+            requests[4].second shouldBe "http://localhost/v1/map-data"
+            mapDataResult shouldBe
+                ApiResponse.Success(
+                    MapDataResponse(
+                        routes =
+                            listOf(
+                                MapRouteResponse(
+                                    id = "route-1",
+                                    name = "Blok M - Kota",
+                                    shortName = "1",
+                                    color = "123456",
+                                    textColor = "ffffff",
+                                    variants =
+                                        listOf(
+                                            MapVariantResponse(
+                                                id = "variant-1",
+                                                headsign = "Kota",
+                                                polyline = "encoded-polyline",
+                                            )
+                                        ),
+                                )
+                            ),
+                        stops =
+                            listOf(
+                                MapStopResponse(
+                                    id = "stop-1",
+                                    name = "Monas",
+                                    location = LocationResponse(-6.175, 106.827),
+                                )
+                            ),
+                        freshness =
+                            FreshnessResponse(
+                                observedAt = Instant.parse("2026-08-28T05:00:00Z"),
+                                receivedAt = Instant.parse("2026-08-28T05:00:01Z"),
+                                stale = false,
+                            ),
+                    )
+                )
         }
     })

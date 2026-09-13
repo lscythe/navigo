@@ -37,6 +37,7 @@ kotlin {
             api(libs.roborazzi.accessibility.check)
             api(libs.roborazzi)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.androidx.core.ktx)
             implementation(libs.robolectric)
         }
         desktopMain.dependencies {

@@ -45,10 +45,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -137,25 +133,9 @@ private fun SheetDragHandle() {
     }
 }
 
-@NavigoThemePreview
-@Composable
-private fun NavigoModalBottomSheetPreview() {
-    NavigoPreview {
-        ModalBottomSheetPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoModalBottomSheetMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        ModalBottomSheetPreviewContent()
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ModalBottomSheetPreviewContent() {
+internal fun ModalBottomSheetPreviewContent() {
     var showSheet by remember { mutableStateOf(false) }
 
     Scaffold { padding ->
@@ -181,25 +161,9 @@ private fun ModalBottomSheetPreviewContent() {
     }
 }
 
-@NavigoThemePreview
-@Composable
-private fun NavigoModalBottomSheetOpenPreview() {
-    NavigoPreview {
-        ModalBottomSheetOpenPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoModalBottomSheetOpenMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        ModalBottomSheetOpenPreviewContent()
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ModalBottomSheetOpenPreviewContent() {
+internal fun ModalBottomSheetOpenPreviewContent() {
     NavigoModalBottomSheet(
         title = "Text size",
         description = "Affects every screen. Arrival numbers scale with it.",

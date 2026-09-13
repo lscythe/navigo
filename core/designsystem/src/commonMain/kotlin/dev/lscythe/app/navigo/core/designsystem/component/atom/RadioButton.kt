@@ -17,16 +17,13 @@ package dev.lscythe.app.navigo.core.designsystem.component.atom
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,11 +35,6 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
-import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
  * Displays a radio button that can be selected or unselected.
@@ -93,42 +85,5 @@ fun NavigoRadioButton(
         contentAlignment = Alignment.Center,
     ) {
         Box(modifier = Modifier.size(24.dp).then(indicatorModifier))
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoRadioButtonPreview() {
-    NavigoPreview {
-        var selected by remember { mutableStateOf(false) }
-
-        Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
-            NavigoRadioButton(
-                selected = selected,
-                onClick = { selected = !selected },
-            )
-            NavigoRadioButton(
-                selected = true,
-                onClick = null,
-            )
-            NavigoRadioButton(
-                selected = false,
-                onClick = null,
-                enabled = false,
-            )
-            NavigoRadioButton(
-                selected = true,
-                onClick = null,
-                enabled = false,
-            )
-        }
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoRadioButtonMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        NavigoRadioButton(selected = true, onClick = null)
     }
 }

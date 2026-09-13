@@ -26,15 +26,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,8 +41,6 @@ import dev.lscythe.app.navigo.core.common.locale.SupportedLanguage
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoRadioButton
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoModalBottomSheet
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.language_apply
@@ -147,26 +142,3 @@ private fun SupportedLanguage.displayName(): String =
         SupportedLanguage.English -> stringResource(Res.string.language_english)
         SupportedLanguage.Indonesian -> stringResource(Res.string.language_indonesian)
     }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@NavigoThemePreview
-@Composable
-private fun LanguageSelectionBottomSheetPreview() {
-    var showSheet by remember { mutableStateOf(false) }
-
-    NavigoPreview {
-        Scaffold { padding ->
-            NavigoButton(onClick = { showSheet = true }, modifier = Modifier.padding(padding)) {
-                Text("Open language selector")
-            }
-            if (showSheet) {
-                LanguageSelectionBottomSheet(
-                    selectedLanguage = SupportedLanguage.Indonesian,
-                    onLanguageSelected = {},
-                    onApply = { showSheet = false },
-                    onDismissRequest = { showSheet = false },
-                )
-            }
-        }
-    }
-}

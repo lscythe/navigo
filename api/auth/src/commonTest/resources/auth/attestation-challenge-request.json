@@ -1,0 +1,5 @@
+{
+  "provider": "play-integrity",
+  "action": "create-session",
+  "packageName": "dev.lscythe.app.navigo.staging"
+}

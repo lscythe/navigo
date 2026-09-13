@@ -18,10 +18,11 @@ package dev.lscythe.app.navigo.core.testing.screenshot
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.v2.runComposeUiTest
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import io.github.takahirom.roborazzi.captureRoboImage
 
-@OptIn(ExperimentalTestApi::class)
+@OptIn(ExperimentalTestApi::class, ExperimentalRoborazziApi::class)
 fun captureIosScreenshot(filePath: String, content: @Composable () -> Unit) = runComposeUiTest {
     setContent(content)
     onRoot().captureRoboImage(this, filePath, DefaultRoborazziOptions)

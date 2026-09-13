@@ -1,0 +1,22 @@
+{
+  "huawei": {
+    "challengeId": "challenge-id",
+    "huaweiSysIntegrity": {"jws": "provider-jws"}
+  },
+  "apple": {
+    "challengeId": "challenge-id",
+    "appleAppAttest": {
+      "enrollmentId": "enrollment-id",
+      "clientData": "base64url-client-data",
+      "assertion": "base64url-assertion"
+    }
+  },
+  "android": {
+    "challengeId": "challenge-id",
+    "androidKeyAttestation": {
+      "enrollmentId": "enrollment-id",
+      "clientData": "base64url-client-data",
+      "signature": "base64url-signature"
+    }
+  }
+}

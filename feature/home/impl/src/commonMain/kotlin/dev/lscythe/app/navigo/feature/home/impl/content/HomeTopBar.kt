@@ -41,10 +41,6 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIconButton
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.core.resources.generated.resources.Res
 import dev.lscythe.app.navigo.core.resources.generated.resources.home_notifications
@@ -143,20 +139,8 @@ internal fun HomeTopBar(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun HomeTopBarPreview() {
-    NavigoPreview { HomeTopBarPreviewContent() }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun HomeTopBarMaterialKolorPreview() {
-    NavigoMaterialKolorPreview { HomeTopBarPreviewContent() }
-}
-
-@Composable
-private fun HomeTopBarPreviewContent() {
+internal fun HomeTopBarPreviewContent() {
     HomeTopBar(
         profileInitials = "AK",
         notificationCount = 3,

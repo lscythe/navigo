@@ -16,6 +16,7 @@
 package dev.lscythe.app.navigo.core.persistence.datasource
 
 import dev.lscythe.app.navigo.core.persistence.Language
+import dev.lscythe.app.navigo.core.persistence.OnboardingPreferenceCompletion
 import dev.lscythe.app.navigo.core.persistence.ThemePreference
 import dev.lscythe.app.navigo.core.persistence.UserPreference
 import dev.lscythe.app.navigo.core.persistence.di.PreferencesKSafe
@@ -36,9 +37,36 @@ class NavigoPreferenceDataSource(@PreferencesKSafe private val ksafe: KSafe) {
 
     suspend fun setLanguage(language: Language) = update { copy(language = language) }
 
+    suspend fun setProfile(displayName: String, avatarColorArgb: UInt) = update {
+        copy(displayName = displayName, avatarColorArgb = avatarColorArgb)
+    }
+
     suspend fun setTheme(theme: ThemePreference) = update { copy(theme = theme) }
 
+    suspend fun completeOnboarding(completion: OnboardingPreferenceCompletion) = update {
+        copy(
+            displayName = completion.displayName,
+            avatarColorArgb = completion.avatarColorArgb,
+            language = completion.language,
+            analyticsEnabled = completion.analyticsEnabled,
+            crashReportsEnabled = completion.crashReportsEnabled,
+            acceptedTerms = completion.acceptedTerms,
+            acceptedPrivacy = completion.acceptedPrivacy,
+            hasCompletedOnboarding = true,
+        )
+    }
+
     suspend fun completeOnboarding() = update { copy(hasCompletedOnboarding = true) }
+
+    suspend fun setPrivacyChoices(
+        analyticsEnabled: Boolean,
+        crashReportsEnabled: Boolean,
+    ) = update {
+        copy(
+            analyticsEnabled = analyticsEnabled,
+            crashReportsEnabled = crashReportsEnabled,
+        )
+    }
 
     private suspend fun update(transform: UserPreference.() -> UserPreference) {
         mutationMutex.withLock {

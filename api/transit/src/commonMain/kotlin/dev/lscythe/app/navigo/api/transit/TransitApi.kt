@@ -17,6 +17,7 @@ package dev.lscythe.app.navigo.api.transit
 
 import dev.lscythe.app.navigo.api.transit.dto.BusesResponse
 import dev.lscythe.app.navigo.api.transit.dto.LocationResponse
+import dev.lscythe.app.navigo.api.transit.dto.MapDataResponse
 import dev.lscythe.app.navigo.api.transit.dto.RouteDetailResponse
 import dev.lscythe.app.navigo.api.transit.dto.RoutesResponse
 import dev.lscythe.app.navigo.api.transit.dto.SearchCategory
@@ -50,6 +51,8 @@ interface TransitApi {
     ): ApiResponse<BusesResponse>
 
     suspend fun createTripPlan(request: TripPlanRequest): ApiResponse<TripPlanResultResponse>
+
+    suspend fun getMapData(): ApiResponse<MapDataResponse>
 
     suspend fun getSearchResults(
         query: String,

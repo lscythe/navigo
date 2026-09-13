@@ -39,10 +39,6 @@ import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.action.Plus
 import dev.lscythe.app.navigo.core.designsystem.icon.status.ExclamationCircle
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -124,24 +120,8 @@ private fun DisclosureIcon(
     )
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoDisclosureNotePreview() {
-    NavigoPreview {
-        DisclosureNotePreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoDisclosureNoteMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        DisclosureNotePreviewContent()
-    }
-}
-
-@Composable
-private fun DisclosureNotePreviewContent() {
+internal fun DisclosureNotePreviewContent() {
     Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoDisclosureNote(
             text = "Reports are anonymous. Location is shared only while you're on a bus.",

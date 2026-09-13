@@ -41,10 +41,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 
 /**
  * Displays a single-line text field with a persistent label and bottom indicator.
@@ -175,24 +171,8 @@ fun NavigoUnderlinedTextField(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoUnderlinedTextFieldPreview() {
-    NavigoPreview {
-        UnderlinedTextFieldPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoUnderlinedTextFieldMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        UnderlinedTextFieldPreviewContent()
-    }
-}
-
-@Composable
-private fun UnderlinedTextFieldPreviewContent() {
+internal fun UnderlinedTextFieldPreviewContent() {
     Column {
         NavigoUnderlinedTextField(
             value = "",
