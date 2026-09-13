@@ -15,6 +15,7 @@
  */
 package dev.lscythe.app.navigo.feature.onboarding.impl
 
+import dev.lscythe.app.navigo.core.common.platform.AppPlatform
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocument
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSet
 import dev.lscythe.app.navigo.domain.legal.model.LegalDocumentSource
@@ -58,6 +59,7 @@ class OnboardingViewModelTest :
 
                     viewModel.onIntent(OnboardingIntent.IntroductionContinued)
                     viewModel.onIntent(OnboardingIntent.PermissionChoiceSelected)
+                    viewModel.onIntent(OnboardingIntent.PermissionsCompleted)
                     viewModel.onIntent(OnboardingIntent.NameChanged("Nara"))
                     viewModel.onIntent(OnboardingIntent.AvatarColorSelected(7u))
                     viewModel.onIntent(OnboardingIntent.AnalyticsConsentChanged(true))
@@ -77,6 +79,7 @@ class OnboardingViewModelTest :
 
                         viewModel.onIntent(OnboardingIntent.IntroductionContinued)
                         viewModel.onIntent(OnboardingIntent.PermissionChoiceSelected)
+                        viewModel.onIntent(OnboardingIntent.PermissionsCompleted)
                         advanceUntilIdle()
 
                         legal.requests shouldBe listOf(AppLanguage.English)
@@ -92,6 +95,7 @@ class OnboardingViewModelTest :
                         val viewModel = viewModel(legal = legal)
                         viewModel.onIntent(OnboardingIntent.IntroductionContinued)
                         viewModel.onIntent(OnboardingIntent.PermissionChoiceSelected)
+                        viewModel.onIntent(OnboardingIntent.PermissionsCompleted)
                         advanceUntilIdle()
 
                         viewModel.onIntent(
@@ -258,6 +262,7 @@ private fun viewModel(
     return OnboardingViewModel(
         LoadOnboardingLegalDocumentsUseCase(legal),
         CompleteOnboardingUseCase(completion),
+        AppPlatform.Android,
     )
 }
 

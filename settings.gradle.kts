@@ -71,6 +71,7 @@ include(
     ":core:analytics-firebase",
     ":core:analytics-local",
     ":core:common",
+    ":core:permissions",
     ":core:database",
     ":core:persistence",
     ":core:resources",
