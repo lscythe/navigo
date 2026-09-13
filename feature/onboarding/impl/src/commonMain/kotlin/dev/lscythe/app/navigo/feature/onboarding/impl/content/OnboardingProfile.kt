@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -117,7 +118,7 @@ internal fun OnboardingProfile(
     modifier: Modifier = Modifier,
 ) {
     val avatarShape = MaterialTheme.shapes.large
-    val avatarColor = Color(state.avatarColorArgb.toLong())
+    val avatarColor = Color(state.avatarColorArgb.toInt())
     var customColor by remember { mutableStateOf(Color(0xFF5C8A3E)) }
     var showColorPicker by remember { mutableStateOf(false) }
     val sheetState =
@@ -156,7 +157,7 @@ internal fun OnboardingProfile(
                     containerColor = avatarColor,
                     shape = avatarShape,
                     contentColor =
-                        if (state.avatarColorArgb == AvatarColors[2].value.toUInt()) {
+                        if (state.avatarColorArgb == AvatarColors[2].toArgb().toUInt()) {
                             Color(0xFF17473C)
                         } else {
                             Color.White
@@ -173,12 +174,14 @@ internal fun OnboardingProfile(
             ProfileSection(stringResource(Res.string.onboarding_profile_avatar_colour_label)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
                     AvatarColors.forEach { color ->
+                        val colorArgb = color.toArgb().toUInt()
+                        val isSelected = colorArgb == state.avatarColorArgb
                         Box(
                             modifier =
                                 Modifier.size(48.dp)
                                     .clip(avatarShape)
                                     .then(
-                                        if (color.value.toUInt() == state.avatarColorArgb) {
+                                        if (isSelected) {
                                             Modifier.border(
                                                 3.dp,
                                                 MaterialTheme.colorScheme.onBackground,
@@ -187,16 +190,9 @@ internal fun OnboardingProfile(
                                         } else Modifier
                                     )
                                     .clickable {
-                                        onIntent(
-                                            OnboardingIntent.AvatarColorSelected(
-                                                color.value.toUInt()
-                                            )
-                                        )
+                                        onIntent(OnboardingIntent.AvatarColorSelected(colorArgb))
                                     }
-                                    .padding(
-                                        if (color.value.toUInt() == state.avatarColorArgb) 5.dp
-                                        else 0.dp
-                                    ),
+                                    .padding(if (isSelected) 5.dp else 0.dp),
                             contentAlignment = Alignment.Center,
                         ) {
                             Box(
@@ -206,16 +202,15 @@ internal fun OnboardingProfile(
                             )
                         }
                     }
+                    val isCustomSelected = AvatarColors.none {
+                        it.toArgb().toUInt() == state.avatarColorArgb
+                    }
                     Box(
                         modifier =
                             Modifier.size(48.dp)
                                 .clip(avatarShape)
                                 .then(
-                                    if (
-                                        AvatarColors.none {
-                                            it.value.toUInt() == state.avatarColorArgb
-                                        }
-                                    ) {
+                                    if (isCustomSelected) {
                                         Modifier.border(
                                             3.dp,
                                             MaterialTheme.colorScheme.onBackground,
@@ -227,15 +222,7 @@ internal fun OnboardingProfile(
                                     scope.launch { sheetState.show() }
                                     showColorPicker = true
                                 }
-                                .padding(
-                                    if (
-                                        AvatarColors.none {
-                                            it.value.toUInt() == state.avatarColorArgb
-                                        }
-                                    )
-                                        5.dp
-                                    else 0.dp
-                                ),
+                                .padding(if (isCustomSelected) 5.dp else 0.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         Canvas(Modifier.fillMaxSize().clip(MaterialTheme.shapes.medium)) {
@@ -383,7 +370,7 @@ internal fun OnboardingProfile(
             sheetState = sheetState,
             onApply = { selectedColor ->
                 customColor = selectedColor
-                onIntent(OnboardingIntent.AvatarColorSelected(selectedColor.value.toUInt()))
+                onIntent(OnboardingIntent.AvatarColorSelected(selectedColor.toArgb().toUInt()))
                 showColorPicker = false
                 dismissColorPickerDialog()
             },
