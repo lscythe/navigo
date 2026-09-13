@@ -51,10 +51,6 @@ import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.action.Close
 import dev.lscythe.app.navigo.core.designsystem.icon.action.Search
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 
 /**
  * Displays a single-line search field with search and clear actions.
@@ -168,24 +164,8 @@ fun NavigoSearchBar(
     )
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoSearchBarPreview() {
-    NavigoPreview {
-        SearchBarPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoSearchBarMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        SearchBarPreviewContent()
-    }
-}
-
-@Composable
-private fun SearchBarPreviewContent() {
+internal fun SearchBarPreviewContent() {
     var query by remember { mutableStateOf("") }
     NavigoSearchBar(
         query = query,

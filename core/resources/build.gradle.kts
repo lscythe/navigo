@@ -26,9 +26,14 @@ kotlin {
         androidResources.enable = true
     }
 
-    sourceSets.commonMain.dependencies {
-        implementation(libs.compose.multiplatform.runtime)
-        api(libs.compose.multiplatform.resources)
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.compose.multiplatform.runtime)
+            api(libs.compose.multiplatform.resources)
+        }
+        androidMain.dependencies {
+            implementation(libs.compose.multiplatform.ui)
+        }
     }
 }
 

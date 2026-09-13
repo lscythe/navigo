@@ -1,7 +1,6 @@
 {
   "challengeId": "challenge-id",
   "playIntegrity": {
-    "token": "provider-token",
-    "requestHash": "request-hash"
+    "token": "provider-token"
   }
 }

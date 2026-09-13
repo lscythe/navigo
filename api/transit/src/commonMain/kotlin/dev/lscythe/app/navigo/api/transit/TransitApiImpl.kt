@@ -18,6 +18,7 @@ package dev.lscythe.app.navigo.api.transit
 import dev.lscythe.app.navigo.api.transit.constant.TransitEndpoint
 import dev.lscythe.app.navigo.api.transit.dto.BusesResponse
 import dev.lscythe.app.navigo.api.transit.dto.LocationResponse
+import dev.lscythe.app.navigo.api.transit.dto.MapDataResponse
 import dev.lscythe.app.navigo.api.transit.dto.RouteDetailResponse
 import dev.lscythe.app.navigo.api.transit.dto.RoutesResponse
 import dev.lscythe.app.navigo.api.transit.dto.SearchCategory
@@ -126,6 +127,10 @@ internal class TransitApiImpl(@AuthenticatedClient private val httpClient: HttpC
         validateLocation(request.origin)
         validateLocation(request.destination)
         return safeRequest { httpClient.post(TransitEndpoint.TRIP_PLANS) { setBody(request) } }
+    }
+
+    override suspend fun getMapData(): ApiResponse<MapDataResponse> = safeRequest {
+        httpClient.get(TransitEndpoint.MAP_DATA)
     }
 
     override suspend fun getSearchResults(

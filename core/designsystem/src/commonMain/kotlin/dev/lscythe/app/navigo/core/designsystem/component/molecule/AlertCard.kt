@@ -38,10 +38,6 @@ import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.ExclamationCircle
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -158,24 +154,8 @@ private fun AlertCardContent(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoAlertCardPreview() {
-    NavigoPreview {
-        AlertCardPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoAlertCardMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        AlertCardPreviewContent()
-    }
-}
-
-@Composable
-private fun AlertCardPreviewContent() {
+internal fun AlertCardPreviewContent() {
     Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {
         NavigoAlertCard(
             source = "NAVIGO",

@@ -15,11 +15,6 @@
  */
 package dev.lscythe.app.navigo.core.designsystem.component
 
-// TODO(wip): restore with icon-button atoms removed from Button.kt mid-refactor.
-// import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoFilledIconButton
-// import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoFilledTonalIconButton
-// import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIconButton
-// import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoOutlinedIconButton
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,11 +35,15 @@ import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoCircularLoa
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoCircularProgressIndicator
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoDot
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoElevatedButton
+import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoFilledIconButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoFilledTonalButton
+import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoFilledTonalIconButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
+import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIconButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoLinearLoadingIndicator
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoLinearProgressIndicator
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoOutlinedButton
+import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoOutlinedIconButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoPagerIndicator
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoProgressSegment
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoRadioButton
@@ -97,23 +96,7 @@ class AtomScreenshotTests {
     fun textButton_multipleThemes() =
         capture("TextButton") { NavigoTextButton({}) { Text("Text") } }
 
-    // TODO(wip): restore these four tests together with the icon-button atoms that were
-    // removed from component/atom/Button.kt mid-refactor. Bodies preserved verbatim.
-    // @Test
-    // fun iconButton_multipleThemes() =
-    //     capture("IconButton") { NavigoIconButton({}) { PreviewIcon() } }
-    //
-    // @Test
-    // fun filledIconButton_multipleThemes() =
-    //     capture("FilledIconButton") { NavigoFilledIconButton({}) { PreviewIcon() } }
-    //
-    // @Test
-    // fun filledTonalIconButton_multipleThemes() =
-    //     capture("FilledTonalIconButton") { NavigoFilledTonalIconButton({}) { PreviewIcon() } }
-    //
-    // @Test
-    // fun outlinedIconButton_multipleThemes() =
-    //     capture("OutlinedIconButton") { NavigoOutlinedIconButton({}) { PreviewIcon() } }
+    @Test fun iconButtons_multipleThemes() = capture("IconButtons") { IconButtonContent() }
 
     @Test fun icon_multipleThemes() = capture("Icon") { IconContent() }
 
@@ -189,7 +172,17 @@ private fun DotContent() =
         NavigoDot(color = MaterialTheme.colorScheme.tertiary)
     }
 
-// @Composable private fun PreviewIcon() = Icon(NavigoIcons.Circle, contentDescription = null)
+@Composable
+private fun IconButtonContent() =
+    Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
+        NavigoIconButton({}) { PreviewIcon() }
+        NavigoFilledIconButton({}) { PreviewIcon() }
+        NavigoFilledTonalIconButton({}) { PreviewIcon() }
+        NavigoOutlinedIconButton({}) { PreviewIcon() }
+        NavigoFilledIconButton({}, enabled = false) { PreviewIcon() }
+    }
+
+@Composable private fun PreviewIcon() = NavigoIcon(NavigoIcons.Circle, contentDescription = null)
 
 @Composable
 private fun IconContent() =

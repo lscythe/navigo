@@ -34,6 +34,9 @@ kotlin {
         androidMain.dependencies {
             runtimeOnly(libs.maplibre.compose.opengl.runtime)
         }
+        desktopMain.dependencies {
+            implementation(libs.compose.multiplatform.ui.tooling.preview)
+        }
         desktopTest.dependencies {
             implementation(project(":core:testing-screenshot"))
         }

@@ -74,5 +74,5 @@
     <string name="home_notifications">Notifikasi</string>
     <string name="home_profile">Profil</string>
     <string name="home_maptoolkit_logo_description">Logo maptoolkit</string>
-    <string name="onboarding_pager_indicator_format">%1$02d / %2$02d</string>
+    <string name="onboarding_pager_indicator_format">%1$s / %2$s</string>
 </resources>

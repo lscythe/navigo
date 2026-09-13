@@ -56,10 +56,22 @@ include(
 )
 
 include(
+    ":domain:auth",
+    ":domain:legal",
+    ":domain:settings",
+    ":domain:user",
+    ":data:auth",
+    ":data:legal",
+    ":data:settings",
+    ":data:user",
+)
+
+include(
     ":core:analytics",
     ":core:analytics-firebase",
     ":core:analytics-local",
     ":core:common",
+    ":core:permissions",
     ":core:database",
     ":core:persistence",
     ":core:resources",
@@ -78,6 +90,8 @@ include(
     ":feature:home:api",
     ":feature:home:impl",
     ":feature:onboarding:api",
+    ":feature:onboarding:data",
+    ":feature:onboarding:domain",
     ":feature:onboarding:impl",
 )
 

@@ -18,13 +18,17 @@ package dev.lscythe.app.navigo
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModelProvider
 import androidx.metrics.performance.JankStats
 import co.touchlab.kermit.Severity
+import dev.lscythe.app.navigo.app.MainViewModel
 import dev.lscythe.app.navigo.app.NavigoRoot
+import dev.lscythe.app.navigo.app.StartupState
 import dev.lscythe.app.navigo.core.analytics.AnalyticsHelper
 import dev.lscythe.app.navigo.core.monitoring.AppLogger
 import dev.zacsweers.metro.AppScope
@@ -48,14 +52,26 @@ class MainActivity(
 
     private lateinit var jankStats: JankStats
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { viewModel.state.value is StartupState.Initializing }
+        enableEdgeToEdge(
+            statusBarStyle =
+                SystemBarStyle.auto(
+                    lightScrim = android.graphics.Color.TRANSPARENT,
+                    darkScrim = android.graphics.Color.TRANSPARENT,
+                )
+        )
         super.onCreate(savedInstanceState)
 
         setContent {
-            NavigoRoot(analyticsHelper = analyticsHelper)
+            NavigoRoot(
+                analyticsHelper = analyticsHelper,
+                viewModelFactory = viewModelFactory,
+                mainViewModel = viewModel,
+            )
         }
         jankStats =
             JankStats.createAndTrack(window) { frameData ->

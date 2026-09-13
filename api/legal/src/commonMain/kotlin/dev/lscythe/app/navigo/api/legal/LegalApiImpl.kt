@@ -37,7 +37,7 @@ import io.ktor.http.HttpStatusCode
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-internal class LegalApiImpl(@PublicClient private val httpClient: HttpClient) : LegalApi {
+class LegalApiImpl(@PublicClient private val httpClient: HttpClient) : LegalApi {
     override suspend fun getTerms(etag: String?): ApiResponse<LegalDocumentResult> =
         getLegalDocument(endpoint = LegalEndpoint.TERMS, etag = etag)
 

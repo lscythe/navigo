@@ -37,6 +37,7 @@ import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoSearchB
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoStatusChip
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoTextField
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoUnderlinedTextField
+import dev.lscythe.app.navigo.core.designsystem.component.molecule.TopAppBarPreviewContent
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.status.ExclamationCircle
 import dev.lscythe.app.navigo.core.designsystem.icon.status.Notification
@@ -83,6 +84,8 @@ class ComponentScreenshotTests {
         capture("ModalBottomSheet") { ModalBottomSheetContent() }
 
     @Test fun navigoBrand_multipleThemes() = capture("NavigoBrand") { NavigoBrand() }
+
+    @Test fun topAppBar_multipleThemes() = capture("TopAppBar") { TopAppBarPreviewContent() }
 
     @Test
     fun navigoBrand_constrainedWidth_multipleThemes() =

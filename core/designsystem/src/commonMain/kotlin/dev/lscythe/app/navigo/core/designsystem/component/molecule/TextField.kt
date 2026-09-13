@@ -40,10 +40,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -177,24 +173,8 @@ fun NavigoTextField(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoTextFieldPreview() {
-    NavigoPreview {
-        TextFieldPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoTextFieldMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        TextFieldPreviewContent()
-    }
-}
-
-@Composable
-private fun TextFieldPreviewContent() {
+internal fun TextFieldPreviewContent() {
     var address by remember { mutableStateOf("Jalan Melati") }
     var notes by remember { mutableStateOf("") }
     Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.container)) {

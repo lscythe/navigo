@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+
 plugins {
     alias(libs.plugins.navigo.multiplatform.library)
     alias(libs.plugins.navigo.multiplatform.library.compose)
+    alias(libs.plugins.navigo.metro)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.buildkonfig)
 }
 
 kotlin {
@@ -26,13 +30,28 @@ kotlin {
 
     sourceSets.commonMain.dependencies {
         api(project(":core:analytics"))
+        implementation(project(":api:legal"))
+        implementation(project(":api:auth"))
+        implementation(project(":data:auth"))
+        implementation(project(":core:persistence"))
+        implementation(project(":data:legal"))
+        implementation(project(":data:settings"))
+        implementation(project(":data:user"))
+        implementation(project(":domain:auth"))
+        implementation(project(":domain:settings"))
+        implementation(project(":feature:onboarding:data"))
+        implementation(project(":feature:onboarding:domain"))
         implementation(project(":core:designsystem"))
         implementation(project(":core:navigation"))
+        implementation(project(":core:monitoring"))
         implementation(project(":core:ui"))
         implementation(project(":feature:home:api"))
         implementation(project(":feature:home:impl"))
         implementation(project(":feature:onboarding:api"))
         implementation(project(":feature:onboarding:impl"))
+        implementation(libs.androidx.lifecycle.viewModelCompose)
+        implementation(libs.metro.viewmodel)
+        implementation(libs.metro.viewmodel.compose)
         implementation(libs.androidx.navigation3.runtime)
         implementation(libs.compose.multiplatform.navigation3.ui)
         implementation(libs.compose.multiplatform.material3.adaptive)
@@ -43,5 +62,20 @@ kotlin {
         implementation(libs.kotest.framework.engine)
         implementation(libs.kotest.assertions.core)
         implementation(libs.kotlinx.serialization.json)
+        implementation(libs.kotlinx.coroutines.test)
+        implementation(project(":domain:auth"))
+    }
+}
+
+buildkonfig {
+    packageName = "dev.lscythe.app.navigo.config"
+    exposeObjectWithName = "AppBuildKonfig"
+
+    defaultConfigs {
+        buildConfigField(
+            STRING,
+            "API_BASE_URL",
+            providers.gradleProperty("navigoNonProdApiBaseUrl").get(),
+        )
     }
 }

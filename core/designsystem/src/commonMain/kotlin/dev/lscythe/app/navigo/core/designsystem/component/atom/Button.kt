@@ -33,10 +33,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 @Composable
@@ -146,18 +142,8 @@ fun NavigoTextButton(
     )
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoButtonPreview() = NavigoPreview { ButtonPreviewContent() }
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoButtonMaterialKolorPreview() = NavigoMaterialKolorPreview {
-    ButtonPreviewContent()
-}
-
-@Composable
-private fun ButtonPreviewContent() {
+internal fun ButtonPreviewContent() {
     Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
         Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
             NavigoElevatedButton(onClick = {}) { Text("Elevated") }

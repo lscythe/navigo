@@ -29,10 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -80,24 +76,8 @@ fun NavigoListContainer(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoListContainerPreview() {
-    NavigoPreview {
-        ListContainerPreviewContent()
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoListContainerMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        ListContainerPreviewContent()
-    }
-}
-
-@Composable
-private fun ListContainerPreviewContent() {
+internal fun ListContainerPreviewContent() {
     val labels =
         listOf(
             "Names or accuses a specific person",

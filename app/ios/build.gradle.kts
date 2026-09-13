@@ -19,6 +19,7 @@ plugins {
     id("org.jetbrains.kotlin.multiplatform")
     alias(libs.plugins.compose)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.navigo.metro)
 }
 
 tasks.register("generateIosVersionConfig") {
@@ -72,8 +73,25 @@ kotlin {
 
     sourceSets.iosMain.dependencies {
         implementation(project(":app:shared"))
+        implementation(project(":api:auth"))
+        implementation(project(":domain:auth"))
+        implementation(project(":api:legal"))
+        implementation(project(":core:network"))
+        implementation(project(":core:monitoring"))
+        implementation(project(":core:persistence"))
+        implementation(project(":feature:onboarding:domain"))
+        implementation(project(":data:auth"))
+        implementation(project(":data:legal"))
+        implementation(project(":data:settings"))
+        implementation(project(":data:user"))
+        implementation(project(":feature:onboarding:data"))
         implementation(project(":core:analytics-local"))
+        implementation(libs.metro.viewmodel)
+        implementation(libs.metro.viewmodel.compose)
         implementation(libs.compose.multiplatform.runtime)
+        implementation("io.github.orioneee:axer:${libs.versions.axer.get()}") {
+            exclude(group = "org.jetbrains.skiko", module = "skiko")
+        }
         implementation(libs.compose.multiplatform.ui)
     }
 }

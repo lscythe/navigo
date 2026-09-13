@@ -16,11 +16,7 @@
 package dev.lscythe.app.navigo.core.designsystem.component.atom
 
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
@@ -41,10 +37,6 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -119,42 +111,5 @@ fun NavigoPagerIndicator(
                 }
             }
         }
-    }
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoPagerIndicatorPreview() {
-    val transition = rememberInfiniteTransition(label = "pager preview")
-    val progress by
-        transition.animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec =
-                infiniteRepeatable(
-                    animation = tween(durationMillis = 3_000, easing = LinearEasing),
-                    repeatMode = RepeatMode.Restart,
-                ),
-            label = "page progress",
-        )
-
-    NavigoPreview {
-        NavigoPagerIndicator(
-            pageCount = 4,
-            currentPage = 0,
-            pageProgress = progress,
-        )
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoPagerIndicatorMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        NavigoPagerIndicator(
-            pageCount = 4,
-            currentPage = 1,
-            pageProgress = 0.65f,
-        )
     }
 }

@@ -34,10 +34,6 @@ import androidx.compose.ui.unit.dp
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ChevronRight
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
@@ -107,20 +103,8 @@ fun NavigoChoiceChip(
     }
 }
 
-@NavigoThemePreview
 @Composable
-private fun NavigoChoiceChipPreview() {
-    NavigoPreview { ChoiceChipPreviewContent() }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoChoiceChipMaterialKolorPreview() {
-    NavigoMaterialKolorPreview { ChoiceChipPreviewContent() }
-}
-
-@Composable
-private fun ChoiceChipPreviewContent() {
+internal fun ChoiceChipPreviewContent() {
     Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
         NavigoChoiceChip(selected = true, onClick = {}, label = "Bahasa")
         NavigoChoiceChip(

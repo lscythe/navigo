@@ -29,8 +29,7 @@ import io.ktor.client.request.delete
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-internal class SessionApiImpl(@AuthenticatedClient private val httpClient: HttpClient) :
-    SessionApi {
+class SessionApiImpl(@AuthenticatedClient private val httpClient: HttpClient) : SessionApi {
     override suspend fun deleteCurrentSession(): ApiResponse<Unit> = safeNoContentRequest {
         httpClient.delete(AuthEndpoint.CURRENT_SESSION)
     }

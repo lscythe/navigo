@@ -15,20 +15,11 @@
  */
 package dev.lscythe.app.navigo.core.designsystem.component.atom
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoMaterialKolorThemePreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoPreview
-import dev.lscythe.app.navigo.core.designsystem.preview.NavigoThemePreview
-import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
 /**
  * Switches between checked and unchecked states.
@@ -51,41 +42,4 @@ fun NavigoSwitch(
         modifier = modifier,
         enabled = enabled,
     )
-}
-
-@NavigoThemePreview
-@Composable
-private fun NavigoSwitchPreview() {
-    NavigoPreview {
-        var checked by remember { mutableStateOf(false) }
-
-        Column(verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element)) {
-            NavigoSwitch(
-                checked = checked,
-                onCheckedChange = { checked = it },
-            )
-            NavigoSwitch(
-                checked = true,
-                onCheckedChange = null,
-            )
-            NavigoSwitch(
-                checked = false,
-                onCheckedChange = null,
-                enabled = false,
-            )
-            NavigoSwitch(
-                checked = true,
-                onCheckedChange = null,
-                enabled = false,
-            )
-        }
-    }
-}
-
-@NavigoMaterialKolorThemePreview
-@Composable
-private fun NavigoSwitchMaterialKolorPreview() {
-    NavigoMaterialKolorPreview {
-        NavigoSwitch(checked = true, onCheckedChange = null)
-    }
 }
