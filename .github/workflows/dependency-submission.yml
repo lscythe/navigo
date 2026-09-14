@@ -27,6 +27,6 @@ jobs:
           java-version: '25'
           cache: gradle
       - name: Submit Gradle dependency graph
-        uses: gradle/actions/dependency-submission@4c125117fe7c5aed11272ec4213f602f012f89f2 # v5
+        uses: gradle/actions/dependency-submission@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
         with:
           dependency-graph: generate-and-submit
