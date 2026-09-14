@@ -25,7 +25,7 @@ internal fun nearbyStopsSheetAnchors(
     screenHeight: Float,
     collapsedHeight: Float,
 ): Map<NearbyStopsSheetValue, Float> {
-    val halfExpanded = screenHeight / 2f
+    val halfExpanded = screenHeight * 0.45f
     val collapsed = (screenHeight - collapsedHeight).coerceAtLeast(halfExpanded)
     return mapOf(
         NearbyStopsSheetValue.Collapsed to collapsed,

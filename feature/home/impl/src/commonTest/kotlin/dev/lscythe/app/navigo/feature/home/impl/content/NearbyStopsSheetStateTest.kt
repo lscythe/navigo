@@ -24,14 +24,14 @@ class NearbyStopsSheetStateTest :
             val anchors = nearbyStopsSheetAnchors(screenHeight = 1_000f, collapsedHeight = 240f)
 
             anchors.getValue(NearbyStopsSheetValue.Collapsed).shouldBeExactly(760f)
-            anchors.getValue(NearbyStopsSheetValue.HalfExpanded).shouldBeExactly(500f)
+            anchors.getValue(NearbyStopsSheetValue.HalfExpanded).shouldBeExactly(450f)
             anchors.getValue(NearbyStopsSheetValue.Expanded).shouldBeExactly(0f)
         }
 
         test("collapsed anchor never rises above half expanded") {
             val anchors = nearbyStopsSheetAnchors(screenHeight = 400f, collapsedHeight = 260f)
 
-            anchors.getValue(NearbyStopsSheetValue.Collapsed).shouldBeExactly(200f)
-            anchors.getValue(NearbyStopsSheetValue.HalfExpanded).shouldBeExactly(200f)
+            anchors.getValue(NearbyStopsSheetValue.Collapsed).shouldBeExactly(180f)
+            anchors.getValue(NearbyStopsSheetValue.HalfExpanded).shouldBeExactly(180f)
         }
     })
