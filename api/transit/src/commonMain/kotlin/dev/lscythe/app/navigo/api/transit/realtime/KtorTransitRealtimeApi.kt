@@ -24,14 +24,17 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.plugins.ResponseException
+import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
+import io.ktor.client.plugins.websocket.WebSocketException
 import io.ktor.client.plugins.websocket.webSocketSession
 import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.readRawBytes
+import io.ktor.client.utils.HttpResponseReceived
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.encodedPath
@@ -39,15 +42,21 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
+import io.ktor.util.AttributeKey
 import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 @SingleIn(AppScope::class)
@@ -190,29 +199,75 @@ internal fun viewportStreamRequest(baseUrl: String): ViewportStreamRequest {
 }
 
 private class KtorViewportWebSocketSessionFactory(
-    private val httpClient: HttpClient,
+    httpClient: HttpClient,
     private val baseUrl: String,
 ) : ViewportWebSocketSessionFactory {
+    private val responseBodies = UpgradeResponseBodies()
+    private val upgradeClient =
+        httpClient.config {
+            followRedirects = false
+            install(ResponseObserver) {
+                filter { call -> call.request.attributes.contains(UPGRADE_RESPONSE_MARKER) }
+                onResponse { response ->
+                    val marker = response.call.request.attributes[UPGRADE_RESPONSE_MARKER]
+                    responseBodies.complete(marker, response.readRawBytes().decodeToString())
+                }
+            }
+        }
+
     override suspend fun open(): ViewportWebSocketSession =
-        openViewportWebSocketSession(httpClient, baseUrl)
+        openViewportWebSocketSession(upgradeClient, baseUrl)
 
     private suspend fun openViewportWebSocketSession(
         httpClient: HttpClient,
         baseUrl: String,
-    ): ViewportWebSocketSession =
+    ): ViewportWebSocketSession {
+        val responseMarker = Any()
+        val responseBody = responseBodies.register(responseMarker)
+        var receivedResponse: HttpResponse? = null
+        val responseListener: (HttpResponse) -> Unit = { response ->
+            if (response.isMarkedWith(responseMarker)) receivedResponse = response
+        }
+        httpClient.monitor.subscribe(HttpResponseReceived, responseListener)
         try {
             val request = viewportStreamRequest(baseUrl)
             val session =
                 httpClient.webSocketSession(request.url) {
                     method = request.method
+                    attributes.put(UPGRADE_RESPONSE_MARKER, responseMarker)
                     headers.append(HttpHeaders.SecWebSocketProtocol, request.requestedProtocol)
                 }
-            KtorViewportWebSocketSession(session)
-        } catch (exception: ClientRequestException) {
-            throw exception.toUpgradeFailure()
-        } catch (exception: ServerResponseException) {
-            throw exception.toUpgradeFailure()
+            return KtorViewportWebSocketSession(session)
+        } catch (exception: ResponseException) {
+            throw exception.response.toUpgradeFailure(responseBody.awaitOrNull(), exception)
+        } catch (exception: WebSocketException) {
+            val response = receivedResponse ?: throw exception
+            throw response.toUpgradeFailure(responseBody.awaitOrNull(), exception)
+        } finally {
+            httpClient.monitor.unsubscribe(HttpResponseReceived, responseListener)
+            responseBodies.remove(responseMarker)
         }
+    }
+
+    private fun HttpResponse.isMarkedWith(marker: Any): Boolean =
+        call.request.attributes.contains(UPGRADE_RESPONSE_MARKER) &&
+            call.request.attributes[UPGRADE_RESPONSE_MARKER] === marker
+}
+
+private class UpgradeResponseBodies {
+    private val mutex = Mutex()
+    private val bodies = mutableMapOf<Any, CompletableDeferred<String>>()
+
+    suspend fun register(marker: Any): CompletableDeferred<String> =
+        mutex.withLock { CompletableDeferred<String>().also { bodies[marker] = it } }
+
+    suspend fun complete(marker: Any, body: String) {
+        mutex.withLock { bodies[marker] }?.complete(body)
+    }
+
+    suspend fun remove(marker: Any) {
+        mutex.withLock { bodies.remove(marker) }?.cancel()
+    }
 }
 
 private class KtorViewportWebSocketSession(private val session: DefaultClientWebSocketSession) :
@@ -245,16 +300,28 @@ private class KtorViewportWebSocketSession(private val session: DefaultClientWeb
     }
 }
 
-private suspend fun ClientRequestException.toUpgradeFailure(): ViewportStreamFailure =
-    response.toUpgradeFailure(this)
 
-private suspend fun ServerResponseException.toUpgradeFailure(): ViewportStreamFailure =
-    response.toUpgradeFailure(this)
+private val UPGRADE_RESPONSE_MARKER = AttributeKey<Any>("ViewportStreamUpgradeResponseMarker")
+private const val RESPONSE_BODY_TIMEOUT_MILLIS = 1_000L
 
-private suspend fun HttpResponse.toUpgradeFailure(cause: Throwable): ViewportStreamFailure {
-    val problem = runCatching { body<ProblemDetail>() }.getOrNull()
-    return if (status.value == 401) {
-        ViewportStreamFailure.Authentication(cause = cause)
+private suspend fun CompletableDeferred<String>.awaitOrNull(): String? =
+    withTimeoutOrNull(RESPONSE_BODY_TIMEOUT_MILLIS) { await() }
+
+private fun HttpResponse.toUpgradeFailure(
+    responseBody: String?,
+    cause: Throwable,
+): ViewportStreamFailure {
+    val problem =
+        responseBody?.let { body ->
+            runCatching { PROBLEM_JSON.decodeFromString<ProblemDetail>(body) }.getOrNull()
+        }
+    return if (status == HttpStatusCode.Unauthorized) {
+        ViewportStreamFailure.Authentication(
+            statusCode = status.value,
+            contentLanguage = headers[HttpHeaders.ContentLanguage],
+            problem = problem,
+            cause = cause,
+        )
     } else {
         ViewportStreamFailure.Upgrade(
             statusCode = status.value,
@@ -264,3 +331,5 @@ private suspend fun HttpResponse.toUpgradeFailure(cause: Throwable): ViewportStr
         )
     }
 }
+
+private val PROBLEM_JSON = Json { ignoreUnknownKeys = true }

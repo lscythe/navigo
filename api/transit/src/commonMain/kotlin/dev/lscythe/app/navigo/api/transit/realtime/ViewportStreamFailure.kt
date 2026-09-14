@@ -31,6 +31,9 @@ sealed class ViewportStreamFailure(
     ) : ViewportStreamFailure(message, cause)
 
     class Authentication(
+        val statusCode: Int = 401,
+        val contentLanguage: String? = null,
+        val problem: ProblemDetail? = null,
         message: String = "Viewport stream authentication failed",
         cause: Throwable? = null,
     ) : ViewportStreamFailure(message, cause)

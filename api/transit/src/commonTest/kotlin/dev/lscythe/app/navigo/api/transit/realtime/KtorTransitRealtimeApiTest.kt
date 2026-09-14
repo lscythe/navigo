@@ -16,17 +16,29 @@
 package dev.lscythe.app.navigo.api.transit.realtime
 
 import app.cash.turbine.test
+import dev.lscythe.app.navigo.core.network.ProblemDetail
 import dev.lscythe.app.navigo.api.transit.constant.TransitEndpoint
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.http.HttpMethod
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
+import io.ktor.serialization.kotlinx.json.json
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.yield
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -230,7 +242,100 @@ class KtorTransitRealtimeApiTest :
                     requestedProtocol = "navigo.viewport.v1",
                 )
         }
+
+        test("preserves redirect upgrade response details") {
+            val problem =
+                ProblemDetail(
+                    type = "https://navigo.app/problems/redirect",
+                    title = "Redirect rejected",
+                    status = 302,
+                    detail = "Use the configured endpoint",
+                    instance = "request-1",
+                )
+            val failure =
+                shouldThrow<ViewportStreamFailure.Upgrade> {
+                    upgradeApi(HttpStatusCode.Found, problem).stream(flowOf(subscription)).collect {}
+                }
+
+            failure.statusCode shouldBe 302
+            failure.contentLanguage shouldBe "id"
+            failure.problem shouldBe problem
+        }
+
+        test("preserves non switching upgrade response details") {
+            val problem =
+                ProblemDetail(
+                    type = "https://navigo.app/problems/not-upgraded",
+                    title = "Upgrade required",
+                    status = 200,
+                    detail = "Response did not switch protocols",
+                    instance = "request-1",
+                )
+            val failure =
+                shouldThrow<ViewportStreamFailure.Upgrade> {
+                    upgradeApi(HttpStatusCode.OK, problem).stream(flowOf(subscription)).collect {}
+                }
+
+            failure.statusCode shouldBe 200
+            failure.contentLanguage shouldBe "id"
+            failure.problem shouldBe problem
+        }
+
+        test("preserves authentication upgrade response details") {
+            val problem =
+                ProblemDetail(
+                    type = "https://navigo.app/problems/unauthenticated",
+                    title = "Unauthenticated",
+                    status = 401,
+                    detail = "Session expired",
+                    instance = "request-1",
+                )
+            val failure =
+                shouldThrow<ViewportStreamFailure.Authentication> {
+                    upgradeApi(HttpStatusCode.Unauthorized, problem)
+                        .stream(flowOf(subscription))
+                        .collect {}
+                }
+
+            failure.statusCode shouldBe 401
+            failure.contentLanguage shouldBe "id"
+            failure.problem shouldBe problem
+        }
     })
+
+private fun upgradeApi(
+    status: HttpStatusCode,
+    problem: ProblemDetail,
+): TransitRealtimeApi {
+    val protocolJson =
+        Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            explicitNulls = false
+        }
+    val engine =
+        MockEngine {
+            respond(
+                content = protocolJson.encodeToString(problem),
+                status = status,
+                headers =
+                    headersOf(
+                        HttpHeaders.ContentType to listOf("application/problem+json"),
+                        HttpHeaders.ContentLanguage to listOf("id"),
+                    ),
+            )
+        }
+    val client =
+        HttpClient(engine) {
+            expectSuccess = true
+            install(WebSockets)
+            install(ContentNegotiation) {
+                json(protocolJson)
+                json(protocolJson, ContentType("application", "problem+json"))
+            }
+        }
+    return KtorTransitRealtimeApi(client, "https://api.navigo.app/")
+}
 
 private class FakeViewportWebSocketSessionFactory(
     private val session: ViewportWebSocketSession? = null,
