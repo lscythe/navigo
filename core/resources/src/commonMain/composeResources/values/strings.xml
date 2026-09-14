@@ -76,5 +76,8 @@
     <string name="home_notifications">Notifications</string>
     <string name="home_profile">Profile</string>
     <string name="home_maptoolkit_logo_description">maptoolkit logo</string>
+    <string name="home_my_location">My location</string>
+    <string name="home_bus_data_connected">Bus Data Connected</string>
+    <string name="home_bus_data_disconnected">Bus Data Disconnected</string>
     <string name="onboarding_pager_indicator_format">%1$s / %2$s</string>
 </resources>

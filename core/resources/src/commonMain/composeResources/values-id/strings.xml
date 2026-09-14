@@ -74,5 +74,8 @@
     <string name="home_notifications">Notifikasi</string>
     <string name="home_profile">Profil</string>
     <string name="home_maptoolkit_logo_description">Logo maptoolkit</string>
+    <string name="home_my_location">Lokasi saya</string>
+    <string name="home_bus_data_connected">Data Bus Terhubung</string>
+    <string name="home_bus_data_disconnected">Data Bus Terputus</string>
     <string name="onboarding_pager_indicator_format">%1$s / %2$s</string>
 </resources>
