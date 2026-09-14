@@ -41,6 +41,32 @@ class NetworkBindingsTest :
             client.get("v1/routes")
         }
 
+        test("authenticated requests send bearer credentials preemptively") {
+            val engine = MockEngine { request ->
+                request.headers[HttpHeaders.Authorization] shouldBe "Bearer access-token"
+                respondOk()
+            }
+            val publicClient =
+                NetworkBindings.createPublicHttpClient(
+                    engine = engine,
+                    baseUrl = "https://api.navigo.app",
+                    languageProvider = LanguageProvider { null },
+                    networkLogger = NetworkLogger {},
+                )
+            val sessionManager =
+                object : SessionManager {
+                    override suspend fun loadTokens(): SessionTokens =
+                        SessionTokens("access-token", "refresh-token")
+
+                    override suspend fun refreshTokens(): SessionTokens =
+                        SessionTokens("new-access-token", "new-refresh-token")
+                }
+            val authenticatedClient =
+                NetworkBindings.provideAuthenticatedHttpClient(publicClient, sessionManager)
+
+            authenticatedClient.get("v1/viewport-stream")
+        }
+
         test("public requests omit language when provider uses system default") {
             val engine = MockEngine { request ->
                 request.headers.contains(HttpHeaders.AcceptLanguage) shouldBe false
