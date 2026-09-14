@@ -111,6 +111,15 @@ class ViewportStreamCodecTest :
                 )
         }
 
+        test("ignores compatible unknown null bus properties") {
+            codec.decode(
+                """{"type":"bus","subscriptionId":"subscription-1","bus":{"bodyNumber":"B-01","routeCode":"1","futureNullableField":null}}"""
+            ) shouldBe
+                ViewportStreamEvent.Bus(
+                    "subscription-1",
+                    RealtimeBusUpdate(bodyNumber = "B-01", routeCode = "1"),
+                )
+        }
         test("decodes bus removal and request scoped errors") {
             codec.decode(
                 """{"type":"bus_removed","subscriptionId":"subscription-1","bodyNumber":"B-01"}"""

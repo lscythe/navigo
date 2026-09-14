@@ -59,11 +59,49 @@ internal class ViewportStreamCodec(private val json: Json) {
     }
 
     private fun rejectExplicitNulls(element: JsonElement) {
-        when (element) {
-            JsonNull -> throw SerializationException("Explicit null is not supported")
-            is JsonObject -> element.values.forEach(::rejectExplicitNulls)
-            else -> Unit
+        val objectValue = element as? JsonObject ?: return
+        objectValue.forEach { (name, value) ->
+            if (name in BUS_PROPERTIES && value is JsonNull) {
+                throw SerializationException("Explicit null is not supported")
+            }
         }
+    }
+
+    private companion object {
+        val BUS_PROPERTIES =
+            setOf(
+                "bodyNumber",
+                "routeCode",
+                "routeName",
+                "routeColor",
+                "routeTextColor",
+                "tripId",
+                "tripHeadsign",
+                "tripShortName",
+                "serviceType",
+                "vehicleType",
+                "location",
+                "snappedLocation",
+                "bearing",
+                "speed",
+                "direction",
+                "distanceMeters",
+                "currentStops",
+                "nextStops",
+                "previousStops",
+                "estimatedDistanceNextStopMeters",
+                "estimatedTimeNextStopSeconds",
+                "nextGate",
+                "nextGateEtaSeconds",
+                "nextParentGate",
+                "nextParentGateEtaSeconds",
+                "passengerStatus",
+                "livery",
+                "tile",
+                "stops",
+                "freshness",
+                "source",
+            )
     }
 }
 

@@ -20,6 +20,7 @@ import dev.lscythe.app.navigo.api.transit.constant.TransitEndpoint
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.ktor.http.HttpMethod
 import kotlin.coroutines.cancellation.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.Channel
@@ -201,6 +202,34 @@ class KtorTransitRealtimeApiTest :
             session.closed shouldBe true
             (session.receiveCancellation.await() is CancellationException) shouldBe true
         }
+
+        test("cancellation completes suspending session cleanup") {
+            val session = FakeViewportWebSocketSession(suspendOnClose = true)
+            val api =
+                KtorTransitRealtimeApi(
+                    FakeViewportWebSocketSessionFactory(session),
+                    ViewportStreamCodec(json),
+                )
+
+            api.stream(flowOf(subscription)).test { cancel() }
+
+            session.closed shouldBe true
+        }
+
+        test("builds secure and local viewport stream upgrade requests") {
+            viewportStreamRequest("https://api.navigo.app/") shouldBe
+                ViewportStreamRequest(
+                    method = HttpMethod.Get,
+                    url = "wss://api.navigo.app/v1/viewport-stream",
+                    requestedProtocol = "navigo.viewport.v1",
+                )
+            viewportStreamRequest("http://localhost:8080/") shouldBe
+                ViewportStreamRequest(
+                    method = HttpMethod.Get,
+                    url = "ws://localhost:8080/v1/viewport-stream",
+                    requestedProtocol = "navigo.viewport.v1",
+                )
+        }
     })
 
 private class FakeViewportWebSocketSessionFactory(
@@ -219,6 +248,7 @@ private class FakeViewportWebSocketSessionFactory(
 private class FakeViewportWebSocketSession(
     override val negotiatedProtocol: String? = TransitEndpoint.VIEWPORT_STREAM_PROTOCOL,
     private val sendFailure: Throwable? = null,
+    private val suspendOnClose: Boolean = false,
 ) : ViewportWebSocketSession {
     val frames = Channel<ViewportIncomingFrame>(Channel.UNLIMITED)
     val sent = mutableListOf<String>()
@@ -239,6 +269,7 @@ private class FakeViewportWebSocketSession(
         }
 
     override suspend fun close() {
+        if (suspendOnClose) yield()
         closed = true
         frames.cancel()
     }

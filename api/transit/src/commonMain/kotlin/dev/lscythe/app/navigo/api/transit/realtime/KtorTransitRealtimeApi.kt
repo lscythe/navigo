@@ -40,12 +40,14 @@ import io.ktor.websocket.close
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
 import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
 @SingleIn(AppScope::class)
@@ -100,7 +102,7 @@ internal class KtorTransitRealtimeApi(
             } catch (throwable: Throwable) {
                 throw ViewportStreamFailure.Transport(throwable.message, throwable)
             } finally {
-                session.close()
+                withContext(NonCancellable) { session.close() }
             }
         }
 
@@ -161,6 +163,32 @@ internal sealed interface ViewportIncomingFrame {
     data class Closed(val code: Short?, val reason: String?) : ViewportIncomingFrame
 }
 
+internal data class ViewportStreamRequest(
+    val method: HttpMethod,
+    val url: String,
+    val requestedProtocol: String,
+)
+
+internal fun viewportStreamRequest(baseUrl: String): ViewportStreamRequest {
+    val webSocketUrl =
+        URLBuilder(baseUrl).apply {
+            protocol =
+                when (protocol) {
+                    URLProtocol.HTTP -> URLProtocol.WS
+                    URLProtocol.HTTPS -> URLProtocol.WSS
+                    URLProtocol.WS,
+                    URLProtocol.WSS -> protocol
+                    else -> error("Unsupported viewport stream base URL protocol")
+                }
+            encodedPath = "/${TransitEndpoint.VIEWPORT_STREAM}"
+        }
+    return ViewportStreamRequest(
+        method = HttpMethod.Get,
+        url = webSocketUrl.buildString(),
+        requestedProtocol = TransitEndpoint.VIEWPORT_STREAM_PROTOCOL,
+    )
+}
+
 private class KtorViewportWebSocketSessionFactory(
     private val httpClient: HttpClient,
     private val baseUrl: String,
@@ -173,25 +201,11 @@ private class KtorViewportWebSocketSessionFactory(
         baseUrl: String,
     ): ViewportWebSocketSession =
         try {
-            val webSocketUrl =
-                URLBuilder(baseUrl).apply {
-                    protocol =
-                        when (protocol) {
-                            URLProtocol.HTTP -> URLProtocol.WS
-                            URLProtocol.HTTPS -> URLProtocol.WSS
-                            URLProtocol.WS,
-                            URLProtocol.WSS -> protocol
-                            else -> error("Unsupported viewport stream base URL protocol")
-                        }
-                    encodedPath = "/${TransitEndpoint.VIEWPORT_STREAM}"
-                }
+            val request = viewportStreamRequest(baseUrl)
             val session =
-                httpClient.webSocketSession(webSocketUrl.buildString()) {
-                    method = HttpMethod.Get
-                    headers.append(
-                        HttpHeaders.SecWebSocketProtocol,
-                        TransitEndpoint.VIEWPORT_STREAM_PROTOCOL,
-                    )
+                httpClient.webSocketSession(request.url) {
+                    method = request.method
+                    headers.append(HttpHeaders.SecWebSocketProtocol, request.requestedProtocol)
                 }
             KtorViewportWebSocketSession(session)
         } catch (exception: ClientRequestException) {
