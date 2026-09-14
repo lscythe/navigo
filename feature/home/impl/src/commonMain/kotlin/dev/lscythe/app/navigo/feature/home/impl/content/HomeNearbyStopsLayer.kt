@@ -15,6 +15,8 @@
  */
 package dev.lscythe.app.navigo.feature.home.impl.content
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
@@ -22,12 +24,16 @@ import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.gestures.animateTo
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
@@ -36,10 +42,21 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoFilledTonalIconButton
+import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
+import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
+import dev.lscythe.app.navigo.core.designsystem.icon.map.CurrentLocation
+import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
+import dev.lscythe.app.navigo.core.resources.generated.resources.Res
+import dev.lscythe.app.navigo.core.resources.generated.resources.home_my_location
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
-internal fun HomeNearbyStopsLayer(modifier: Modifier = Modifier) {
+internal fun HomeNearbyStopsLayer(
+    modifier: Modifier = Modifier,
+    onMyLocationClick: () -> Unit = {},
+) {
     val state = remember { AnchoredDraggableState(NearbyStopsSheetValue.Collapsed) }
     val scope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -78,7 +95,7 @@ internal fun HomeNearbyStopsLayer(modifier: Modifier = Modifier) {
         }
     BoxWithConstraints(modifier = modifier.fillMaxSize()) {
         val screenHeight = constraints.maxHeight.toFloat()
-        val collapsedHeight = with(density) { 250.dp.toPx() }
+        val collapsedHeight = with(density) { 170.dp.toPx() }
         LaunchedEffect(screenHeight, collapsedHeight) {
             val positions = nearbyStopsSheetAnchors(screenHeight, collapsedHeight)
             state.updateAnchors(
@@ -105,5 +122,38 @@ internal fun HomeNearbyStopsLayer(modifier: Modifier = Modifier) {
                     .nestedScroll(nestedScrollConnection)
                     .anchoredDraggable(state, Orientation.Vertical),
         )
+        val isExpanded = state.currentValue == NearbyStopsSheetValue.Expanded
+        val locationButtonAlpha by
+            animateFloatAsState(
+                targetValue = if (isExpanded) 0f else 1f,
+                animationSpec = tween(durationMillis = 150),
+                label = "myLocationButtonAlpha",
+            )
+
+        if (locationButtonAlpha > 0f) {
+            val buttonSize = 48.dp
+            val buttonMargin = NavigoSpacing.item
+            val buttonOffset = with(density) { (buttonSize + buttonMargin).toPx() }
+            NavigoFilledTonalIconButton(
+                onClick = onMyLocationClick,
+                shape = CircleShape,
+                modifier =
+                    Modifier.align(Alignment.TopEnd)
+                        .padding(end = NavigoSpacing.screen)
+                        .graphicsLayer {
+                            val sheetY = state.offset.takeIf(Float::isFinite) ?: screenHeight
+                            translationY = sheetY - buttonOffset
+                            alpha = locationButtonAlpha
+                            scaleX = locationButtonAlpha
+                            scaleY = locationButtonAlpha
+                        }
+                        .size(buttonSize),
+            ) {
+                NavigoIcon(
+                    imageVector = NavigoIcons.CurrentLocation,
+                    contentDescription = stringResource(Res.string.home_my_location),
+                )
+            }
+        }
     }
 }

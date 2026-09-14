@@ -24,11 +24,13 @@ internal fun HomeRoute(
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onMyLocationClick: () -> Unit = {},
 ) {
     HomeScreen(
         onSearchClick = onSearchClick,
         onNotificationsClick = onNotificationsClick,
         onProfileClick = onProfileClick,
         modifier = modifier,
+        onMyLocationClick = onMyLocationClick,
     )
 }

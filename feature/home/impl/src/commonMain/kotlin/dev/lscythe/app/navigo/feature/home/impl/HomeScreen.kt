@@ -15,37 +15,53 @@
  */
 package dev.lscythe.app.navigo.feature.home.impl
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 import dev.lscythe.app.navigo.feature.home.impl.content.HomeMap
 import dev.lscythe.app.navigo.feature.home.impl.content.HomeNearbyStopsLayer
+import dev.lscythe.app.navigo.feature.home.impl.content.HomeSocketStatusChip
 import dev.lscythe.app.navigo.feature.home.impl.content.HomeTopBar
-
 @Composable
 internal fun HomeScreen(
     onSearchClick: () -> Unit,
     onNotificationsClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
+    isSocketConnected: Boolean = true,
+    onMyLocationClick: () -> Unit = {},
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         HomeMap()
-        HomeTopBar(
-            profileInitials = "AK",
-            notificationCount = 3,
-            onSearchClick = onSearchClick,
-            onNotificationsClick = onNotificationsClick,
-            onProfileClick = onProfileClick,
+        Column(
             modifier =
-                Modifier.padding(
-                    horizontal = NavigoSpacing.screen,
-                    vertical = NavigoSpacing.item,
-                ),
-        )
-        HomeNearbyStopsLayer()
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = NavigoSpacing.screen,
+                        vertical = NavigoSpacing.item,
+                    ),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
+        ) {
+            HomeTopBar(
+                profileInitials = "AK",
+                notificationCount = 3,
+                onSearchClick = onSearchClick,
+                onNotificationsClick = onNotificationsClick,
+                onProfileClick = onProfileClick,
+            )
+            HomeSocketStatusChip(
+                isConnected = isSocketConnected,
+            )
+        }
+        HomeNearbyStopsLayer(onMyLocationClick = onMyLocationClick)
     }
 }
