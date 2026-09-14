@@ -86,7 +86,7 @@ internal fun NearbyStopRow(
             contentColor =
                 if (stop.accent == StopAccent.Dark) MaterialTheme.colorScheme.primaryFixed
                 else MaterialTheme.colorScheme.onSecondary,
-            textStyle = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.titleLarge,
+            textStyle = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
         )
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
