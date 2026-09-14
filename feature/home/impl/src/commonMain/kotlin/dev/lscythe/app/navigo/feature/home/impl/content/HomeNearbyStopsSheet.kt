@@ -23,13 +23,12 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,14 +40,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoButton
 import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoIcon
-import dev.lscythe.app.navigo.core.designsystem.component.atom.NavigoOutlinedButton
 import dev.lscythe.app.navigo.core.designsystem.component.molecule.NavigoChoiceChip
 import dev.lscythe.app.navigo.core.designsystem.icon.NavigoIcons
-import dev.lscythe.app.navigo.core.designsystem.icon.action.Plus
-import dev.lscythe.app.navigo.core.designsystem.icon.map.MapPin
-import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ArrowLeft
 import dev.lscythe.app.navigo.core.designsystem.icon.navigation.ChevronUp
 import dev.lscythe.app.navigo.core.designsystem.token.NavigoSpacing
 
@@ -65,24 +59,29 @@ internal fun HomeNearbyStopsSheet(
         shape = RoundedCornerShape(topStart = cornerRadius, topEnd = cornerRadius),
         color = MaterialTheme.colorScheme.surface,
     ) {
-        AnimatedContent(
-            targetState = value,
-            transitionSpec = {
-                fadeIn(tween(durationMillis = 160, delayMillis = 120))
-                    .togetherWith(fadeOut(tween(durationMillis = 120)))
-            },
-            label = "nearbyStopsSheetContent",
-        ) { current ->
-            when (current) {
-                NearbyStopsSheetValue.Collapsed ->
-                    CollapsedNearbyStops(
-                        onExpand = { onValueChange(NearbyStopsSheetValue.HalfExpanded) }
-                    )
-                NearbyStopsSheetValue.HalfExpanded -> HalfExpandedNearbyStops()
-                NearbyStopsSheetValue.Expanded ->
-                    ExpandedNearbyStops(
-                        onBack = { onValueChange(NearbyStopsSheetValue.HalfExpanded) }
-                    )
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = NavigoSpacing.screen),
+        ) {
+            SheetDragHandle()
+            SheetTitle()
+            Spacer(Modifier.height(NavigoSpacing.item))
+            AnimatedContent(
+                targetState = value,
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(durationMillis = 160, delayMillis = 120))
+                        .togetherWith(fadeOut(animationSpec = tween(durationMillis = 120)))
+                },
+                label = "nearbyStopsSheetContent",
+                modifier = Modifier.fillMaxWidth().weight(1f, fill = false),
+            ) { current ->
+                when (current) {
+                    NearbyStopsSheetValue.Collapsed ->
+                        CollapsedNearbyStops(
+                            onExpand = { onValueChange(NearbyStopsSheetValue.HalfExpanded) }
+                        )
+                    NearbyStopsSheetValue.HalfExpanded -> HalfExpandedNearbyStops()
+                    NearbyStopsSheetValue.Expanded -> ExpandedNearbyStops()
+                }
             }
         }
     }
@@ -93,12 +92,10 @@ private fun CollapsedNearbyStops(onExpand: () -> Unit) {
     Column(
         modifier =
             Modifier.fillMaxWidth()
-                .clickable(onClick = onExpand)
-                .padding(horizontal = NavigoSpacing.screen),
-        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.screen),
+                .padding(top = NavigoSpacing.item)
+                .clickable(onClick = onExpand),
+        verticalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
     ) {
-        SheetDragHandle()
-        SheetTitle(updatedOnly = true)
         NearbyStopRow(nearbyStops.first(), compact = false)
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -116,9 +113,9 @@ private fun CollapsedNearbyStops(onExpand: () -> Unit) {
 
 @Composable
 private fun HalfExpandedNearbyStops() {
-    Column(Modifier.fillMaxSize().padding(horizontal = NavigoSpacing.screen)) {
-        SheetDragHandle()
-        SheetTitle(updatedOnly = true)
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(top = NavigoSpacing.item),
+    ) {
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         nearbyStops.take(2).forEach { stop ->
             NearbyStopRow(stop, modifier = Modifier.padding(vertical = NavigoSpacing.item))
@@ -126,8 +123,8 @@ private fun HalfExpandedNearbyStops() {
         }
         Text(
             "YOUR USUAL RUNS",
-            modifier = Modifier.padding(top = NavigoSpacing.screen, bottom = NavigoSpacing.item),
-            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = NavigoSpacing.item, bottom = NavigoSpacing.element),
+            style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item)) {
@@ -137,39 +134,32 @@ private fun HalfExpandedNearbyStops() {
 }
 
 @Composable
-private fun ExpandedNearbyStops(onBack: () -> Unit) {
-    Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
+private fun ExpandedNearbyStops() {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(top = NavigoSpacing.item),
+    ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(NavigoSpacing.screen),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
+            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.element),
         ) {
-            NavigoOutlinedButton(
-                onClick = onBack,
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(12.dp),
-            ) {
-                NavigoIcon(NavigoIcons.ArrowLeft, contentDescription = "Back", size = 24.dp)
-            }
-            Column(Modifier.weight(1f)) {
-                Text("Stops near you", style = MaterialTheme.typography.headlineMedium)
-                Text(
-                    "14 stops · updated 40s ago",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            NavigoOutlinedButton(onClick = {}) { Text("Nearest") }
-        }
-        Row(
-            Modifier.padding(horizontal = NavigoSpacing.screen),
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
-        ) {
-            NavigoChoiceChip(selected = true, onClick = {}, label = "All lines")
-            NavigoChoiceChip(selected = false, onClick = {}, label = "Live only")
-            NavigoChoiceChip(selected = false, onClick = {}, label = "Seats free")
+            NavigoChoiceChip(
+                selected = true,
+                onClick = {},
+                label = "All lines",
+                horizontalPadding = NavigoSpacing.item,
+                verticalPadding = NavigoSpacing.element,
+                labelStyle = MaterialTheme.typography.labelMedium,
+            )
+            NavigoChoiceChip(
+                selected = false,
+                onClick = {},
+                label = "Live only",
+                horizontalPadding = NavigoSpacing.item,
+                verticalPadding = NavigoSpacing.element,
+                labelStyle = MaterialTheme.typography.labelMedium,
+            )
         }
         HorizontalDivider(
-            modifier = Modifier.padding(top = NavigoSpacing.screen),
+            modifier = Modifier.padding(top = NavigoSpacing.item),
             color = MaterialTheme.colorScheme.outlineVariant,
         )
         LazyColumn(Modifier.weight(1f)) {
@@ -178,23 +168,10 @@ private fun ExpandedNearbyStops(onBack: () -> Unit) {
                     stop,
                     modifier =
                         Modifier.padding(
-                            horizontal = NavigoSpacing.screen,
                             vertical = NavigoSpacing.item,
                         ),
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            }
-        }
-        Row(
-            Modifier.fillMaxWidth().padding(NavigoSpacing.screen),
-            horizontalArrangement = Arrangement.spacedBy(NavigoSpacing.item),
-        ) {
-            NavigoButton(onClick = {}, modifier = Modifier.weight(1f)) {
-                NavigoIcon(NavigoIcons.Plus, contentDescription = null, size = 22.dp)
-                Text("Report a bus", modifier = Modifier.padding(start = 8.dp))
-            }
-            NavigoOutlinedButton(onClick = {}) {
-                NavigoIcon(NavigoIcons.MapPin, contentDescription = "Open map", size = 24.dp)
             }
         }
     }
