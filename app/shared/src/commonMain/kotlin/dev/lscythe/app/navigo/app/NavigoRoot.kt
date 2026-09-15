@@ -17,9 +17,7 @@ package dev.lscythe.app.navigo.app
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -66,19 +64,14 @@ fun NavigoRoot(
                     CircularProgressIndicator()
                 }
             is StartupState.AuthRequired ->
-                if (state.destination == StartupDestination.Onboarding) {
-                    NavigoNavigation(
-                        analyticsHelper,
-                        viewModelFactory,
-                        mainViewModel,
-                        OnboardingNavKey,
-                        modifier,
-                    )
-                } else {
-                    Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Button(onClick = mainViewModel::retryAuthentication) { Text("Retry") }
-                    }
-                }
+                NavigoNavigation(
+                    analyticsHelper,
+                    viewModelFactory,
+                    mainViewModel,
+                    if (state.destination == StartupDestination.Home) HomeNavKey
+                    else OnboardingNavKey,
+                    modifier,
+                )
             is StartupState.Ready ->
                 NavigoNavigation(
                     analyticsHelper,
@@ -103,7 +96,10 @@ private fun NavigoNavigation(
     val serializersModule = remember { navigoSerializersModule() }
     val appState = rememberNavigoAppState(initialRoute, serializersModule)
     val entryProvider = entryProvider {
-        onboardingEntry(mainViewModel::retryAuthentication)
+        onboardingEntry {
+            mainViewModel.retryAuthentication()
+            appState.navigator.resetTo(HomeNavKey)
+        }
         homeEntry(appState.navigator)
     }
 

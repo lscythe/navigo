@@ -13,23 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package dev.lscythe.app.navigo.feature.home.impl.content
+package dev.lscythe.app.navigo.api.transit.realtime
 
-enum class NearbyStopsSheetValue {
-    Collapsed,
-    HalfExpanded,
-    Expanded,
-}
+import kotlinx.coroutines.flow.Flow
 
-internal fun nearbyStopsSheetAnchors(
-    screenHeight: Float,
-    collapsedHeight: Float,
-): Map<NearbyStopsSheetValue, Float> {
-    val halfExpanded = screenHeight * 0.45f
-    val collapsed = (screenHeight - collapsedHeight).coerceAtLeast(halfExpanded)
-    return mapOf(
-        NearbyStopsSheetValue.Collapsed to collapsed,
-        NearbyStopsSheetValue.HalfExpanded to halfExpanded,
-        NearbyStopsSheetValue.Expanded to 0f,
-    )
+/** Authenticated realtime transit updates for a sequence of viewport subscriptions. */
+interface TransitRealtimeApi {
+    /** Opens one cold viewport stream for each collection. */
+    fun stream(subscriptions: Flow<ViewportSubscription>): Flow<ViewportStreamEvent>
 }

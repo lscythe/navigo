@@ -26,11 +26,15 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":core:network"))
+            api(project(":core:network"))
+            api(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.client.websockets)
         }
         commonTest.dependencies {
             implementation(project(":core:testing"))
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.mock)
             implementation(libs.ktor.serialization.kotlinx.json)

@@ -50,7 +50,6 @@ internal fun SheetDragHandle(modifier: Modifier = Modifier) {
 
 @Composable
 internal fun SheetTitle(
-    updatedOnly: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -58,10 +57,10 @@ internal fun SheetTitle(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text("Stops near you", style = MaterialTheme.typography.headlineMedium)
+        Text("Stops near you", style = MaterialTheme.typography.titleLarge)
         Text(
             "updated 40s ago",
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
@@ -80,18 +79,19 @@ internal fun NearbyStopRow(
     ) {
         NavigoAvatar(
             text = stop.route,
-            size = if (compact) 52.dp else 60.dp,
+            size = if (compact) 44.dp else 48.dp,
             containerColor =
                 if (stop.accent == StopAccent.Dark) MaterialTheme.colorScheme.primary
                 else MaterialTheme.colorScheme.secondary,
             contentColor =
                 if (stop.accent == StopAccent.Dark) MaterialTheme.colorScheme.primaryFixed
                 else MaterialTheme.colorScheme.onSecondary,
+            textStyle = if (compact) MaterialTheme.typography.titleSmall else MaterialTheme.typography.titleLarge,
         )
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
                 "${stop.name} · ${stop.distance}",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
             Row(
@@ -106,11 +106,11 @@ internal fun NearbyStopRow(
                 ) {
                     Text(
                         stop.status,
-                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                         color =
                             if (stop.status == "Seats") MaterialTheme.colorScheme.onPrimaryFixed
                             else MaterialTheme.colorScheme.primaryFixed,
-                        style = MaterialTheme.typography.labelLarge,
+                        style = MaterialTheme.typography.labelMedium,
                     )
                 }
                 Text(
@@ -122,7 +122,7 @@ internal fun NearbyStopRow(
         }
         Text(
             stop.arrival,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
         )
     }
@@ -139,20 +139,20 @@ internal fun UsualRunCard(
     val foreground =
         if (run.emphasized) MaterialTheme.colorScheme.onPrimary
         else MaterialTheme.colorScheme.onSurface
-    Surface(modifier = modifier, shape = MaterialTheme.shapes.extraLarge, color = background) {
+    Surface(modifier = modifier, shape = MaterialTheme.shapes.large, color = background) {
         Column(
-            Modifier.padding(NavigoSpacing.screen),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            Modifier.padding(horizontal = NavigoSpacing.item, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Text(run.label, style = MaterialTheme.typography.titleMedium, color = foreground)
+            Text(run.label, style = MaterialTheme.typography.labelMedium, color = foreground)
             Text(
                 run.route,
-                style = MaterialTheme.typography.headlineLarge,
+                style = MaterialTheme.typography.titleLarge,
                 color =
                     if (run.emphasized) MaterialTheme.colorScheme.primaryFixed
                     else MaterialTheme.colorScheme.secondary,
             )
-            Text(run.duration, style = MaterialTheme.typography.titleMedium, color = foreground)
+            Text(run.duration, style = MaterialTheme.typography.bodySmall, color = foreground)
         }
     }
 }

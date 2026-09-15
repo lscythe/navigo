@@ -22,4 +22,6 @@ object TransitEndpoint {
     const val TRIP_PLANS = "v1/trip-plans"
     const val SEARCH_RESULTS = "v1/search-results"
     const val MAP_DATA = "v1/map-data"
+    const val VIEWPORT_STREAM = "v1/viewport-stream"
+    const val VIEWPORT_STREAM_PROTOCOL = "navigo.viewport.v1"
 }

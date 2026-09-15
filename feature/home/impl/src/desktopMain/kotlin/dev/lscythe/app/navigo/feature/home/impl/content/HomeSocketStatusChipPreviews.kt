@@ -15,21 +15,19 @@
  */
 package dev.lscythe.app.navigo.feature.home.impl.content
 
-enum class NearbyStopsSheetValue {
-    Collapsed,
-    HalfExpanded,
-    Expanded,
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopMaterialKolorPreview
+import dev.lscythe.app.navigo.core.designsystem.preview.DesktopPreview
+
+@Preview
+@Composable
+private fun HomeSocketStatusChipPreview() {
+    DesktopPreview { HomeSocketStatusChipPreviewContent() }
 }
 
-internal fun nearbyStopsSheetAnchors(
-    screenHeight: Float,
-    collapsedHeight: Float,
-): Map<NearbyStopsSheetValue, Float> {
-    val halfExpanded = screenHeight * 0.45f
-    val collapsed = (screenHeight - collapsedHeight).coerceAtLeast(halfExpanded)
-    return mapOf(
-        NearbyStopsSheetValue.Collapsed to collapsed,
-        NearbyStopsSheetValue.HalfExpanded to halfExpanded,
-        NearbyStopsSheetValue.Expanded to 0f,
-    )
+@Preview
+@Composable
+private fun HomeSocketStatusChipMaterialKolorPreview() {
+    DesktopMaterialKolorPreview { HomeSocketStatusChipPreviewContent() }
 }
