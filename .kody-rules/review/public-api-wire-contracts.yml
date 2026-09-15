@@ -1,0 +1,19 @@
+title: Preserve public API and wire-contract parity
+rule: >-
+  Review public Kotlin APIs and serialized transport models as contracts. When a
+  signature or wire shape changes, require every caller, implementation, fixture,
+  and contract test to migrate together. Serialized names, nullability,
+  requiredness, enum values, and error payloads must match the authoritative
+  schema without compatibility aliases unless the schema requires them.
+severity: high
+scope: pull-request
+path: '**/*'
+examples:
+  - snippet: API signature, implementation, callers, fixture, and contract test change together
+    isCorrect: true
+  - snippet: A serialized DTO field changes while its fixture and consumers retain the old shape
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []

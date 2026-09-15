@@ -1,0 +1,18 @@
+title: Preserve Kotlin Multiplatform source-set boundaries
+rule: >-
+  Keep commonMain platform-neutral. Platform APIs and implementations belong in
+  Android, JVM or Desktop, iOS, or other platform source sets behind an existing
+  interface or an expect and actual seam when shared callers need them. Reject
+  platform imports in commonMain and fake cross-platform implementations.
+severity: high
+scope: file
+path: '**/*.kt'
+examples:
+  - snippet: 'commonMain declares expect fun platformName(): String'
+    isCorrect: true
+  - snippet: commonMain imports android.content.Context
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []
