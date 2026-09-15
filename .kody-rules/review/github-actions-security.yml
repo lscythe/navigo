@@ -1,0 +1,19 @@
+title: Harden GitHub Actions workflows
+rule: >-
+  GitHub Actions changes must use least-privilege permissions, pin third-party
+  actions to immutable full commit SHAs, and treat pull request data as
+  untrusted. Reject secret exposure, unsafe interpolation into shell commands,
+  and pull_request_target jobs that execute code or scripts from the pull
+  request head.
+severity: critical
+scope: file
+path: '.github/workflows/**'
+examples:
+  - snippet: uses an action pinned to a full commit SHA with job-scoped read permissions
+    isCorrect: true
+  - snippet: a pull_request_target job checks out and executes the pull request head
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []

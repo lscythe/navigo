@@ -1,0 +1,19 @@
+title: Preserve the required pull request template
+rule: >-
+  The pull request description must retain every section from
+  .github/PULL_REQUEST_TEMPLATE.md: Summary, Related issue, Specification,
+  Acceptance criteria, Verification, and Review checklist. Each section must be
+  completed accurately, using None where no issue or specification exists. Kody
+  must not replace the repository-owned description with a generated summary.
+severity: high
+scope: pull-request
+path: '**/*'
+examples:
+  - snippet: PR body contains all six required headings with accurate checklist states
+    isCorrect: true
+  - snippet: PR body is replaced by an AI summary and omits the template headings
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []
