@@ -1,0 +1,18 @@
+title: Enforce coroutine and Flow lifecycle safety
+rule: >-
+  Kotlin coroutine and Flow changes must preserve structured concurrency,
+  cancellation, exception propagation, and resource cleanup. Reject detached or
+  unbounded scopes, swallowed CancellationException, blocking calls in suspend
+  paths, and collectors whose lifetime exceeds their owner.
+severity: high
+scope: file
+path: '**/*.kt'
+examples:
+  - snippet: viewModelScope.launch { repository.events.collect(::render) }
+    isCorrect: true
+  - snippet: GlobalScope.launch { repository.events.collect(::render) }
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []

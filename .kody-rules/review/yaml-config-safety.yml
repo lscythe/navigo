@@ -1,0 +1,18 @@
+title: Keep YAML configuration safe and valid
+rule: >-
+  YAML changes must use schema-valid keys, valid indentation and scalar types,
+  and must not expose credentials or interpolate untrusted values into commands.
+  Reject unknown configuration keys when the consumer silently ignores them and
+  reject broad permissions or triggers that exceed the stated behavior.
+severity: high
+scope: file
+path: '**/*.yml'
+examples:
+  - snippet: configuration uses documented keys and repository secrets by name
+    isCorrect: true
+  - snippet: configuration embeds a token literal or an undocumented key
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []
