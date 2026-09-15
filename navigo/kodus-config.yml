@@ -1,8 +1,33 @@
+summary:
+  generatePRSummary: false
 reviewOptions:
   business_logic: false
 kodyLearningExcludedReviewers:
   - '49699333'
   - '297179586'
-summary:
-  generatePRSummary: false
-  behaviourForNewCommits: 'none'
+customMessages:
+  startReviewMessage:
+    content: >-
+      ## Kody review started
+
+
+      Kody is reviewing this pull request for correctness, security,
+      performance, and compliance with the repository’s
+
+      configured rules.
+
+
+      @reviewCadence
+
+
+      ### Changed files
+
+
+      @changedFiles
+
+
+      ### Change summary
+
+
+      @changeSummary
+    status: every_push

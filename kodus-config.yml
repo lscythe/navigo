@@ -2,3 +2,62 @@ baseBranches:
   - develop
 isRequestChangesActive: true
 pullRequestApprovalActive: true
+customMessages:
+  startReviewMessage:
+    content: >-
+      ## Kody review started
+
+
+      Kody is reviewing this pull request for correctness, security,
+      performance, and compliance with the repository’s
+
+      configured rules.
+
+
+      @reviewCadence
+
+
+      ### Changed files
+
+
+      @changedFiles
+
+
+      ### Change summary
+
+
+      @changeSummary
+    status: every_push
+  endReviewMessage:
+    content: >-
+      ## Kody review completed
+
+
+      Kody finished reviewing this pull request using the repository’s current
+      configuration and active rules.
+
+
+      <details>
+
+      <summary>Review controls and configuration</summary>
+
+
+      - **Run another review:** Add a root-level comment with `@kody
+      start-review`.
+
+      - **Provide feedback:** React to a suggestion with 👍 if it was useful or
+      👎 if it was inaccurate.
+
+
+      ### Active review settings
+
+
+      @reviewOptions
+
+
+      [Open Kody
+      configuration](https://app.kodus.io/settings/code-review/global/general)
+
+
+      </details>
+    status: every_push
