@@ -1,0 +1,17 @@
+title: Use version catalog for dependencies
+rule: >-
+  All dependency versions must be referenced from the Gradle version catalog
+  (libs.versions.toml) through the generated libs accessor. Hardcoded version
+  strings in build.gradle.kts are not allowed.
+severity: medium
+scope: file
+path: '**/*'
+examples:
+  - snippet: implementation(libs.ktor.client.core)
+    isCorrect: true
+  - snippet: implementation("io.ktor:ktor-client-core:3.5.2")
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []
