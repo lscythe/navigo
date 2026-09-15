@@ -1,0 +1,5 @@
+reviewOptions:
+  business_logic: false
+kodyLearningExcludedReviewers:
+  - '49699333'
+  - '297179586'
