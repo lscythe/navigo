@@ -1,0 +1,19 @@
+title: Require evidence for observable changes
+rule: >-
+  A pull request that changes permanent behavior or a public contract must include
+  focused verification that would fail for a plausible regression. Require
+  behavioral tests for uncovered contracts and updated screenshot baselines for
+  intentional UI changes. Do not demand tests for documentation-only or purely
+  mechanical changes.
+severity: high
+scope: pull-request
+path: '**/*'
+examples:
+  - snippet: changed behavior includes a focused regression test or intentional UI baseline update
+    isCorrect: true
+  - snippet: changed runtime behavior has no executable evidence and no existing covering test
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []
