@@ -1,0 +1,20 @@
+title: Use centralized logging
+rule: >-
+  All logging must go through the project's logging abstraction (e.g., Kermit
+  from core:monitoring-kermit) and must not directly call platform-specific log
+  APIs (android.util.Log), System.out, or println. This ensures consistent
+  output and enables proper filtering in production.
+severity: medium
+scope: file
+path: '**/*'
+examples:
+  - snippet: Logger.d { "User logged in" }
+    isCorrect: true
+  - snippet: println("User logged in")
+    isCorrect: false
+  - snippet: android.util.Log.d("Navigo", "User logged in")
+    isCorrect: false
+inheritance:
+  inheritable: true
+  exclude: []
+  include: []
